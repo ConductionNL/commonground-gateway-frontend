@@ -54,6 +54,11 @@ export default function MainMenu() {
                     </Link>
                   </li>
                   <li className="utrecht-topnav__item">
+                    <Link to={"/configurations"} className="utrecht-topnav__link">
+                      Configurations
+                    </Link>
+                  </li>
+                  <li className="utrecht-topnav__item">
                     <Link to={"/applications"} className="utrecht-topnav__link">
                       Applications
                     </Link>
