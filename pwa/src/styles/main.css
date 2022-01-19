@@ -75,21 +75,22 @@
     border-top: 1px solid #dee2e6 !important;
 }
 
-    .utrecht-html table tbody td {
-        font-size: 14px;
-        border-top-width: 0px;
-        border-top: 0 !important;
-        border-bottom: 1px solid #dee2e6 !important;
-        border-color: #ebedf2 !important;
-        padding: 0 25px !important;
-        height: 60px;
-        vertical-align: middle !important;
-    }
+.utrecht-html table tbody td {
+    font-size: 14px;
+    border-top-width: 0px;
+    border-top: 0 !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    border-color: #ebedf2 !important;
+    padding: 0 25px !important;
+    height: 60px;
+    vertical-align: middle !important;
+}
 
 .btn-success:hover {
     background-color: #28a745 !important;
     border-color: #28a745 !important;
 }
+
 .btn-danger:hover {
     background-color: #dc3545 !important;
     border-color: #dc3545 !important;
@@ -120,7 +121,7 @@ a:hover {
     background-clip: padding-box !important;
     border: 1px solid #ced4da !important;
     border-radius: .25rem !important;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out !important;
 }
 
 .utrecht-select {
@@ -136,7 +137,7 @@ a:hover {
     background-clip: padding-box !important;
     border: 1px solid #ced4da !important;
     border-radius: .25rem !important;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out !important;
 }
 
 /* Footer has no border-top var yes */
@@ -167,18 +168,21 @@ a:hover {
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.07);
     z-index: 1;
 }
+
 .page-navs .nav .nav-link {
     padding: 1rem !important;
 }
+
 .page-navs .nav-line {
     border: 0px !important;
 }
+
 .page-navs .nav-line .nav-link {
     border-bottom-width: 3px !important;
 }
 
 .nav-link {
- color: #495057 !important;
+    color: #495057 !important;
 }
 
 .nav-tabs .nav-link.active {
@@ -230,4 +234,15 @@ a:hover {
     background: inherit !important;
 }
 
+/*.input-group + .tooltip-icon {*/
+/*    position: absolute;*/
+/*    right: 25px;*/
+/*    bottom: 14px;*/
+/*}*/
 
+.with-tooltip > svg {
+    position: absolute;
+    right: 25px;
+    bottom: 14px;
+    color: darkblue;
+}

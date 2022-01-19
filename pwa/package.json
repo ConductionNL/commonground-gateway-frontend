@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@conductionnl/nl-design-system": "^1.0.108",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.16",
     "@nl-design-system-unstable/theme-switcher": "1.0.0-alpha.6",
     "@utrecht/design-tokens": "1.0.0-alpha.51",
     "@utrecht/web-component-library-react": "1.0.0-alpha.57",

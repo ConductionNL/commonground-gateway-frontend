@@ -16,6 +16,8 @@ import {
 } from "@conductionnl/nl-design-system/lib";
 import {isLoggedIn} from "../../services/auth";
 import FlashMessage from 'react-flash-message';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 export default function SourceForm({id}) {
   const [context, setContext] = React.useState(null);
@@ -165,18 +167,20 @@ export default function SourceForm({id}) {
                                                        nameOverride={"Name"}/>
                               ) : (
                                 <GenericInputComponent type={"text"} name={"name"} id={"nameInput"}
-                                                       nameOverride={"Name"}/>
+                                                       nameOverride={"Name"} info={"icon={faInfoCircle}"}/>
                               )}
                             </div>
-                            <div className="col-6">
+                            <div className="col-6 with-tooltip" >
                               {source !== null && source.location !== null ? (
                                 <GenericInputComponent type={"text"} name={"location"} id={"locationInput"}
                                                        data={source.location}
                                                        nameOverride={"Location (url)"}/>
                               ) : (
                                 <GenericInputComponent type={"text"} name={"location"} id={"locationInput"}
-                                                       nameOverride={"Location (url)"}/>
+                                                       nameOverride={"Location (url)"} />
                               )}
+                              <FontAwesomeIcon icon={faInfoCircle} data-toggle="tooltip" title="Tooltip on left"></FontAwesomeIcon>
+
                             </div>
                           </div>
                           <div className="row">
