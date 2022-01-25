@@ -507,7 +507,6 @@ export default function AttributeForm({id, entity}) {
                         </div>
                       </div>
                     </div>
-                  </div>
 
                     <Accordion id="attributeAccordion"
                       items={[{
