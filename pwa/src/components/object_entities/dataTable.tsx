@@ -5,10 +5,10 @@ import { Link } from "gatsby";
 import FlashMessage from 'react-flash-message';
 
 export default function DataTable({ id }) {
-  const [data, setData] = React.useState(null);
+  const [data, setData] = React.useState<Array<Record<any, any>>>(null);
   const [context, setContext] = React.useState(null);
-  const [showSpinner, setShowSpinner] = React.useState(false);
-  const [alert, setAlert] = React.useState(null);
+  const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
+  const [alert, setAlert] = React.useState<any>(null);
 
 
   React.useEffect(() => {
@@ -29,18 +29,9 @@ export default function DataTable({ id }) {
         Authorization: "Bearer " + sessionStorage.getItem("jwt"),
       },
     })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          setAlert(null);
-          setAlert({ type: 'danger', message: response.statusText });
-          throw new Error(response.statusText);
-        }
-      })
+      .then((response) => response.json())
       .then((data) => {
         setShowSpinner(false);
-        // console.log('Object entities:', data);
         if (data['hydra:member'] !== undefined && data['hydra:member'].length > 0) {
           setData(data["hydra:member"]);
         }

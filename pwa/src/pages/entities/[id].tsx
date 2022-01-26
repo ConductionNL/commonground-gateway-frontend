@@ -70,7 +70,7 @@ const IndexPage = (props) => {
                 aria-labelledby="data-tab"
               >
                 <br/>
-                <DataTable {...{id}}/>
+                <DataTable id={props.params.id}/>
               </div>
               <div
                 className="tab-pane"
