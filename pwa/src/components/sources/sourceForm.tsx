@@ -3,7 +3,7 @@ import {Link} from "gatsby";
 import {
   checkValues,
   removeEmptyObjectValues,
-  retrieveFormArrayAsOArray,
+  retrieveFormArrayAsOArray, retrieveFormArrayAsObject,
 } from "../utility/inputHandler";
 import {
   GenericInputComponent,
@@ -13,6 +13,7 @@ import {
   Spinner,
   SelectInputComponent
 } from "@conductionnl/nl-design-system/lib";
+import {MultiDimensionalArrayInput} from "../common/multiDimensionalArrayInput";
 import FlashMessage from 'react-flash-message';
 import ElementCreationNew from "../common/elementCreationNew"
 import APIService from "../../apiService/apiService";
@@ -53,10 +54,10 @@ export const SourceForm: React.FC<SourceFormProps> = ({id}) => {
     event.preventDefault();
     setShowSpinner(true);
 
-    let headers = retrieveFormArrayAsOArray(event.target, "headers");
+    let headers = retrieveFormArrayAsObject(event.target, "headers");
     let oas = retrieveFormArrayAsOArray(event.target, "oas");
     let paths = retrieveFormArrayAsOArray(event.target, "paths");
-    let translationConfig = retrieveFormArrayAsOArray(event.target, "translationConfig");
+
 
     let body: {} = {
       name: event.target.name.value,
@@ -79,7 +80,6 @@ export const SourceForm: React.FC<SourceFormProps> = ({id}) => {
       headers,
       oas,
       paths,
-      translationConfig
     };
 
 
@@ -380,7 +380,12 @@ export const SourceForm: React.FC<SourceFormProps> = ({id}) => {
                               title: "Headers",
                               id: "headersAccordion",
                               render: function () {
-                                return <ElementCreationNew id="headers" label="Headers" data={source?.headers}
+                                return <MultiDimensionalArrayInput
+                                  id="headers" label="Headers"
+                                  data={source && source.headers ? [{
+                                    key: 'headers',
+                                    value: source.headers
+                                  }] : null}
                                 />
                               }
                             },
@@ -398,14 +403,6 @@ export const SourceForm: React.FC<SourceFormProps> = ({id}) => {
                                   return <ElementCreationNew id="paths" label="Paths" data={source?.paths}/>
                                 }
                               },
-                              {
-                                title: "Translation config",
-                                id: "translationConfigAccordion",
-                                render: function () {
-                                  return <ElementCreationNew id="translationConfig" label="Translation Config"
-                                                             data={source?.translationConfig}/>
-                                }
-                              }
                             ]}
                           />
                         </>
