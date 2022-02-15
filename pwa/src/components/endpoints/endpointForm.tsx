@@ -18,10 +18,10 @@ import FlashMessage from 'react-flash-message';
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 
 interface EndpointFormProps {
-  id: string,
+  endpointId: string,
 }
 
-export const EndpointForm: React.FC<EndpointFormProps> = ({id}) => {
+export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
 
   const [context, setContext] = React.useState(null);
   const [endpoint, setEndpoint] = React.useState<any>(null);
@@ -29,7 +29,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({id}) => {
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
   const [loadingOverlay, setLoadingOverlay] = React.useState<boolean>(false);
   const [alert, setAlert] = React.useState<any>(null);
-  const title: string = (id === "new") ? "Create Endpoint" : "Edit Endpoint"
+  const title: string = (endpointId === "new") ? "Create Endpoint" : "Edit Endpoint"
 
   React.useEffect(() => {
     if (typeof window !== "undefined" && context === null) {
@@ -37,16 +37,17 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({id}) => {
         adminUrl: process.env.GATSBY_ADMIN_URL,
       });
     } else if (isLoggedIn()) {
-      if (id !== "new") {
+      if (endpointId !== "new") {
         getEndpoint();
       }
       getApplications();
     }
   }, [context]);
+  console.log({id:endpointId})
 
   const getEndpoint = () => {
     setShowSpinner(true);
-    fetch(`${context.adminUrl}/endpoints/${id}`, {
+    fetch(`${context.adminUrl}/endpoints/${endpointId}`, {
       credentials: "include",
       headers: {"Content-Type": "application/json", 'Authorization': 'Bearer ' + sessionStorage.getItem('jwt')},
     })
@@ -104,8 +105,8 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({id}) => {
 
     let url = `${context.adminUrl}/endpoints`;
     let method = "POST";
-    if (id !== "new") {
-      url = `${url}/${id}`;
+    if (endpointId !== "new") {
+      url = `${url}/${endpointId}`;
       method = "PUT";
     }
 

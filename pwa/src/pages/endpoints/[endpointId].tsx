@@ -7,6 +7,7 @@ import LogTable from "../../components/logs/logTable/logTable";
 
 const IndexPage = (props) => {
   const [context, setContext] = React.useState(null);
+  const endpointId: string = props.params.endpointId === "new" ? null : props.params.endpointId;
 
   React.useEffect(() => {
     if (typeof window !== "undefined" && context === null) {
@@ -54,7 +55,7 @@ const IndexPage = (props) => {
                 aria-labelledby="overview-tab"
               >
                 <br />
-                <EndpointForm id={props.params.id}/>
+                <EndpointForm {...{endpointId}}/>
               </div>
               <div
                 className="tab-pane"
@@ -63,7 +64,7 @@ const IndexPage = (props) => {
                 aria-labelledby="handlers-tab"
               >
                 <br />
-                <HandlerTable id={props.params.id} />
+                <HandlerTable {...{endpointId}} />
               </div>
               <div
                 className="tab-pane"
@@ -72,7 +73,9 @@ const IndexPage = (props) => {
                 aria-labelledby="logs-tab"
               >
                 <br />
-                <LogTable id={props.params.id} query={'endpoint.id'}/>
+
+                <LogTable id={ props.params.endpointId} query={'endpoint.id'}/>
+
               </div>
             </div>
           </div>
