@@ -227,25 +227,12 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({objectEntityI
                           <div className="form-group">
                             {
                               applications !== null && applications.length > 0 ? (
-                                <>
-                                  {objectEntity !== null &&
-                                  objectEntity.application !== undefined &&
-                                  objectEntity.application !== null ? (
-                                      <SelectInputComponent
-                                        options={applications}
-                                        data={objectEntity.application.name}
-                                        name={"application"} id={"applicationInput"}
-                                        nameOverride={"Application"}
-                                        value={"/admin/applications/"}/>
-                                    )
-                                    : (
-                                      <SelectInputComponent
-                                        options={applications}
-                                        name={"application"} id={"applicationInput"}
-                                        nameOverride={"Application"}
-                                        value={"/admin/applications/"}/>
-                                    )}
-                                </>
+                                <SelectInputComponent
+                                  options={applications}
+                                  name={"application"}
+                                  id={"applicationInput"}
+                                  nameOverride={"Application"}
+                                  data={objectEntity?.application.id}/>
                               ) : (
                                 <SelectInputComponent
                                   data="Please wait, gettings applications from the Gateway..."
@@ -341,4 +328,5 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({objectEntityI
     </div>
   )
 }
+
 export default ObjectEntityForm
