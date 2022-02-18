@@ -190,38 +190,23 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
                         <div className="col-6">
                           {
                             applications !== null && applications.length > 0 ? (
-                              <>
-                                {endpoint !== null &&
-                                endpoint.application !== undefined &&
-                                endpoint.application !== null ? (
-                                  <SelectInputComponent
-                                    options={applications}
-                                    data={endpoint.application.name}
-                                    name={"application"}
-                                    id={"applicationInput"}
-                                    nameOverride={"Applications"}
-                                    value={"/admin/applications/"}
-                                  />
-                                ) : (
-                                  <SelectInputComponent
-                                    options={applications}
-                                    name={"application"}
-                                    id={"applicationInput"}
-                                    nameOverride={"Applications"}
-                                    value={"/admin/applications/"}
-                                  />
-                                )}
-                              </>
+                              <SelectInputComponent
+                                options={applications}
+                                name={"application"}
+                                id={"applicationInput"}
+                                nameOverride={"Application"}
+                                data={endpoint?.application.id}/>
                             ) : (
                               <SelectInputComponent
                                 data="Please wait, gettings applications from the Gateway..."
-                                options={[{
-                                  name: "Please wait, gettings applications from the Gateway...",
-                                  value: "Please wait, gettings applications from the Gateway..."
-                                }]}
+                                options=
+                                  {[{
+                                    name: "Please wait, gettings applications from the Gateway...",
+                                    value: "Please wait, gettings applications from the Gateway..."
+                                  }]}
                                 name={"application"}
                                 id={"applicationInput"}
-                                nameOverride={"Applications"}
+                                nameOverride={"Application"}
                                 disabled
                               />
                             )}

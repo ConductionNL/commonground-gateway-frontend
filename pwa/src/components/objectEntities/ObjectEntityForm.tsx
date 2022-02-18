@@ -164,7 +164,7 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({objectId, ent
                     title="Entity_object Documentation"
                     id="ObjectEntityHelpModal"
                     body={() => (
-                      <div dangerouslySetInnerHTML={{ __html: documentation }} />
+                      <div dangerouslySetInnerHTML={{__html: documentation}}/>
                     )}
                   />
                   <i className="fas fa-question mr-1"/>
@@ -236,11 +236,16 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({objectId, ent
                               ) : (
                                 <SelectInputComponent
                                   data="Please wait, gettings applications from the Gateway..."
-                                  options={[{
-                                    name: "Please wait, gettings applications from the Gateway...",
-                                    value: "Please wait, gettings applications from the Gateway..."
-                                  }]}
-                                  name={"application"} id={"applicationInput"} nameOverride={"Application"} disabled/>
+                                  options=
+                                    {[{
+                                      name: "Please wait, gettings applications from the Gateway...",
+                                      value: "Please wait, gettings applications from the Gateway..."
+                                    }]}
+                                  name={"application"}
+                                  id={"applicationInput"}
+                                  nameOverride={"Application"}
+                                  disabled
+                                />
                               )}
                           </div>
                         </div>
