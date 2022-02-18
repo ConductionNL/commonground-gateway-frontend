@@ -28,6 +28,7 @@ interface HandlerFormProps {
   id: string,
   endpointId: string,
 }
+
 export const HandlerForm: React.FC<HandlerFormProps> = ({id, endpointId}) => {
   const [context, setContext] = React.useState(null);
   const [handler, setHandler] = React.useState(null);
@@ -161,7 +162,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({id, endpointId}) => {
       translationsIn,
       translationsOut
     };
-    
+
     // This removes empty values from the body
     body = removeEmptyObjectValues(body);
     if (!checkValues([body["name"]])) {
@@ -170,7 +171,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({id, endpointId}) => {
       setLoadingOverlay(false);
       return;
     }
-    
+
     let url = `${context.adminUrl}/handlers`;
     let method = "POST";
     if (id) {
@@ -225,10 +226,10 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({id, endpointId}) => {
                     title="Handler Documentation"
                     id="handlerHelpModal"
                     body={() => (
-                      <div dangerouslySetInnerHTML={{ __html: documentation }} />
+                      <div dangerouslySetInnerHTML={{__html: documentation}}/>
                     )}
                   />
-                  <i className="fas fa-question mr-1" />
+                  <i className="fas fa-question mr-1"/>
                   <span className="mr-2">Help</span>
                 </button>
                 <Link className="utrecht-link" to={`/endpoints/${endpointId}`}>
@@ -312,28 +313,22 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({id, endpointId}) => {
                         <div className="col-6">
                           {
                             entities !== null && entities.length > 0 ? (
-                              <div className="form-group">
-                                {handler !== null &&
-                                handler.entity !== undefined &&
-                                handler.entity !== null ? (
-                                    <SelectInputComponent
-                                      options={entities}
-                                      data={handler.entity}
-                                      name={"entity"} id={"entityInput"} nameOverride={"Entity"}
-                                      value={"/admin/entities/"}/>
-                                  )
-                                  : (
-                                    <SelectInputComponent
-                                      options={entities}
-                                      name={"entity"} id={"entityInput"} nameOverride={"Entity"}
-                                      value={"/admin/entities/"}/>
-                                  )}
-                              </div>
+                              <SelectInputComponent
+                                options={entities}
+                                data={handler?.entity}
+                                name={"entity"}
+                                id={"entityInput"}
+                                nameOverride={"Entity"}
+                                value={"/admin/entities/"}
+                              />
                             ) : (
                               <SelectInputComponent
                                 options={[]}
-                                name={"entity"} id={"entityInput"} nameOverride={"Entity"}
-                                value={"/admin/entities/"}/>
+                                name={"entity"}
+                                id={"entityInput"}
+                                nameOverride={"Entity"}
+                                value={"/admin/entities/"}
+                              />
                             )
                           }
                         </div>
