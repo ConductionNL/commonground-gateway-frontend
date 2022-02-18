@@ -95,6 +95,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
     if (!endpointId) { // unset id means we're creating a new entry
       API.Endpoint.create(body)
         .then(() => {
+          console
           navigate(`/endpoints`)
         })
         .catch((err) => {
@@ -195,7 +196,8 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
                                 name={"application"}
                                 id={"applicationInput"}
                                 nameOverride={"Application"}
-                                data={endpoint?.application.id}/>
+                                data={endpoint?.application.name}
+                              />
                             ) : (
                               <SelectInputComponent
                                 data="Please wait, gettings applications from the Gateway..."

@@ -156,7 +156,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
       requiredIf,
       objectConfig,
     };
-    
+
     body = removeEmptyObjectValues(body);
 
     if (!checkValues([body["name"], body["type"]])) {
@@ -325,7 +325,8 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                             name={"format"}
                             id={"formatInput"}
                             nameOverride={"Format"}
-                            data={attribute && attribute.format && attribute.format}/>
+                            data={attribute?.format}
+                          />
                         </div>
                       </div>
                       <div className="row mt-3">
