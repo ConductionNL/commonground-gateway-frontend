@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  GenericInputComponent,
-  Card,
-  Modal,
-  SelectInputComponent
-}
-  from "@conductionnl/nl-design-system/lib";
+import { GenericInputComponent, Card, Modal, SelectInputComponent } from "@conductionnl/nl-design-system/lib";
 import { Link } from "gatsby";
 import Spinner from "../common/spinner";
 import { navigate } from "gatsby-link";
@@ -17,7 +11,7 @@ import { HeaderContext } from "../../context/headerContext";
 import { checkValues, removeEmptyObjectValues } from "../utility/inputHandler";
 
 interface TranslationFormProps {
-  tableName: string,
+  tableName: string;
 }
 
 export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) => {
@@ -33,12 +27,12 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
   React.useEffect(() => {
     setHeader({
       title: "Translation",
-      subText: "Manage your translation here"
+      subText: "Manage your translation here",
     });
-  }, [setHeader])
+  }, [setHeader]);
 
   React.useEffect(() => {
-    tableName && handleSetTranslation()
+    tableName && handleSetTranslation();
   }, [API, tableName]);
 
   const handleSetTranslation = () => {
@@ -62,10 +56,14 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
     setLoadingOverlay(true);
 
     let body: {} = {
-      translationTable: tableName ? tableName : event.target.translationTable ? event.target.translationTable.value : null,
+      translationTable: tableName
+        ? tableName
+        : event.target.translationTable
+        ? event.target.translationTable.value
+        : null,
       language: event.target.language ? event.target.language.value : null,
       translateFrom: event.target.translateFrom ? event.target.translateFrom.value : null,
-      translateTo: event.target.translateTo ? event.target.translateTo.value : null
+      translateTo: event.target.translateTo ? event.target.translateTo.value : null,
     };
 
     // This removes empty values from the body
@@ -77,7 +75,8 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
       return;
     }
 
-    if (!tableName) { // unset id means we're creating a new entry
+    if (!tableName) {
+      // unset id means we're creating a new entry
       API.Translation.create(body)
         .then(() => {
           setAlert({ message: "Saved translation", type: "success" });
@@ -96,7 +95,7 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
       API.Translation.update(body, tableName)
         .then((res) => {
           setAlert({ message: "Updated translation", type: "success" });
-          setTranslation(res.data)
+          setTranslation(res.data);
         })
         .catch((err) => {
           setAlert({ type: "danger", message: err.message });
@@ -106,11 +105,10 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
           setLoadingOverlay(false);
         });
     }
-
   };
 
   const handleSetDocumentation = (): void => {
-    API.Documentation.get()
+    API.Documentation.get("translations")
       .then((res) => {
         setDocumentation(res.data.content);
       })
@@ -124,38 +122,32 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
     <form id="dataForm" onSubmit={saveTranslation}>
       <Card
         title={title}
-        cardHeader={function() {
+        cardHeader={function () {
           return (
             <div>
-              <button
-                className="utrecht-link button-no-style"
-                data-bs-toggle="modal"
-                data-bs-target="#helpModal"
-              >
+              <button className="utrecht-link button-no-style" data-bs-toggle="modal" data-bs-target="#helpModal">
                 <Modal
                   title="Translation Documentation"
                   id="helpModal"
-                  body={() => (
-                    <div dangerouslySetInnerHTML={{ __html: documentation }} />
-                  )}
+                  body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
                 />
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
               </button>
               <Link className="utrecht-link" to={"/translations"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2" />Back
+                  <i className="fas fa-long-arrow-alt-left mr-2" />
+                  Back
                 </button>
               </Link>
-              <button
-                className="utrecht-button utrecht-button-sm btn-sm btn-success"
-                type="submit"
-              >
-                <i className="fas fa-save mr-2" />Save
+              <button className="utrecht-button utrecht-button-sm btn-sm btn-success" type="submit">
+                <i className="fas fa-save mr-2" />
+                Save
               </button>
-            </div>);
+            </div>
+          );
         }}
-        cardBody={function() {
+        cardBody={function () {
           return (
             <div className="row">
               <div className="col-12">
@@ -173,7 +165,8 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
                             id={"translationTableInput"}
                             data={translation && translation.translationTable && translation.translationTable}
                             nameOverride={"Table"}
-                            required />
+                            required
+                          />
                         </div>
                       </div>
                       <div className="col-6">
@@ -181,12 +174,13 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
                           <SelectInputComponent
                             options={[
                               { name: "Nederlands (NL)", value: "nl_NL" },
-                              { name: "English (EN)", value: "en_EN" }
+                              { name: "English (EN)", value: "en_EN" },
                             ]}
                             name={"language"}
                             id={"languageInput"}
                             nameOverride={"Language"}
-                            data={translation?.language} />
+                            data={translation?.language}
+                          />
                         </div>
                       </div>
                     </div>
@@ -199,7 +193,8 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
                             id={"translateFromInput"}
                             data={translation && translation.translateFrom && translation.translateFrom}
                             nameOverride={"From"}
-                            required />
+                            required
+                          />
                         </div>
                       </div>
                       <div className="col-6">
@@ -210,7 +205,8 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
                             id={"translateToInput"}
                             data={translation && translation.translateTo && translation.translateTo}
                             nameOverride={"To"}
-                            required />
+                            required
+                          />
                         </div>
                       </div>
                     </div>
@@ -219,7 +215,8 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ tableName }) =
               </div>
             </div>
           );
-        }} />
+        }}
+      />
     </form>
   );
 };

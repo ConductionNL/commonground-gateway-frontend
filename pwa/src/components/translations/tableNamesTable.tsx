@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  Table,
-  Card,
-  Spinner,
-  Modal
-} from "@conductionnl/nl-design-system/lib";
+import { Table, Card, Spinner, Modal } from "@conductionnl/nl-design-system/lib";
 import { Link } from "gatsby";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
@@ -28,7 +23,7 @@ export default function TableNamesTable() {
   });
 
   React.useEffect(() => {
-    handleSetTableNames()
+    handleSetTableNames();
   }, [API]);
 
   const handleSetTableNames = () => {
@@ -36,7 +31,7 @@ export default function TableNamesTable() {
     API.Translation.getAllTableNames()
       .then((res) => {
         const convertedArray = res.data["results"].map((value) => ({
-          name: value
+          name: value,
         }));
         setTableNames(convertedArray);
       })
@@ -50,7 +45,7 @@ export default function TableNamesTable() {
   };
 
   const handleSetDocumentation = (): void => {
-    API.Documentation.get()
+    API.Documentation.get("translations")
       .then((res) => {
         setDocumentation(res.data.content);
       })
@@ -63,20 +58,14 @@ export default function TableNamesTable() {
   return (
     <Card
       title={"Translations"}
-      cardHeader={function() {
+      cardHeader={function () {
         return (
           <>
-            <button
-              className="utrecht-link button-no-style"
-              data-bs-toggle="modal"
-              data-bs-target="#helpModal"
-            >
+            <button className="utrecht-link button-no-style" data-bs-toggle="modal" data-bs-target="#helpModal">
               <Modal
                 title="Translations Documentation"
                 id="helpModal"
-                body={() => (
-                  <div dangerouslySetInnerHTML={{ __html: documentation }} />
-                )}
+                body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
               />
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
@@ -94,7 +83,7 @@ export default function TableNamesTable() {
           </>
         );
       }}
-      cardBody={function() {
+      cardBody={function () {
         return (
           <div className="row">
             <div className="col-12">
@@ -105,25 +94,22 @@ export default function TableNamesTable() {
                   columns={[
                     {
                       headerName: "Tables",
-                      field: "name"
+                      field: "name",
                     },
                     {
                       field: "name",
                       headerName: " ",
                       renderCell: (tables: { name: string }) => {
                         return (
-                          <Link
-                            className="utrecht-link d-flex justify-content-end"
-                            to={`/translations/${tables.name}`}
-                          >
+                          <Link className="utrecht-link d-flex justify-content-end" to={`/translations/${tables.name}`}>
                             <button className="utrecht-button btn-sm btn-success">
                               <i className="fas fa-edit pr-1" />
                               Edit
                             </button>
                           </Link>
                         );
-                      }
-                    }
+                      },
+                    },
                   ]}
                   rows={tableNames}
                 />
@@ -132,8 +118,8 @@ export default function TableNamesTable() {
                   columns={[
                     {
                       headerName: "Tables",
-                      field: "name"
-                    }
+                      field: "name",
+                    },
                   ]}
                   rows={[{ name: "No results found" }]}
                 />
