@@ -93,8 +93,8 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
       name: event.target.name.value,
       description: event.target.description.value ?? null,
       path: event.target.path.value,
-      application: event.target.application.value ?? null,
-      type: "gateway-endpoint",
+      application: event.target.application.value ?? null
+
     };
 
     // This removes empty values from the body
@@ -195,34 +195,20 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
                         />
                       </div>
                       <div className="col-6">
-                        {applications !== null && applications.length > 0 ? (
-                          <>
-                            {endpoint !== null &&
-                            endpoint.application !== undefined &&
-                            endpoint.application !== null ? (
-                              <SelectInputComponent
-                                options={applications}
-                                data={endpoint.application.name}
-                                name={"application"}
-                                id={"applicationInput"}
-                                nameOverride={"Applications"}
-                                value={"/admin/applications/"}
-                              />
-                            ) : (
-                              <SelectInputComponent
-                                options={applications}
-                                name={"application"}
-                                id={"applicationInput"}
-                                nameOverride={"Applications"}
-                                value={"/admin/applications/"}
-                              />
-                            )}
-                          </>
-                        ) : (
-                          <SelectInputComponent
-                            data="Please wait, gettings applications from the Gateway..."
-                            options={[
-                              {
+                        {
+                          applications ? (
+                                <SelectInputComponent
+                                  options={applications}
+                                  data={endpoint?.application?.name}
+                                  name={"application"}
+                                  id={"applicationInput"}
+                                  nameOverride={"Applications"}
+                                  value={"/admin/applications/"}
+                                />
+                          ) : (
+                            <SelectInputComponent
+                              data="Please wait, gettings applications from the Gateway..."
+                              options={[{
                                 name: "Please wait, gettings applications from the Gateway...",
                                 value: "Please wait, gettings applications from the Gateway...",
                               },
@@ -242,7 +228,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
                           <GenericInputComponent
                             nameOverride={"Path"}
                             name={"path"}
-                            data={endpoint && endpoint.path && endpoint.path}
+                            data={endpoint?.path}
                             type={"text"}
                             id={"pathInput"}
                             required={true}
