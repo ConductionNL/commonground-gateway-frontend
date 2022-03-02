@@ -9,11 +9,11 @@
   { { - end } }
   { { - if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion - } }
 apiVersion: networking.k8s.io/v1
-  { { - else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion - } }
+    { { - else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion - } }
 apiVersion: networking.k8s.io/v1beta1
-  { { - else - } }
+    { { - else - } }
 apiVersion: extensions/v1beta1
-  { { - end } }
+    { { - end } }
 kind: Ingress
 metadata:
     name: { { $fullName } }
@@ -44,92 +44,92 @@ spec:
                     -   path: { { .Values.ingress.path } }/api
                         {{- if and .Values.ingress.pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
                         pathType: { { .Values.ingress.pathType } }
+                  { { - end } }
+                    backend:
+                      { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
+                        service:
+                            name: { { $gateway } }
+                            port:
+                                number: { { $svcPort } }
+                      { { - else } }
+                        serviceName: { { $gateway } }
+                        servicePort: { { $svcPort } }
                       { { - end } }
-                        backend:
-                          { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
-                            service:
-                                name: { { $gateway } }
-                                port:
-                                    number: { { $svcPort } }
-                          { { - else } }
-                            serviceName: { { $gateway } }
-                            servicePort: { { $svcPort } }
-                          { { - end } }
                     -   path: { { .Values.ingress.path } }/digid
                         {{- if and .Values.ingress.pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
                         pathType: { { .Values.ingress.pathType } }
+                  { { - end } }
+                    backend:
+                      { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
+                        service:
+                            name: { { $gateway } }
+                            port:
+                                number: { { $svcPort } }
+                      { { - else } }
+                        serviceName: { { $gateway } }
+                        servicePort: { { $svcPort } }
                       { { - end } }
-                        backend:
-                          { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
-                            service:
-                                name: { { $gateway } }
-                                port:
-                                    number: { { $svcPort } }
-                          { { - else } }
-                            serviceName: { { $gateway } }
-                            servicePort: { { $svcPort } }
-                          { { - end } }
                     -   path: { { .Values.ingress.path } }/saml
                         {{- if and .Values.ingress.pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
                         pathType: { { .Values.ingress.pathType } }
-                      { { - end } }
-                        backend:
-                          { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
-                            service:
-                                name: { { $gateway } }
-                                port:
-                                    number: { { $svcPort } }
-                          { { - else } }
-                            serviceName: { { $gateway } }
-                            servicePort: { { $svcPort } }
+                  { { - end } }
+                    backend:
+                      { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
+                        service:
+                            name: { { $gateway } }
+                            port:
+                                number: { { $svcPort } }
+                      { { - else } }
+                        serviceName: { { $gateway } }
+                        servicePort: { { $svcPort } }
                   { { - end } }
                     -   path: { { .Values.ingress.path } }/login
                         {{- if and .Values.ingress.pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
                         pathType: { { .Values.ingress.pathType } }
-                      { { - end } }
-                        backend:
-                          { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
-                            service:
-                                name: { { $gateway } }
-                                port:
-                                    number: { { $svcPort } }
-                          { { - else } }
-                            serviceName: { { $gateway } }
-                            servicePort: { { $svcPort } }
+                  { { - end } }
+                    backend:
+                      { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
+                        service:
+                            name: { { $gateway } }
+                            port:
+                                number: { { $svcPort } }
+                      { { - else } }
+                        serviceName: { { $gateway } }
+                        servicePort: { { $svcPort } }
                   { { - end } }
                     -   path: { { .Values.ingress.path } }/
                         {{- if and .Values.ingress.pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
                         pathType: { { .Values.ingress.pathType } }
+                  { { - end } }
+                    backend:
+                      { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
+                        service:
+                            name: { { $fullName } }
+                            port:
+                                number: { { $svcPort } }
+                      { { - else } }
+                        serviceName: { { $fullName } }
+                        servicePort: { { $svcPort } }
                       { { - end } }
-                        backend:
-                          { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
-                            service:
-                                name: { { $fullName } }
-                                port:
-                                    number: { { $svcPort } }
-                          { { - else } }
-                            serviceName: { { $fullName } }
-                            servicePort: { { $svcPort } }
-                          { { - end } }
       { { - range .Values.ingress.hosts } }
         -   host: { { .host | quote } }
             http:
                 paths:
                   { { - range .paths } }
                     -   path: { { .path } }
-                      { { - if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) } }
-                        pathType: { { .pathType } }
+                  { { - if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) } }
+                    pathType: { { .pathType } }
+                  { { - end } }
+                    backend:
+                      { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
+                        service:
+                            name: { { $fullName } }
+                            port:
+                                number: { { $svcPort } }
+                      { { - else } }
+                        serviceName: { { $fullName } }
+                        servicePort: { { $svcPort } }
                       { { - end } }
-                        backend:
-                          { { - if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion } }
-                            service:
-                                name: { { $fullName } }
-                                port:
-                                    number: { { $svcPort } }
-                          { { - else } }
-                            serviceName: { { $fullName } }
-                            servicePort: { { $svcPort } }
-                          { { - end } }
                   { { - end } }
       { { - end } }
   { { - end } }
