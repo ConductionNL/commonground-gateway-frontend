@@ -71,7 +71,7 @@ export default function EntitiesTable() {
   return (
     <Card
       title={"Object types"}
-      cardHeader={function () {
+      cardHeader={function() {
         return (
           <>
             <button className="utrecht-link button-no-style" data-bs-toggle="modal" data-bs-target="#entityHelpModal">
@@ -96,7 +96,7 @@ export default function EntitiesTable() {
           </>
         );
       }}
-      cardBody={function () {
+      cardBody={function() {
         return (
           <div className="row">
             <div className="col-12">
@@ -107,22 +107,22 @@ export default function EntitiesTable() {
                   columns={[
                     {
                       headerName: "Name",
-                      field: "name",
+                      field: "name"
                     },
                     {
                       headerName: "Endpoint",
-                      field: "endpoint",
+                      field: "endpoint"
                     },
                     {
                       headerName: "Path",
-                      field: "route",
+                      field: "route"
                     },
                     {
                       headerName: "Source",
                       field: "gateway",
                       valueFormatter: (item) => {
                         return item ? item.name : "";
-                      },
+                      }
                     },
                     {
                       field: "id",
@@ -143,8 +143,8 @@ export default function EntitiesTable() {
                             </Link>
                           </div>
                         );
-                      },
-                    },
+                      }
+                    }
                   ]}
                   rows={entities}
                 />
@@ -153,20 +153,20 @@ export default function EntitiesTable() {
                   columns={[
                     {
                       headerName: "Name",
-                      field: "name",
+                      field: "name"
                     },
                     {
                       headerName: "Endpoint",
-                      field: "endpoint",
+                      field: "endpoint"
                     },
                     {
                       headerName: "Path",
-                      field: "route",
+                      field: "route"
                     },
                     {
                       headerName: "Source",
-                      field: "gateway.name",
-                    },
+                      field: "gateway.name"
+                    }
                   ]}
                   rows={[{ name: "No results found" }]}
                 />

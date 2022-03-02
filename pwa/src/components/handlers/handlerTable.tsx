@@ -63,7 +63,7 @@ export default function HandlersTable({ endpointId }) {
   return (
     <Card
       title={title}
-      cardHeader={function () {
+      cardHeader={function() {
         return (
           <>
             <button
@@ -93,7 +93,7 @@ export default function HandlersTable({ endpointId }) {
           </>
         );
       }}
-      cardBody={function () {
+      cardBody={function() {
         return (
           <div className="row">
             <div className="col-12">
@@ -104,11 +104,11 @@ export default function HandlersTable({ endpointId }) {
                   columns={[
                     {
                       headerName: "Name",
-                      field: "name",
+                      field: "name"
                     },
                     {
                       headerName: "Description",
-                      field: "description",
+                      field: "description"
                     },
                     {
                       field: "id",
@@ -132,8 +132,8 @@ export default function HandlersTable({ endpointId }) {
                             </Link>
                           </div>
                         );
-                      },
-                    },
+                      }
+                    }
                   ]}
                   rows={handlers}
                 />
@@ -142,12 +142,12 @@ export default function HandlersTable({ endpointId }) {
                   columns={[
                     {
                       headerName: "Name",
-                      field: "name",
+                      field: "name"
                     },
                     {
                       headerName: "Description",
-                      field: "description",
-                    },
+                      field: "description"
+                    }
                   ]}
                   rows={[]}
                 />

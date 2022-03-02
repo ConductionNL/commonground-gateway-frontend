@@ -14,25 +14,27 @@ const Login: React.FC = () => {
   const API: APIService = new APIService("");
 
   const handleLogin = (): void => {
-    setLoading(true)
+    setLoading(true);
 
-    const body = {...{username, password}}
+    const body = { ...{ username, password } };
 
     API.Login.login(body)
       .then((res) => {
-        const user = { username: res.data.username }
+        const user = { username: res.data.username };
 
-        setUser(user)
+        setUser(user);
         sessionStorage.setItem("jwt", res.data.jwtToken);
         sessionStorage.setItem("user", JSON.stringify(user));
 
-        navigate('/')
+        navigate("/");
       })
       .catch((err) => {
-        setError(err.response.data.message)
+        setError(err.response.data.message);
       })
-      .finally(() => { setLoading(false) })
-  }
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <div className="login">

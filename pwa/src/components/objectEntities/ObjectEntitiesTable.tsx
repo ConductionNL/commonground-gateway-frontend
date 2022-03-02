@@ -3,7 +3,7 @@ import {
   Table,
   Card,
   Spinner,
-  Modal,
+  Modal
 } from "@conductionnl/nl-design-system/lib";
 import { Link } from "gatsby";
 import APIService from "../../apiService/apiService";
@@ -53,20 +53,20 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
         <Form
           src={formIOSchema}
           onSubmit={saveObject}
-        />,
+        />
       );
     });
     setShowSpinner(false);
   }, [formIOSchema]);
 
   const getFormIOSchema = () => {
-      API.FormIO.getSchema('weer')
-        .then((res) => {
-          setFormIOSchema(res.data);
-        })
-        .catch((err) => {
-          throw new Error("GET form.io schema error: " + err);
-        });
+    API.FormIO.getSchema("weer")
+      .then((res) => {
+        setFormIOSchema(res.data);
+      })
+      .catch((err) => {
+        throw new Error("GET form.io schema error: " + err);
+      });
   };
 
   const saveObject = (event) => {
@@ -140,7 +140,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
   return (
     <Card
       title={"Objects"}
-      cardHeader={function () {
+      cardHeader={function() {
         return (
           <>
             <button
@@ -172,8 +172,8 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
               title={`Create a new ${entity?.name} object`}
               id="objectModal"
               body={() => (
-                <>  
-                  {FormIO && FormIO }
+                <>
+                  {FormIO && FormIO}
                 </>
               )}
             />
@@ -191,7 +191,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
                   columns={[
                     {
                       headerName: "ID",
-                      field: "id",
+                      field: "id"
                     },
                     {
                       headerName: "Owner",

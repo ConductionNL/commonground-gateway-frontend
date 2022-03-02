@@ -20,12 +20,12 @@ export const IndexPage = (props) => {
                   {
                     name: "Handlers",
                     id: "handlers",
-                    active: activeTab === "handlers",
+                    active: activeTab === "handlers"
                   },
                   {
                     name: "Logs",
-                    id: "logs",
-                  },
+                    id: "logs"
+                  }
                 ]}
               />
             )}

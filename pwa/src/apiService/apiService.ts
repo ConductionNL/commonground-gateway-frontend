@@ -8,7 +8,7 @@ import Log from "./resources/log";
 import Login from "./services/login";
 import Documentation from "./services/documentation";
 import Endpoint from "./resources/endpoint";
-import Translation from './resources/translation';
+import Translation from "./resources/translation";
 import FormIO from "./resources/formIO";
 import Test from "./resources/test";
 import Handler from "./resources/handler";
@@ -39,8 +39,8 @@ export default class APIService {
       headers: {
         Accept: "application/form.io",
         "Content-Type": "application/json",
-        Authorization: "Bearer " + this._jwtToken,
-      },
+        Authorization: "Bearer " + this._jwtToken
+      }
     });
   }
 
@@ -49,8 +49,8 @@ export default class APIService {
       baseURL: GATSBY_API_URL,
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
   }
 
@@ -70,8 +70,8 @@ export default class APIService {
       headers: {
         "Accept": "application/form.io",
         "Content-Type": "application/json",
-        Authorization: "Bearer " + this._jwtToken,
-      },
+        Authorization: "Bearer " + this._jwtToken
+      }
     });
   }
 
@@ -103,9 +103,9 @@ export default class APIService {
   public get Endpoint(): Endpoint {
     return new Endpoint(this.adminClient);
   }
-  
+
   public get Translation(): Translation {
-    return new Translation(this.adminClient)
+    return new Translation(this.adminClient);
   }
 
   public get Handler(): Handler {

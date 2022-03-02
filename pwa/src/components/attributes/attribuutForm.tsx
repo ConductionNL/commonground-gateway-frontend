@@ -4,7 +4,7 @@ import {
   checkValues,
   removeEmptyObjectValues,
   retrieveFormArrayAsOArray,
-  retrieveFormArrayAsObject,
+  retrieveFormArrayAsObject
 } from "../utility/inputHandler";
 import MultiDimensionalArrayInput from "../common/multiDimensionalArrayInput";
 import {
@@ -15,7 +15,7 @@ import {
   Accordion,
   Spinner,
   Card,
-  Modal,
+  Modal
 } from "@conductionnl/nl-design-system/lib";
 import { navigate } from "gatsby-link";
 import ElementCreationNew from "../common/elementCreationNew";
@@ -46,7 +46,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
   React.useEffect(() => {
     setHeader({
       title: "Attribute",
-      subText: "Manage your attribute here",
+      subText: "Manage your attribute here"
     });
   }, [setHeader]);
 
@@ -155,7 +155,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
       anyOf,
       forbiddenIf,
       requiredIf,
-      objectConfig,
+      objectConfig
     };
 
     body = removeEmptyObjectValues(body);
@@ -203,7 +203,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
     <form id="attributeForm" onSubmit={saveAttribute}>
       <Card
         title={title}
-        cardHeader={function () {
+        cardHeader={function() {
           return (
             <>
               <button
@@ -220,7 +220,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
               </button>
-              <Link className="utrecht-link" to={`/entities/${entityId}`} state={{activeTab: "attributes"}}>
+              <Link className="utrecht-link" to={`/entities/${entityId}`} state={{ activeTab: "attributes" }}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
                   <i className="fas fa-long-arrow-alt-left mr-2" />
                   Back
@@ -233,7 +233,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
             </>
           );
         }}
-        cardBody={function () {
+        cardBody={function() {
           return (
             <div className="row">
               <div className="col-12">
@@ -265,7 +265,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                             { name: "Datetime", value: "datetime" },
                             { name: "Number", value: "number" },
                             { name: "Float", value: "float" },
-                            { name: "File", value: "file" },
+                            { name: "File", value: "file" }
                           ]}
                           name={"type"}
                           id={"typeInput"}
@@ -319,7 +319,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                             { name: "BSN", value: "bsn" },
                             { name: "Url", value: "url" },
                             { name: "UUID", value: "uuid" },
-                            { name: "Json", value: "json" },
+                            { name: "Json", value: "json" }
                           ]}
                           name={"format"}
                           id={"formatInput"}
@@ -641,7 +641,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                         {
                           title: "Object Config",
                           id: "objectConfigAccordion",
-                          render: function () {
+                          render: function() {
                             return (
                               <MultiDimensionalArrayInput
                                 id={"objectConfig"}
@@ -649,21 +649,21 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                                 data={
                                   attribute && attribute.objectConfig
                                     ? [
-                                        {
-                                          key: "objectConfig",
-                                          value: attribute.objectConfig,
-                                        },
-                                      ]
+                                      {
+                                        key: "objectConfig",
+                                        value: attribute.objectConfig
+                                      }
+                                    ]
                                     : null
                                 }
                               />
                             );
-                          },
+                          }
                         },
                         {
                           title: "File Types",
                           id: "fileTypesAccordion",
-                          render: function () {
+                          render: function() {
                             return (
                               <MultiSelect
                                 id="fileTypes"
@@ -672,19 +672,19 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                                 options={MIMETypes}
                               />
                             );
-                          },
+                          }
                         },
                         {
                           title: "Enum",
                           id: "enumAccordion",
-                          render: function () {
+                          render: function() {
                             return <ElementCreationNew id={"enum"} label={"Enum"} data={attribute?.enum} />;
-                          },
+                          }
                         },
                         {
                           title: "Required If",
                           id: "requiredIfAccordion",
-                          render: function () {
+                          render: function() {
                             return (
                               <MultiDimensionalArrayInput
                                 id={"requiredIf"}
@@ -692,21 +692,21 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                                 data={
                                   attribute && attribute.requiredIf
                                     ? [
-                                        {
-                                          key: "requiredIf",
-                                          value: attribute.requiredIf,
-                                        },
-                                      ]
+                                      {
+                                        key: "requiredIf",
+                                        value: attribute.requiredIf
+                                      }
+                                    ]
                                     : null
                                 }
                               />
                             );
-                          },
+                          }
                         },
                         {
                           title: "Forbidden If",
                           id: "forbiddenIfAccordion",
-                          render: function () {
+                          render: function() {
                             return (
                               <ElementCreationNew
                                 id={"forbiddenIf"}
@@ -714,29 +714,29 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                                 data={attribute?.forbiddenIf}
                               />
                             );
-                          },
+                          }
                         },
                         {
                           title: "All Of",
                           id: "allOfAccordion",
-                          render: function () {
+                          render: function() {
                             return <ElementCreationNew label={"All Of"} id={"allOf"} data={attribute?.allOf} />;
-                          },
+                          }
                         },
                         {
                           title: "Any Of",
                           id: "anyOfAccordion",
-                          render: function () {
+                          render: function() {
                             return <ElementCreationNew label={"Any Of"} id={"anyOf"} data={attribute?.anyOf} />;
-                          },
+                          }
                         },
                         {
                           title: "One Of",
                           id: "oneOfAccordion",
-                          render: function () {
+                          render: function() {
                             return <ElementCreationNew label={"One Of"} id={"oneOf"} data={attribute?.oneOf} />;
-                          },
-                        },
+                          }
+                        }
                       ]}
                     />
                   </div>

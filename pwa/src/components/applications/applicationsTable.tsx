@@ -71,7 +71,7 @@ export default function ApplicationsTable() {
   return (
     <Card
       title={"Applications"}
-      cardHeader={function () {
+      cardHeader={function() {
         return (
           <>
             <button
@@ -100,7 +100,7 @@ export default function ApplicationsTable() {
           </>
         );
       }}
-      cardBody={function () {
+      cardBody={function() {
         return (
           <div className="row">
             <div className="col-12">
@@ -111,11 +111,11 @@ export default function ApplicationsTable() {
                   columns={[
                     {
                       headerName: "Name",
-                      field: "name",
+                      field: "name"
                     },
                     {
                       headerName: "Description",
-                      field: "description",
+                      field: "description"
                     },
                     {
                       field: "id",
@@ -136,8 +136,8 @@ export default function ApplicationsTable() {
                             </Link>
                           </div>
                         );
-                      },
-                    },
+                      }
+                    }
                   ]}
                   rows={applications}
                 />
@@ -146,12 +146,12 @@ export default function ApplicationsTable() {
                   columns={[
                     {
                       headerName: "Name",
-                      field: "name",
+                      field: "name"
                     },
                     {
                       headerName: "Description",
-                      field: "description",
-                    },
+                      field: "description"
+                    }
                   ]}
                   rows={[{ name: "No results found", description: " " }]}
                 />

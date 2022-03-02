@@ -71,5 +71,5 @@ export const MIMETypes = [
   { name: ".zip", id: ".zip", value: "application/zip" },
   { name: ".3gp", id: ".3gp", value: "video/3gpp; audio/3gpp" },
   { name: ".3g2", id: ".3g2", value: "video/3gpp2; audio/3gpp2" },
-  { name: ".7z", id: ".7z", value: "application/x-7z-compressed" },
+  { name: ".7z", id: ".7z", value: "application/x-7z-compressed" }
 ];

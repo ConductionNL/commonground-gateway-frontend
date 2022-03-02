@@ -14,13 +14,13 @@ interface DashboardCardProps {
 }
 
 export const DashboardCard: React.FC<DashboardCardProps> = ({
-  amount,
-  title,
-  iconBackgroundColor,
-  icon,
-  subtitle,
-  linkTo,
-}) => {
+                                                              amount,
+                                                              title,
+                                                              iconBackgroundColor,
+                                                              icon,
+                                                              subtitle,
+                                                              linkTo
+                                                            }) => {
   return (
     <Link to={linkTo} className="dashboardCard">
       <div className="dashboardCard-icon" style={{ backgroundColor: `#${iconBackgroundColor}` }}>
@@ -49,12 +49,12 @@ interface DashboardCardSmallProps {
 }
 
 export const DashboardCardSmall: React.FC<DashboardCardSmallProps> = ({
-  title,
-  subtitle,
-  iconBackgroundColor,
-  icon,
-  linkTo,
-}) => {
+                                                                        title,
+                                                                        subtitle,
+                                                                        iconBackgroundColor,
+                                                                        icon,
+                                                                        linkTo
+                                                                      }) => {
   return (
     <a href={linkTo} target="_blank" className="dashboardCard dashboardCard--small">
       <div className="dashboardCard-icon" style={{ backgroundColor: `#${iconBackgroundColor}` }}>

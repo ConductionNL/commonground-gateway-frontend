@@ -24,11 +24,11 @@ export const logout = () => {
   setUser({});
   window.sessionStorage.removeItem("jwt");
   window.sessionStorage.removeItem("user");
-  navigate("/login")
+  navigate("/login");
 };
 
 export const validateSession = (jwt) => {
   const decodedJwt = jwtDecode<JwtPayload>(jwt);
 
   return !(!decodedJwt || decodedJwt?.exp >= Date.now());
-}
+};

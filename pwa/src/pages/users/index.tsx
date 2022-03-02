@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import UsersTable from "../../components/users/usersTable";
 
 const IndexPage = () => {
@@ -7,13 +7,13 @@ const IndexPage = () => {
       <div className="row">
         <div className="col-12">
           <div className="page-top-item">
-            <UsersTable/>
+            <UsersTable />
           </div>
         </div>
       </div>
     </main>
-  )
-}
+  );
+};
 
 export default IndexPage;
 

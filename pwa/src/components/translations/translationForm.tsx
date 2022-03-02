@@ -65,7 +65,7 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
       translationTable: tableName_,
       language: event.target.language ? event.target.language.value : null,
       translateFrom: event.target.translateFrom ? event.target.translateFrom.value : null,
-      translateTo: event.target.translateTo ? event.target.translateTo.value : null,
+      translateTo: event.target.translateTo ? event.target.translateTo.value : null
     };
 
     if (!id) {
@@ -117,7 +117,7 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
       <form id="dataForm" onSubmit={saveTranslation}>
         <Card
           title={title}
-          cardHeader={function () {
+          cardHeader={function() {
             return (
               <div>
                 <button
@@ -147,7 +147,7 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
               </div>
             );
           }}
-          cardBody={function () {
+          cardBody={function() {
             return (
               <div className="row">
                 <div className="col-12">
@@ -206,7 +206,7 @@ export const TransForm: React.FC<TransFormProps> = ({ translation }) => {
           <SelectInputComponent
             options={[
               { name: "Nederlands (NL)", value: "nl_NL" },
-              { name: "English (EN)", value: "en_EN" },
+              { name: "English (EN)", value: "en_EN" }
             ]}
             name={"language"}
             id={"languageInput"}

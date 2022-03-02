@@ -16,7 +16,13 @@ interface MultiDimensionalArrayInputProps {
  * This components handles multidimensional array input forms.
  * @returns JSX of the generated form.
  */
-const MultiDimensionalArrayInput: React.FC<MultiDimensionalArrayInputProps> = ({ data, id, label, deleteFunction, addFunction}) => {
+const MultiDimensionalArrayInput: React.FC<MultiDimensionalArrayInputProps> = ({
+                                                                                 data,
+                                                                                 id,
+                                                                                 label,
+                                                                                 deleteFunction,
+                                                                                 addFunction
+                                                                               }) => {
   const deleteElement = deleteElementFunction;
 
   return (
@@ -92,6 +98,6 @@ const MultiDimensionalArrayInput: React.FC<MultiDimensionalArrayInputProps> = ({
       </div>
     </>
   );
-}
+};
 
 export default MultiDimensionalArrayInput;

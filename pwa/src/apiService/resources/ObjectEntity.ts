@@ -24,6 +24,6 @@ export default class ObjectEntity {
   };
 
   public delete = (id: string): Promise<AxiosResponse> => {
-    return this._instance.delete(`/object_entities/${id}`)
-  }
+    return this._instance.delete(`/object_entities/${id}`);
+  };
 }

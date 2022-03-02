@@ -13,7 +13,7 @@ export default function ConfigurationsExportButton() {
   React.useEffect(() => {
     if (typeof window !== "undefined" && context === null) {
       setContext({
-        adminUrl: process.env.GATSBY_ADMIN_URL,
+        adminUrl: process.env.GATSBY_ADMIN_URL
       });
     }
   }, [context]);
@@ -23,11 +23,11 @@ export default function ConfigurationsExportButton() {
     fetch(`${context.adminUrl}/export/all`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + sessionStorage.getItem("jwt"),
-      },
+        Authorization: "Bearer " + sessionStorage.getItem("jwt")
+      }
     })
       .then((response) => {
-        response.text().then(function (text) {
+        response.text().then(function(text) {
           download("export.yaml", text, "text/yaml");
         });
       })

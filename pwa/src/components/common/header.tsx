@@ -4,7 +4,7 @@ import Breadcrumbs from "./breadcrumbs/breadcrumbs";
 
 export default function Header({ pageContext }) {
   const {
-    breadcrumb: { crumbs },
+    breadcrumb: { crumbs }
   } = pageContext;
   const [header] = React.useContext(HeaderContext);
 

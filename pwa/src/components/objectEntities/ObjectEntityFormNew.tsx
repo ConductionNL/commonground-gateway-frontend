@@ -1,12 +1,12 @@
 import * as React from "react";
 import {
   Card,
-  Spinner,
+  Spinner
 } from "@conductionnl/nl-design-system/lib";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import { Link } from 'gatsby';
+import { Link } from "gatsby";
 
 interface ObjectEntityFormNewProps {
   objectEntityId: string,
@@ -20,7 +20,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
   const [showSpinner, setShowSpinner] = React.useState(null);
   const [formIOSchema, setFormIOSchema] = React.useState(null);
   const [formIO, setFormIO] = React.useState(null);
-  const title = 'Edit';
+  const title = "Edit";
 
   React.useEffect(() => {
     getEntity();
@@ -43,7 +43,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
         <Form
           src={formIOSchema}
           onSubmit={saveObject}
-        />,
+        />
       );
     });
     setShowSpinner(false);
@@ -80,7 +80,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
 
   const getFormIOSchema = () => {
     if (formIOSchema && object) setFormIOSchema(fillFormIOSchema(formIOSchema));
-    setShowSpinner(true); 
+    setShowSpinner(true);
     API.FormIO.getSchema(entity.endpoint)
       .then((res) => {
         setFormIOSchema(object ? fillFormIOSchema(res.data) : res.data);
@@ -104,7 +104,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
       }
     }
     return schemaWithData;
-  }
+  };
 
   const saveObject = (event) => {
     let body = event.data;
@@ -113,7 +113,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
     if (!objectEntityId) {
       API.ApiCalls.createObject(entity?.endpoint, body)
         .then((res) => {
-          setObject(res.data)
+          setObject(res.data);
         })
         .catch((err) => {
           throw new Error("Create object error: " + err);
@@ -125,7 +125,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
     if (objectEntityId) {
       API.ApiCalls.updateObject(entity?.endpoint, objectEntityId, body)
         .then((res) => {
-          setObject(res.data)
+          setObject(res.data);
         })
         .catch((err) => {
           throw new Error("Update object error: " + err);
@@ -140,7 +140,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
   return (
     <Card
       title={title}
-      cardHeader={function () {
+      cardHeader={function() {
         return (
           <div>
             <button
@@ -156,9 +156,9 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
                 <i className="fas fa-long-arrow-alt-left mr-2" />Back
               </button>
             </Link>
-          </div>)
+          </div>);
       }}
-      cardBody={function () {
+      cardBody={function() {
         return (
           <div className="row">
             <div className="col-12">
@@ -166,11 +166,11 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
                 <Spinner />
               ) : (
                 formIO && formIO
-              )} 
+              )}
             </div>
           </div>
-        )
+        );
       }} />
-  )
-}
+  );
+};
 export default ObjectEntityFormNew;

@@ -65,7 +65,7 @@ export default function TranslationTable({ tableName }) {
   return (
     <Card
       title={"Translations"}
-      cardHeader={function () {
+      cardHeader={function() {
         return (
           <div>
             <button
@@ -103,7 +103,7 @@ export default function TranslationTable({ tableName }) {
           </div>
         );
       }}
-      cardBody={function () {
+      cardBody={function() {
         return (
           <div className="row">
             <div className="col-12">
@@ -114,15 +114,15 @@ export default function TranslationTable({ tableName }) {
                   columns={[
                     {
                       headerName: "Translate From",
-                      field: "translateFrom",
+                      field: "translateFrom"
                     },
                     {
                       headerName: "Translate To",
-                      field: "translateTo",
+                      field: "translateTo"
                     },
                     {
                       headerName: "Language",
-                      field: "language",
+                      field: "language"
                     },
                     {
                       field: "id",
@@ -146,8 +146,8 @@ export default function TranslationTable({ tableName }) {
                             </Link>
                           </div>
                         );
-                      },
-                    },
+                      }
+                    }
                   ]}
                   rows={translations}
                 />
@@ -156,16 +156,16 @@ export default function TranslationTable({ tableName }) {
                   columns={[
                     {
                       headerName: "Translate from",
-                      field: "translateFrom",
+                      field: "translateFrom"
                     },
                     {
                       headerName: "Translate to",
-                      field: "translateTo",
+                      field: "translateTo"
                     },
                     {
                       headerName: "Language",
-                      field: "language",
-                    },
+                      field: "language"
+                    }
                   ]}
                   rows={[{ name: "No results found" }]}
                 />

@@ -8,9 +8,9 @@ interface CallHealthQuickviewProps {
 }
 
 export const CallHealthQuickview: React.FC<CallHealthQuickviewProps> = ({
-  healthyCallsAmount,
-  unhealthyCallsAmount,
-}) => {
+                                                                          healthyCallsAmount,
+                                                                          unhealthyCallsAmount
+                                                                        }) => {
   return (
     <div className="callHealthQuickview">
       <div className="callHealthQuickview--healthy">

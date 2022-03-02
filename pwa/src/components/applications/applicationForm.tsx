@@ -5,7 +5,7 @@ import {
   Spinner,
   Card,
   Accordion,
-  Modal,
+  Modal
 } from "@conductionnl/nl-design-system/lib";
 import { Link } from "gatsby";
 import { navigate } from "gatsby-link";
@@ -43,7 +43,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
   React.useEffect(() => {
     setHeader({
       title: "Applications",
-      subText: "Manage your applications here",
+      subText: "Manage your applications here"
     });
   }, [setHeader]);
 
@@ -93,7 +93,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
       public: event.target.public.value ? event.target.public.value : null,
       secret: event.target.secret.value ? event.target.secret.value : null,
       resource: event.target.resource.value ? event.target.resource.value : null,
-      domains,
+      domains
     };
 
     body = removeEmptyObjectValues(body);
@@ -141,7 +141,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
     <form id="applicationForm" onSubmit={saveApplication}>
       <Card
         title={title}
-        cardHeader={function () {
+        cardHeader={function() {
           return (
             <>
               <button
@@ -171,7 +171,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
             </>
           );
         }}
-        cardBody={function () {
+        cardBody={function() {
           return (
             <div className="row">
               <div className="col-12">
@@ -236,10 +236,10 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
                         {
                           title: "Domains *",
                           id: "domainsAccordion",
-                          render: function () {
+                          render: function() {
                             return <ElementCreationNew id="domains" label="Domains" data={application?.domains} />;
-                          },
-                        },
+                          }
+                        }
                       ]}
                     />
                   </div>

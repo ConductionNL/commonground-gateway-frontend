@@ -29,7 +29,7 @@ export const TranslationTableForm: React.FC<TranslationTableFormProps> = ({ tabl
       translationTable: event.target.translationTable ? event.target.translationTable.value : null,
       language: event.target.language ? event.target.language.value : null,
       translateFrom: event.target.translateFrom ? event.target.translateFrom.value : null,
-      translateTo: event.target.translateTo ? event.target.translateTo.value : null,
+      translateTo: event.target.translateTo ? event.target.translateTo.value : null
     };
 
     API.Translation.create(body)
@@ -66,7 +66,7 @@ export const TranslationTableForm: React.FC<TranslationTableFormProps> = ({ tabl
       <form id="dataForm" onSubmit={saveTranslation}>
         <Card
           title={title}
-          cardHeader={function () {
+          cardHeader={function() {
             return (
               <>
                 <button
@@ -96,7 +96,7 @@ export const TranslationTableForm: React.FC<TranslationTableFormProps> = ({ tabl
               </>
             );
           }}
-          cardBody={function () {
+          cardBody={function() {
             return (
               <div className="row">
                 <div className="col-12">
@@ -120,10 +120,12 @@ export const TranslationTableForm: React.FC<TranslationTableFormProps> = ({ tabl
                         </div>
                       </div>
                       <hr />
-                      <h2 className="utrecht-heading-2 utrecht-heading-2--distanced TranslationTableForm-heading TranslationTableForm-heading-h2 mb-1">
+                      <h2
+                        className="utrecht-heading-2 utrecht-heading-2--distanced TranslationTableForm-heading TranslationTableForm-heading-h2 mb-1">
                         Add your first translation to this table
                       </h2>
-                      <h4 className="utrecht-heading-4 utrecht-heading-4--distanced TranslationTableForm-heading TranslationTableForm-heading-h4 TranslationTableForm-h4 mb-2">
+                      <h4
+                        className="utrecht-heading-4 utrecht-heading-4--distanced TranslationTableForm-heading TranslationTableForm-heading-h4 TranslationTableForm-h4 mb-2">
                         You need to create at least one translation when creating a new table
                       </h4>
 

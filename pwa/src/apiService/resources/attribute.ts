@@ -28,6 +28,6 @@ export default class Entity {
   };
 
   public delete = (id: string): Promise<AxiosResponse> => {
-    return this._instance.delete(`/attributes/${id}`)
-  }
+    return this._instance.delete(`/attributes/${id}`);
+  };
 }

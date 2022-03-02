@@ -67,7 +67,7 @@ export default function AttributeTable({ entityId }) {
   return (
     <Card
       title={title}
-      cardHeader={function () {
+      cardHeader={function() {
         return (
           <>
             <button
@@ -97,7 +97,7 @@ export default function AttributeTable({ entityId }) {
           </>
         );
       }}
-      cardBody={function () {
+      cardBody={function() {
         return (
           <div className="row">
             <div className="col-12">
@@ -108,15 +108,15 @@ export default function AttributeTable({ entityId }) {
                   columns={[
                     {
                       headerName: "Name",
-                      field: "name",
+                      field: "name"
                     },
                     {
                       headerName: "Type",
-                      field: "type",
+                      field: "type"
                     },
                     {
                       headerName: "Format",
-                      field: "format",
+                      field: "format"
                     },
                     {
                       headerName: "Required",
@@ -126,7 +126,7 @@ export default function AttributeTable({ entityId }) {
                           <LabelWithBackground label="required" type="primary" />
                         ) : (
                           <LabelWithBackground label="optional" type="secondary" />
-                        ),
+                        )
                     },
                     {
                       field: "id",
@@ -150,8 +150,8 @@ export default function AttributeTable({ entityId }) {
                             </Link>
                           </div>
                         );
-                      },
-                    },
+                      }
+                    }
                   ]}
                   rows={attributes}
                 />
@@ -160,20 +160,20 @@ export default function AttributeTable({ entityId }) {
                   columns={[
                     {
                       headerName: "Name",
-                      field: "name",
+                      field: "name"
                     },
                     {
                       headerName: "Type",
-                      field: "type",
+                      field: "type"
                     },
                     {
                       headerName: "Format",
-                      field: "format",
+                      field: "format"
                     },
                     {
                       headerName: "Required",
-                      field: "required",
-                    },
+                      field: "required"
+                    }
                   ]}
                   rows={[]}
                 />

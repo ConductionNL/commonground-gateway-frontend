@@ -24,6 +24,6 @@ export default class Endpoint {
   };
 
   public delete = (id: string): Promise<AxiosResponse> => {
-    return this._instance.delete(`/endpoints/${id}`)
-  }
+    return this._instance.delete(`/endpoints/${id}`);
+  };
 }

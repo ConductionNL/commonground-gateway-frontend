@@ -6,7 +6,7 @@ import {
   Card,
   Modal,
   Spinner,
-  TextareaGroup,
+  TextareaGroup
 } from "@conductionnl/nl-design-system/lib";
 import { navigate } from "gatsby-link";
 import { Link } from "gatsby";
@@ -35,7 +35,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
   React.useEffect(() => {
     setHeader({
       title: "Object type",
-      subText: "Manage your object type here",
+      subText: "Manage your object type here"
     });
   }, [setHeader]);
 
@@ -97,7 +97,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
       endpoint: event.target.endpoint.value ?? null,
       gateway: event.target.gateway.value ?? null,
       extend: event.target.extend.checked,
-      function: event.target.function.value ?? null,
+      function: event.target.function.value ?? null
     };
 
     // This removes empty values from the body
@@ -144,7 +144,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
     <form id="dataForm" onSubmit={saveEntity}>
       <Card
         title={title}
-        cardHeader={function () {
+        cardHeader={function() {
           return (
             <div>
               <button
@@ -174,7 +174,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
             </div>
           );
         }}
-        cardBody={function () {
+        cardBody={function() {
           return (
             <div className="row">
               <div className="col-12">
@@ -199,7 +199,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
                           options={[
                             { name: "Organization", value: "organization" },
                             { name: "User", value: "user" },
-                            { name: "User group", value: "userGroup" },
+                            { name: "User group", value: "userGroup" }
                           ]}
                           data={entity?.function ?? null}
                           name={"function"}
@@ -258,8 +258,8 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
                             options={[
                               {
                                 name: "Please wait, gettings sources from the Gateway...",
-                                value: "Please wait, gettings sources from the Gateway...",
-                              },
+                                value: "Please wait, gettings sources from the Gateway..."
+                              }
                             ]}
                             name={"gateway"}
                             id={"gatewayInput"}

@@ -64,7 +64,7 @@ export default function TableNamesTable() {
     <>
       <Card
         title={"Translation tables"}
-        cardHeader={function () {
+        cardHeader={function() {
           return (
             <>
               <button
@@ -94,7 +94,7 @@ export default function TableNamesTable() {
             </>
           );
         }}
-        cardBody={function () {
+        cardBody={function() {
           return (
             <div className="row">
               <div className="col-12">
@@ -105,7 +105,7 @@ export default function TableNamesTable() {
                     columns={[
                       {
                         headerName: "Tables",
-                        field: "name",
+                        field: "name"
                       },
                       {
                         field: "name",
@@ -122,8 +122,8 @@ export default function TableNamesTable() {
                               </button>
                             </a>
                           );
-                        },
-                      },
+                        }
+                      }
                     ]}
                     rows={tableNames}
                   />
@@ -132,8 +132,8 @@ export default function TableNamesTable() {
                     columns={[
                       {
                         headerName: "Tables",
-                        field: "name",
-                      },
+                        field: "name"
+                      }
                     ]}
                     rows={[{ name: "No results found" }]}
                   />

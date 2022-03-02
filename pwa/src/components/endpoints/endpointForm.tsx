@@ -5,7 +5,7 @@ import {
   TextareaGroup,
   Spinner,
   Card,
-  Modal,
+  Modal
 } from "@conductionnl/nl-design-system/lib";
 import { navigate } from "gatsby-link";
 import { Link } from "gatsby";
@@ -34,7 +34,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
   React.useEffect(() => {
     setHeader({
       title: "Endpoint",
-      subText: "Manage your endpoint here",
+      subText: "Manage your endpoint here"
     });
   }, [setHeader]);
 
@@ -93,7 +93,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
       name: event.target.name.value,
       description: event.target.description.value ?? null,
       path: event.target.path.value,
-      application: event.target.application.value ?? null,
+      application: event.target.application.value ?? null
     };
 
     // This removes empty values from the body
@@ -140,7 +140,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
     <form id="dataForm" onSubmit={saveEndpoint}>
       <Card
         title={title}
-        cardHeader={function () {
+        cardHeader={function() {
           return (
             <div>
               <button
@@ -174,7 +174,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
             </div>
           );
         }}
-        cardBody={function () {
+        cardBody={function() {
           return (
             <div className="row">
               <div className="col-12">
@@ -209,8 +209,8 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
                             options={[
                               {
                                 name: "Please wait, gettings applications from the Gateway...",
-                                value: "Please wait, gettings applications from the Gateway...",
-                              },
+                                value: "Please wait, gettings applications from the Gateway..."
+                              }
                             ]}
                             name={"application"}
                             id={"applicationInput"}

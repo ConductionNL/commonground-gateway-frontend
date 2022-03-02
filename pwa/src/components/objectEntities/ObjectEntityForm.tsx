@@ -5,7 +5,7 @@ import {
   Accordion,
   SelectInputComponent,
   Card,
-  Modal,
+  Modal
 } from "@conductionnl/nl-design-system/lib";
 import { Link } from "gatsby";
 import { checkValues, removeEmptyObjectValues, retrieveFormArrayAsOArray } from "../utility/inputHandler";
@@ -16,7 +16,7 @@ import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 import { AlertContext } from "../../context/alertContext";
 import { HeaderContext } from "../../context/headerContext";
-import { isValidUUIDV4 } from 'is-valid-uuid-v4';
+import { isValidUUIDV4 } from "is-valid-uuid-v4";
 
 interface ObjectEntityFormProps {
   objectId: string;
@@ -37,7 +37,7 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
   React.useEffect(() => {
     setHeader({
       title: "Object",
-      subText: "Manage your object here",
+      subText: "Manage your object here"
     });
   }, [setHeader]);
 
@@ -107,7 +107,7 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
       entity: `/admin/entities/${entityId}`,
       errors,
       promises,
-      externalResult,
+      externalResult
     };
 
     // This removes empty values from the body
@@ -161,7 +161,7 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
     <form id="dataForm" onSubmit={saveObjectEntity}>
       <Card
         title={title}
-        cardHeader={function () {
+        cardHeader={function() {
           return (
             <>
               <button
@@ -195,7 +195,7 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
             </>
           );
         }}
-        cardBody={function () {
+        cardBody={function() {
           return (
             <div className="row">
               <div className="col-12">
@@ -262,7 +262,7 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
                                 }]}
                                 name={"application"} id={"applicationInput"} nameOverride={"Application"} disabled />
                             )}
-                       </div>
+                        </div>
                       </div>
                       <div className="col-6">
                         <GenericInputComponent
@@ -293,29 +293,29 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
                         {
                           title: "Errors",
                           id: "errorsAccordion",
-                          render: function () {
+                          render: function() {
                             return (
                               <>
                                 <ElementCreationNew id="errors" label="Errors" data={objectEntity?.errors} />
                               </>
                             );
-                          },
+                          }
                         },
                         {
                           title: "Promises",
                           id: "promisesAccordion",
-                          render: function () {
+                          render: function() {
                             return (
                               <>
                                 <ElementCreationNew id="promises" label="Promises" data={objectEntity?.promises} />
                               </>
                             );
-                          },
+                          }
                         },
                         {
                           title: "External Result",
                           id: "externalResultAccordion",
-                          render: function () {
+                          render: function() {
                             return (
                               <>
                                 <ElementCreationNew
@@ -325,8 +325,8 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
                                 />
                               </>
                             );
-                          },
-                        },
+                          }
+                        }
                       ]}
                     />
                   </>

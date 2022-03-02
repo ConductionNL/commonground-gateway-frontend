@@ -21,7 +21,7 @@ const IndexPage = (props) => {
                   { name: "Overview", id: "overview", active: !activeTab },
                   { name: "Attributes", id: "attributes", active: activeTab === "attributes" },
                   { name: "Objects", id: "data", active: activeTab === "objects" },
-                  { name: "Logs", id: "logs" },
+                  { name: "Logs", id: "logs" }
                 ]}
               />
             )}
