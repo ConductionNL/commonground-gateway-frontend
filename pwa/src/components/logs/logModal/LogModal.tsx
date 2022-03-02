@@ -15,38 +15,28 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
       key={log.id}
       title={"Call log"}
       id={`logs${log.id}`}
-      body={function() {
+      body={function () {
         return (
           <>
             <Tabs
               items={[
                 { name: "General", id: "logGeneral", active: true },
                 { name: "Request", id: "logRequest" },
-                { name: "Response", id: "logResponse" }
+                { name: "Response", id: "logResponse" },
               ]}
             />
             <div className="tab-content">
-              <div
-                className="tab-pane active"
-                id="logGeneral"
-                role="tabpanel"
-                aria-labelledby="logGeneral-tab"
-              >
+              <div className="tab-pane active" id="logGeneral" role="tabpanel" aria-labelledby="logGeneral-tab">
                 <table className="mt-3 logTable-table">
                   <tr>
                     <th>Status</th>
                     <td>
-                      <StatusCode
-                        code={log?.responseStatusCode}
-                        message={log?.responseStatus}
-                      />
+                      <StatusCode code={log?.responseStatusCode} message={log?.responseStatus} />
                     </td>
                   </tr>
                   <tr>
                     <th>Type</th>
-                    <td>
-                      {log?.type === "in" ? "Incoming" : "Outcoming"}
-                    </td>
+                    <td>{log?.type === "in" ? "Incoming" : "Outcoming"}</td>
                   </tr>
                   <tr>
                     <th>Call ID</th>
@@ -84,7 +74,7 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                     {
                       title: "Session",
                       id: "logRequestSession",
-                      render: function() {
+                      render: function () {
                         return (
                           <>
                             {log.session && (
@@ -95,23 +85,16 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                             {log.sessionValues ? (
                               JSON.stringify(log.sessionValues)
                             ) : (
-                              <p className="utrecht-paragraph">
-                                No session values found
-                              </p>
+                              <p className="utrecht-paragraph">No session values found</p>
                             )}
                           </>
                         );
-                      }
-                    }
+                      },
+                    },
                   ]}
                 />
               </div>
-              <div
-                className="tab-pane"
-                id="logRequest"
-                role="tabpanel"
-                aria-labelledby="logRequest-tab"
-              >
+              <div className="tab-pane" id="logRequest" role="tabpanel" aria-labelledby="logRequest-tab">
                 <table className="mt-3 logTable-table">
                   <tr>
                     <th>Method</th>
@@ -132,108 +115,87 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                     {
                       title: "Headers",
                       id: "logRequestHeaders",
-                      render: function() {
+                      render: function () {
                         return (
                           <>
                             {log.requestHeaders ? (
                               JSON.stringify(log.requestHeaders)
                             ) : (
-                              <p className="utrecht-paragraph">
-                                No headers found
-                              </p>
+                              <p className="utrecht-paragraph">No headers found</p>
                             )}
                           </>
                         );
-                      }
+                      },
                     },
                     {
                       title: "Query paramaters",
                       id: "logRequestQueryparamters",
-                      render: function() {
+                      render: function () {
                         return (
                           <>
                             {log.requestQuery ? (
                               JSON.stringify(log.requestQuery)
                             ) : (
-                              <p className="utrecht-paragraph">
-                                No parameters found
-                              </p>
-                            )}
-                          </>
-                        );
-                      }
-                    },
-                    {
-                      title: "Content",
-                      id: "logRequestContent",
-                      render: function() {
-                        return (
-                          <>
-                            {log.requestContent ? (
-                              <CodeBlock
-                                code={log.requestContent}
-                                language="json"
-                              />
-                            ) : (
-                              <p className="utrecht-paragraph">
-                                No content found
-                              </p>
+                              <p className="utrecht-paragraph">No parameters found</p>
                             )}
                           </>
                         );
                       },
-                      backgroundColor: "black"
-                    }
+                    },
+                    {
+                      title: "Content",
+                      id: "logRequestContent",
+                      render: function () {
+                        return (
+                          <>
+                            {log.requestContent ? (
+                              <CodeBlock code={log.requestContent} language="json" />
+                            ) : (
+                              <p className="utrecht-paragraph">No content found</p>
+                            )}
+                          </>
+                        );
+                      },
+                      backgroundColor: "black",
+                    },
                   ]}
                 />
               </div>
-              <div
-                className="tab-pane"
-                id="logResponse"
-                role="tabpanel"
-                aria-labelledby="logResponse-tab"
-              >
+              <div className="tab-pane" id="logResponse" role="tabpanel" aria-labelledby="logResponse-tab">
                 <Accordion
                   id="logResponseAccordion"
                   items={[
                     {
                       title: "Headers",
                       id: "logResponseHeaders",
-                      render: function() {
+                      render: function () {
                         return (
                           <>
                             {log.responseHeaders ? (
                               JSON.stringify(log.responseHeaders)
                             ) : (
-                              <p className="utrecht-paragraph">
-                                No headers found
-                              </p>
-                            )}
-                          </>
-                        );
-                      }
-                    },
-                    {
-                      title: "Content",
-                      id: "logResponseContent",
-                      render: function() {
-                        return (
-                          <>
-                            {log.responseContent ? (
-                              <CodeBlock
-                                code={log.responseContent}
-                                language="json"
-                              />
-                            ) : (
-                              <p className="utrecht-paragraph">
-                                No content found
-                              </p>
+                              <p className="utrecht-paragraph">No headers found</p>
                             )}
                           </>
                         );
                       },
-                      backgroundColor: "black"
-                    }
+                    },
+                    {
+                      title: "Content",
+                      id: "logResponseContent",
+                      render: function () {
+                        return (
+                          <>
+                            {log.responseContent ? (
+                              <CodeBlock code={log.responseContent} language="json" />
+                            ) : (
+                              <p className="utrecht-paragraph">No content found</p>
+                            )}
+                          </>
+                        );
+                      },
+                      backgroundColor: "black",
+                    },
                   ]}
                 />
               </div>

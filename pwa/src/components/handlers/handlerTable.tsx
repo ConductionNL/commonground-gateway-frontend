@@ -18,6 +18,10 @@ export default function HandlersTable({ endpointId }) {
     handleSetHandlers();
   }, [API]);
 
+  React.useEffect(() => {
+    handleSetDocumentation();
+  });
+
   const handleSetHandlers = () => {
     setShowSpinner(true);
     API.Handler.getAllFromEndpoint(endpointId)
@@ -30,6 +34,16 @@ export default function HandlersTable({ endpointId }) {
       })
       .finally(() => {
         setShowSpinner(false);
+      });
+  };
+
+  const handleSetDocumentation = (): void => {
+    API.Documentation.get("handlers")
+      .then((res) => {
+        setDocumentation(res.data.content);
+      })
+      .catch((err) => {
+        throw new Error("GET Documentation error: " + err);
       });
   };
 
