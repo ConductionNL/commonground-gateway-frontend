@@ -32,7 +32,7 @@ export default function Layout({ children, pageContext }) {
     }
 
     const jwt = sessionStorage.getItem("jwt");
-    !validateSession(jwt) && logout()
+    !validateSession(jwt) && logout();
     !API && jwt && setAPI(new APIService(jwt));
   }, [API, isLoggedIn()]);
 
@@ -49,7 +49,7 @@ export default function Layout({ children, pageContext }) {
               <MainMenu />
               <div className="utrecht-page__content">
                 <header className="utrecht-page-header">
-                  <Header { ...{ pageContext } } />
+                  <Header {...{ pageContext }} />
                 </header>
                 <div className="container py-4">{children}</div>
               </div>
