@@ -3,6 +3,7 @@ import { Accordion, Modal, Tabs } from "@conductionnl/nl-design-system";
 import { Link, navigate } from "gatsby";
 import CodeBlock from "../../common/codeBlock/codeBlock";
 import { StatusCode } from "../logTable/logTable";
+import msToSeconds from "../../../services/msToSeconds";
 
 interface LogModalProps {
   log: any;
@@ -52,8 +53,14 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                     <td>{log?.callId}</td>
                   </tr>
                   <tr>
+                    <th>Session ID</th>
+                    <td>
+                      {log?.session}
+                    </td>
+                  </tr>
+                  <tr>
                     <th>Response time</th>
-                    <td>{log?.responseTime.toString() + " seconds"}</td>
+                    <td>{log && `${log.responseTime}ms (${msToSeconds(log.responseTime)}s)`}</td>
                   </tr>
                   <tr>
                     <th>Route</th>
@@ -76,23 +83,21 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                     </td>
                   </tr>
                 </table>
-
                 <Accordion
                   id="logGeneralAccordion"
                   items={[
                     {
                       title: "Session",
                       id: "logRequestSession",
+                      backgroundColor: "black",
                       render: function() {
                         return (
                           <>
-                            {log.session && (
-                              <h5 className="utrecht-heading-5 utrecht-heading-5--distanced">
-                                Session: {log.session && log.session}
-                              </h5>
-                            )}
                             {log.sessionValues ? (
-                              JSON.stringify(log.sessionValues)
+                              <CodeBlock
+                                code={JSON.stringify(log.sessionValues)}
+                                language="json"
+                              />
                             ) : (
                               <p className="utrecht-paragraph">
                                 No session values found
@@ -135,7 +140,21 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                         return (
                           <>
                             {log.requestHeaders ? (
-                              JSON.stringify(log.requestHeaders)
+                              <table className="mt-3 logTable-table">
+                                {log.requestHeaders.map((requestHeader, idx) => {
+                                    return (
+                                      <tr key={Object.keys(requestHeader)[0] + idx}>
+                                        <th>
+                                          {Object.keys(requestHeader)[0]}
+                                        </th>
+                                        <td>
+                                          {Object.values(requestHeader)[0]}
+                                        </td>
+                                      </tr>
+                                    );
+                                  }
+                                )}
+                              </table>
                             ) : (
                               <p className="utrecht-paragraph">
                                 No headers found
@@ -152,7 +171,21 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                         return (
                           <>
                             {log.requestQuery ? (
-                              JSON.stringify(log.requestQuery)
+                              <table className="mt-3 logTable-table">
+                                {log.requestQuery.map((queryParamaters, idx) => {
+                                    return (
+                                      <tr key={Object.keys(queryParamaters)[0] + idx}>
+                                        <th>
+                                          {Object.keys(queryParamaters)[0]}
+                                        </th>
+                                        <td>
+                                          {Object.values(queryParamaters)[0]}
+                                        </td>
+                                      </tr>
+                                    );
+                                  }
+                                )}
+                              </table>
                             ) : (
                               <p className="utrecht-paragraph">
                                 No parameters found
@@ -165,6 +198,7 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                     {
                       title: "Content",
                       id: "logRequestContent",
+                      backgroundColor: "black",
                       render: function() {
                         return (
                           <>
@@ -180,8 +214,7 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                             )}
                           </>
                         );
-                      },
-                      backgroundColor: "black"
+                      }
                     }
                   ]}
                 />
@@ -202,7 +235,21 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                         return (
                           <>
                             {log.responseHeaders ? (
-                              JSON.stringify(log.responseHeaders)
+                              <table className="mt-3 logTable-table">
+                                {log.requestHeaders.map((requestHeader, idx) => {
+                                    return (
+                                      <tr key={Object.keys(requestHeader)[0] + idx}>
+                                        <th>
+                                          {Object.keys(requestHeader)[0]}
+                                        </th>
+                                        <td>
+                                          {Object.values(requestHeader)[0]}
+                                        </td>
+                                      </tr>
+                                    );
+                                  }
+                                )}
+                              </table>
                             ) : (
                               <p className="utrecht-paragraph">
                                 No headers found
@@ -239,7 +286,8 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
             </div>
           </>
         );
-      }}
+      }
+      }
     />
   );
 };
