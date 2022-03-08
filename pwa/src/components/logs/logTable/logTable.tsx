@@ -29,12 +29,12 @@ const LogsTable: React.FC<LogsTableProps> = ({logs}) => {
         </tr>
         </tbody>}
         {logs.map((log, idx) => {
-          const statusClass = log.responseStatusCode > 199 && log.responseStatusCode < 300 ? "success" : "danger";
+          const statusClass = log.responseStatusCode ? log.responseStatusCode > 199 && log.responseStatusCode < 300 ? "success" : "danger" : "danger";
           return (
             <tbody>
               <tr key={idx} className="logsTable-tr">
                 <td>
-                  <LabelWithBackground label={log.responseStatusCode.toString()} type={statusClass}/>
+                  <LabelWithBackground label={log?.responseStatusCode?.toString()} type={statusClass} />
                 </td>
                 <td>{log.type}</td>
                 <td>{log.requestMethod}</td>
