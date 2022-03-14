@@ -4,15 +4,12 @@ import {
   TextareaGroup,
   Spinner,
   Card,
-  Modal, Accordion
+  Modal,
+  Accordion,
 } from "@conductionnl/nl-design-system/lib";
-import {navigate} from "gatsby-link";
-import {Link} from "gatsby";
-import {
-  checkValues,
-  removeEmptyObjectValues,
-  retrieveFormArrayAsOArrayWithName,
-} from "../utility/inputHandler";
+import { navigate } from "gatsby-link";
+import { Link } from "gatsby";
+import { checkValues, removeEmptyObjectValues, retrieveFormArrayAsOArrayWithName } from "../utility/inputHandler";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
@@ -54,8 +51,8 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
     API.Endpoint.getOne(endpointId)
       .then((res) => {
         res.data.applications = res.data.applications.map((endpoint) => {
-          return {name: endpoint.name, id: endpoint.name, value: `/admin/endpoints/${endpoint.id}`}
-        })
+          return { name: endpoint.name, id: endpoint.name, value: `/admin/endpoints/${endpoint.id}` };
+        });
         setEndpoint(res.data);
       })
       .catch((err) => {
@@ -71,8 +68,8 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
     API.Application.getAll()
       .then((res) => {
         const _applications = res.data?.map((application) => {
-          return {name: application.name, id: application.name, value: `/admin/applications/${application.id}`}
-        })
+          return { name: application.name, id: application.name, value: `/admin/applications/${application.id}` };
+        });
         setApplications(_applications);
       })
       .catch((err) => {
@@ -102,7 +99,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
       name: event.target.name.value,
       description: event.target.description.value ?? null,
       path: event.target.path.value,
-      applications
+      applications,
     };
 
     // This removes empty values from the body
@@ -114,44 +111,25 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
       return;
     }
 
-    if (!endpointId) {
-      // unset id means we're creating a new entry
-      API.Endpoint.create(body)
-        .then(() => {
-          setAlert({message: "Saved endpoint", type: "success"});
-          navigate(`/endpoints`);
-        })
-        .catch((err) => {
-          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
-          throw new Error("Create endpoint error: " + err);
-        })
-        .finally(() => {
-          setLoadingOverlay(false);
-        });
-    }
-
-    if (endpointId) {
-      // set id means we're updating a existing entry
-      API.Endpoint.update(body, endpointId)
-        .then((res) => {
-          setAlert({message: "Updated endpoint", type: "success"});
-          setEndpoint(res.data);
-        })
-        .catch((err) => {
-          setAlert({type: "danger", message: err.message});
-          throw new Error("Update endpoint error: " + err);
-        })
-        .finally(() => {
-          setLoadingOverlay(false);
-        });
-    }
+    API.Endpoint.createOrUpdate(body, endpointId)
+      .then(() => {
+        setAlert({ message: `${endpointId ? "Updated" : "Created"} endpoint`, type: "success" });
+        navigate("/endpoints");
+      })
+      .catch((err) => {
+        setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+        throw new Error(`Create or update endpoint error: ${err}`);
+      })
+      .finally(() => {
+        setLoadingOverlay(false);
+      });
   };
 
   return (
     <form id="dataForm" onSubmit={saveEndpoint}>
       <Card
         title={title}
-        cardHeader={function () {
+        cardHeader={() => {
           return (
             <div>
               <button
@@ -187,7 +165,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
                 type="submit"
                 disabled={!setApplications}
               >
-                <i className="fas fa-save mr-2"/>
+                <i className="fas fa-save mr-2" />
                 Save
               </button>
             </div>
@@ -201,8 +179,8 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
                   <Spinner/>
                 ) : (
                   <div>
-                    {loadingOverlay && <LoadingOverlay/>}
-                    <div className="row">
+                    {loadingOverlay && <LoadingOverlay />}
+                    <div className="row form-row">
                       <div className="col-6">
                         <GenericInputComponent
                           type={"text"}
@@ -210,26 +188,27 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
                           id={"nameInput"}
                           data={endpoint && endpoint.name && endpoint.name}
                           nameOverride={"Name"}
+                          required
                         />
                       </div>
+                      <div className="col-6">
+                        <GenericInputComponent
+                          nameOverride={"Path"}
+                          name={"path"}
+                          data={endpoint?.path}
+                          type={"text"}
+                          id={"pathInput"}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="row form-row">
                       <div className="col-6">
                         <TextareaGroup
                           name={"description"}
                           id={"descriptionInput"}
                           defaultValue={endpoint?.description}
                         />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-6">
-                          <GenericInputComponent
-                            nameOverride={"Path"}
-                            name={"path"}
-                            data={endpoint?.path}
-                            type={"text"}
-                            id={"pathInput"}
-                            required={true}
-                          />
                       </div>
                     </div>
                     <Accordion
@@ -249,8 +228,8 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
                             ) : (
                               <Spinner/>
                             );
-                          }
-                        }
+                          },
+                        },
                       ]}
                     />
                   </div>

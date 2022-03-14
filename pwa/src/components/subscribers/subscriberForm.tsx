@@ -58,9 +58,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
     handleSetTableNames();
   }, [API, subscriberId]);
 
-  const handleSetSubscriber = () => {
-    setShowSpinner(true);
+  React.useEffect(() => {
+    setShowSpinner(!sources || !endpoints || !tableNames || (subscriberId && !subscriber));
+  }, [subscriber, sources, endpoints, tableNames, subscriberId]);
 
+  const handleSetSubscriber= () => {
     API.Subscriber.getOne(subscriberId)
       .then((res) => {
         setSubscriber(res.data);
@@ -68,9 +70,6 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
       .catch((err) => {
         setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET subscriber error: " + err);
-      })
-      .finally(() => {
-        setShowSpinner(false);
       });
   };
 
@@ -86,8 +85,6 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
   };
 
   const handleSetSources = () => {
-    setShowSpinner(true);
-
     API.Source.getAll()
       .then((res) => {
         setSources(res.data);
@@ -95,15 +92,10 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
       .catch((err) => {
         setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET sources error: " + err);
-      })
-      .finally(() => {
-        setShowSpinner(false);
       });
   };
 
   const handleSetEndpoints = () => {
-    setShowSpinner(true);
-
     API.Endpoint.getAll()
       .then((res) => {
         setEndpoint(res.data);
@@ -111,15 +103,10 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
       .catch((err) => {
         setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET endpoints error: " + err);
-      })
-      .finally(() => {
-        setShowSpinner(false);
       });
   };
 
   const handleSetTableNames = () => {
-    setShowSpinner(true);
-
     API.Translation.getTableNames()
       .then((res) => {
         const mappedTableNames = res.data.results.map((value, idx) => ({id: idx, name: value, value: value}));
@@ -128,9 +115,6 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
       .catch((err) => {
         setAlert({message: err, type: "danger"});
         throw new Error("GET table names error: " + err);
-      })
-      .finally(() => {
-        setShowSpinner(false);
       });
   };
 
@@ -146,14 +130,15 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
     let translationsOut: any[] = retrieveFormArrayAsOArray(event.target, "translationsOut");
 
     let body: any = {
-      name: event.target.name.value ?? null,
+      name: event.target.name.value,
       description: event.target.description.value ?? null,
+      type: event.target.type.value,
       entity: `admin/entities/${entityId}`,
       endpoint: event.target.endpoint.value ?? null,
       gateway: event.target.source.value ?? null,
       method: event.target.method.value,
       conditions: event.target.conditions.value ?? null,
-      runOrder: parseInt(event.target.runOrder.value) ?? null,
+      runOrder: event.target.runOrder.value ? parseInt(event.target.runOrder.value) : 0,
       asynchronous: event.target.asynchronous.checked,
       blocking: event.target.blocking.checked,
       mappingIn,
@@ -167,52 +152,32 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
     body = removeEmptyObjectValues(body);
     console.log(body.conditions);
 
-    if (!checkValues([body.name])) {
-      setAlert({title: "Oops something went wrong", type: "danger", message: "Required fields are empty"});
+    if (!checkValues([body.name, body.type])) {
+      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
       setLoadingOverlay(false);
       return;
     }
 
-    if (body.conditions !== undefined && !validateJSON(body.conditions)) {
-      setAlert({title: "Oops something went wrong", type: "danger", message: "Conditions is not valid JSON"});
+    if (body.conditions && !validateJSON(body.conditions)) {
+      setAlert({ title: "Oops something went wrong", type: "danger", message: "Conditions is not valid JSON" });
       setLoadingOverlay(false);
       return;
     }
 
-    if (!subscriberId) {
-      // unset id means we're creating a new entry
-      API.Subscriber.create(body)
-        .then(() => {
-          setAlert({message: "Saved subscriber", type: "success"});
-          navigate(`/entities/${entityId}`, {
-            state: {activeTab: "subscribers"},
-          });
-        })
-        .catch((err) => {
-          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
-          throw new Error("Create subscriber error: " + err);
-        })
-        .finally(() => {
-          setLoadingOverlay(false);
+    API.Subscriber.createOrUpdate(body, subscriberId)
+      .then(() => {
+        setAlert({ message: `${subscriberId ? "Updated" : "Created"} subscriber`, type: "success" });
+        navigate(`/entities/${entityId}`, {
+          state: { activeTab: "subscribers" },
         });
-    }
-
-    if (subscriberId) {
-      // set id means we're updating a existing entry
-      API.Subscriber.update(body, subscriberId)
-        .then((res) => {
-          console.log(res.data);
-          setAlert({message: "Updated subscriber", type: "success"});
-          setSubscriber(res.data);
-        })
-        .catch((err) => {
-          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
-          throw new Error("Update subscriber error: " + err);
-        })
-        .finally(() => {
-          setLoadingOverlay(false);
-        });
-    }
+      })
+      .catch((err) => {
+        setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+        throw new Error(`Create or update subscriber error: ${err}`);
+      })
+      .finally(() => {
+        setLoadingOverlay(false);
+      });
   };
 
   return (
@@ -272,8 +237,8 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                   <Spinner/>
                 ) : (
                   <div>
-                    {loadingOverlay && <LoadingOverlay/>}
-                    <div className="row">
+                    {loadingOverlay && <LoadingOverlay />}
+                    <div className="row form-row">
                       <div className="col-6">
                         <GenericInputComponent
                           type={"text"}
@@ -281,6 +246,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                           id={"nameInput"}
                           data={subscriber?.name}
                           nameOverride={"Name"}
+                          required
                         />
                       </div>
                       <div className="col-6">
@@ -291,7 +257,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                         />
                       </div>
                     </div>
-                    <div className="row">
+                    <div className="row form-row">
                       <div className="col-6">
                         <SelectInputComponent
                           options={[
@@ -317,8 +283,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                         />
                       </div>
                     </div>
-                    <br/>
-                    <div className="row">
+                    <div className="row form-row">
                       <div className="col-6">
                         <TextareaGroup
                           name={"conditions"}
@@ -342,15 +307,20 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                         />
                       </div>
                     </div>
-                    <br/>
-                    <div className="row">
+                    <div className="row form-row">
                       <div className="col-6">
                         <SelectInputComponent
-                          options={
-                            endpoints !== null && endpoints.length > 0
-                              ? endpoints
-                              : [{name: "Please create an endpoint first.", value: null}]
-                          }
+                          options={[{ name: 'Extern Source', value: 'externSource' }, { name: 'Intern Gateway', value: 'internGateway' }]}
+                          data={subscriber?.type}
+                          name={"type"}
+                          id={"typeInput"}
+                          nameOverride={"Type"}
+                          required
+                        />
+                      </div>
+                      <div className="col-6">
+                        <SelectInputComponent
+                          options={endpoints !== null && endpoints.length > 0 ? endpoints : [{ name: 'Please create an endpoint first.', value: null }]}
                           data={subscriber?.endpoint?.name}
                           name={"endpoint"}
                           id={"endpointInput"}
@@ -359,8 +329,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                         />
                       </div>
                     </div>
-                    <br/>
-                    <div className="row mt-3">
+                    <div className="row form-row">
                       <div className="col-12 col-sm-6 ">
                         <div className="form-check">
                           <Checkbox
