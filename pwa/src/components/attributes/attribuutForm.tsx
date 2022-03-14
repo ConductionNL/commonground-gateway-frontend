@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Link} from "gatsby";
+import { Link } from "gatsby";
 import {
   checkValues,
   removeEmptyObjectValues,
@@ -17,14 +17,14 @@ import {
   Card,
   Modal,
 } from "@conductionnl/nl-design-system/lib";
-import {navigate} from "gatsby-link";
+import { navigate } from "gatsby-link";
 import ElementCreationNew from "../common/elementCreationNew";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import {AlertContext} from "../../context/alertContext";
-import {HeaderContext} from "../../context/headerContext";
-import {MIMETypes} from "../../data/mimeTypes";
+import { AlertContext } from "../../context/alertContext";
+import { HeaderContext } from "../../context/headerContext";
+import { MIMETypes } from "../../data/mimeTypes";
 import MultiSelect from "../common/multiSelect";
 import Application from "../../apiService/resources/application";
 
@@ -33,7 +33,7 @@ interface AttributeFormProps {
   entityId: string;
 }
 
-export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entityId}) => {
+export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entityId }) => {
   const [attribute, setAttribute] = React.useState<any>(null);
   const [attributes, setAttributes] = React.useState<any>(null);
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
@@ -82,7 +82,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -97,7 +97,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
         setAttributes(_attributes);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET attributes error: " + err);
       });
   };
@@ -162,7 +162,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
     body = removeEmptyObjectValues(body);
 
     if (!checkValues([body.name, body.type])) {
-      setAlert({title: "Oops something went wrong", type: "danger", message: "Required fields are empty"});
+      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
       setLoadingOverlay(false);
       return;
     }
@@ -196,38 +196,25 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                 data-bs-toggle="modal"
                 data-bs-target="#attributeHelpModal"
                 onClick={() => {
-                  !documentation && handleSetDocumentation()
+                  !documentation && handleSetDocumentation();
                 }}
               >
-                <i className="fas fa-question mr-1"/>
+                <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Attribute Documentation"
                 id="attributeHelpModal"
-                body={() =>
-                  documentation ? (
-                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                  ) : (
-                    <Spinner/>
-                  )
-                }
+                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
-              <Link
-                className="utrecht-link"
-                to={`/entities/${entityId}`}
-                state={{activeTab: "attributes"}}
-              >
+              <Link className="utrecht-link" to={`/entities/${entityId}`} state={{ activeTab: "attributes" }}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2"/>
+                  <i className="fas fa-long-arrow-alt-left mr-2" />
                   Back
                 </button>
               </Link>
-              <button
-                className="utrecht-button utrecht-button-sm btn-sm btn-success"
-                type="submit"
-              >
-                <i className="fas fa-save mr-2"/>
+              <button className="utrecht-button utrecht-button-sm btn-sm btn-success" type="submit">
+                <i className="fas fa-save mr-2" />
                 Save
               </button>
             </>
@@ -238,7 +225,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner/>
+                  <Spinner />
                 ) : (
                   <div>
                     {loadingOverlay && <LoadingOverlay />}
@@ -256,16 +243,16 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                       <div className="col-6">
                         <SelectInputComponent
                           options={[
-                            {name: "String", value: "string"},
-                            {name: "Array", value: "array"},
-                            {name: "Integer", value: "integer"},
-                            {name: "Boolean", value: "boolean"},
-                            {name: "Object", value: "object"},
-                            {name: "Date", value: "date"},
-                            {name: "Datetime", value: "datetime"},
-                            {name: "Number", value: "number"},
-                            {name: "Float", value: "float"},
-                            {name: "File", value: "file"},
+                            { name: "String", value: "string" },
+                            { name: "Array", value: "array" },
+                            { name: "Integer", value: "integer" },
+                            { name: "Boolean", value: "boolean" },
+                            { name: "Object", value: "object" },
+                            { name: "Date", value: "date" },
+                            { name: "Datetime", value: "datetime" },
+                            { name: "Number", value: "number" },
+                            { name: "Float", value: "float" },
+                            { name: "File", value: "file" },
                           ]}
                           name={"type"}
                           id={"typeInput"}
@@ -287,7 +274,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                           />
                         ) : (
                           <SelectInputComponent
-                            options={[{name: "Please create a attribute to use inversedBy", value: null}]}
+                            options={[{ name: "Please create a attribute to use inversedBy", value: null }]}
                             name={"inversedBy"}
                             id={"inversedByInput"}
                             nameOverride={"inversedBy"}
@@ -297,13 +284,13 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                       <div className="col-6">
                         <SelectInputComponent
                           options={[
-                            {name: "Email", value: "email"},
-                            {name: "Phone", value: "phone"},
-                            {name: "Country code", value: "countryCode"},
-                            {name: "BSN", value: "bsn"},
-                            {name: "Url", value: "url"},
-                            {name: "UUID", value: "uuid"},
-                            {name: "Json", value: "json"},
+                            { name: "Email", value: "email" },
+                            { name: "Phone", value: "phone" },
+                            { name: "Country code", value: "countryCode" },
+                            { name: "BSN", value: "bsn" },
+                            { name: "Url", value: "url" },
+                            { name: "UUID", value: "uuid" },
+                            { name: "Json", value: "json" },
                           ]}
                           name={"format"}
                           id={"formatInput"}
@@ -508,11 +495,11 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                                             data={
                                               attribute && attribute.requiredIf
                                                 ? [
-                                                  {
-                                                    key: "requiredIf",
-                                                    value: attribute.requiredIf,
-                                                  },
-                                                ]
+                                                    {
+                                                      key: "requiredIf",
+                                                      value: attribute.requiredIf,
+                                                    },
+                                                  ]
                                                 : null
                                             }
                                           />
@@ -543,11 +530,11 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                                             data={
                                               attribute && attribute.objectConfig
                                                 ? [
-                                                  {
-                                                    key: "objectConfig",
-                                                    value: attribute.objectConfig,
-                                                  },
-                                                ]
+                                                    {
+                                                      key: "objectConfig",
+                                                      value: attribute.objectConfig,
+                                                    },
+                                                  ]
                                                 : null
                                             }
                                           />
@@ -722,7 +709,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                                       title: "Enum",
                                       id: "enumAccordion",
                                       render: function () {
-                                        return <ElementCreationNew id={"enum"} label={"Enum"} data={attribute?.enum}/>;
+                                        return <ElementCreationNew id={"enum"} label={"Enum"} data={attribute?.enum} />;
                                       },
                                     },
                                     {
@@ -730,7 +717,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                                       id: "allOfAccordion",
                                       render: function () {
                                         return (
-                                          <ElementCreationNew label={"All Of"} id={"allOf"} data={attribute?.allOf}/>
+                                          <ElementCreationNew label={"All Of"} id={"allOf"} data={attribute?.allOf} />
                                         );
                                       },
                                     },
@@ -739,7 +726,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                                       id: "anyOfAccordion",
                                       render: function () {
                                         return (
-                                          <ElementCreationNew label={"Any Of"} id={"anyOf"} data={attribute?.anyOf}/>
+                                          <ElementCreationNew label={"Any Of"} id={"anyOf"} data={attribute?.anyOf} />
                                         );
                                       },
                                     },
@@ -748,7 +735,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({attributeId, entity
                                       id: "oneOfAccordion",
                                       render: function () {
                                         return (
-                                          <ElementCreationNew label={"One Of"} id={"oneOf"} data={attribute?.oneOf}/>
+                                          <ElementCreationNew label={"One Of"} id={"oneOf"} data={attribute?.oneOf} />
                                         );
                                       },
                                     },

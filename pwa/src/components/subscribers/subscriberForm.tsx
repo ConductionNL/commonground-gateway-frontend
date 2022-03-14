@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Link} from "gatsby";
+import { Link } from "gatsby";
 import {
   checkValues,
   removeEmptyObjectValues,
@@ -14,23 +14,24 @@ import {
   TextareaGroup,
   Accordion,
   Spinner,
-  Card, Modal,
+  Card,
+  Modal,
 } from "@conductionnl/nl-design-system/lib";
-import {navigate} from "gatsby-link";
+import { navigate } from "gatsby-link";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import {AlertContext} from "../../context/alertContext";
-import {HeaderContext} from "../../context/headerContext";
+import { AlertContext } from "../../context/alertContext";
+import { HeaderContext } from "../../context/headerContext";
 import MultiSelect from "../common/multiSelect";
-import {validateJSON} from "../../services/validateJSON";
+import { validateJSON } from "../../services/validateJSON";
 
 interface SubscriberFormProps {
   subscriberId: string;
   entityId: string;
 }
 
-export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, entityId}) => {
+export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, entityId }) => {
   const [subscriber, setSubscriber] = React.useState<any>(null);
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
   const [loadingOverlay, setLoadingOverlay] = React.useState<boolean>(false);
@@ -62,13 +63,13 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
     setShowSpinner(!sources || !endpoints || !tableNames || (subscriberId && !subscriber));
   }, [subscriber, sources, endpoints, tableNames, subscriberId]);
 
-  const handleSetSubscriber= () => {
+  const handleSetSubscriber = () => {
     API.Subscriber.getOne(subscriberId)
       .then((res) => {
         setSubscriber(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET subscriber error: " + err);
       });
   };
@@ -79,7 +80,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -90,7 +91,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
         setSources(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET sources error: " + err);
       });
   };
@@ -101,7 +102,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
         setEndpoint(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET endpoints error: " + err);
       });
   };
@@ -109,11 +110,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
   const handleSetTableNames = () => {
     API.Translation.getTableNames()
       .then((res) => {
-        const mappedTableNames = res.data.results.map((value, idx) => ({id: idx, name: value, value: value}));
+        const mappedTableNames = res.data.results.map((value, idx) => ({ id: idx, name: value, value: value }));
         setTableNames(mappedTableNames);
       })
       .catch((err) => {
-        setAlert({message: err, type: "danger"});
+        setAlert({ message: err, type: "danger" });
         throw new Error("GET table names error: " + err);
       });
   };
@@ -192,38 +193,25 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                 data-bs-toggle="modal"
                 data-bs-target="#sourceHelpModal"
                 onClick={() => {
-                  !documentation && handleSetDocumentation()
+                  !documentation && handleSetDocumentation();
                 }}
               >
-                <i className="fas fa-question mr-1"/>
+                <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Source Documentation"
                 id="sourceHelpModal"
-                body={() =>
-                  documentation ? (
-                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                  ) : (
-                    <Spinner/>
-                  )
-                }
+                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
-              <Link
-                className="utrecht-link"
-                to={`/entities/${entityId}`}
-                state={{activeTab: "subscribers"}}
-              >
+              <Link className="utrecht-link" to={`/entities/${entityId}`} state={{ activeTab: "subscribers" }}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2"/>
+                  <i className="fas fa-long-arrow-alt-left mr-2" />
                   Back
                 </button>
               </Link>
-              <button
-                className="utrecht-button utrecht-button-sm btn-sm btn-success"
-                type="submit"
-              >
-                <i className="fas fa-save mr-2"/>
+              <button className="utrecht-button utrecht-button-sm btn-sm btn-success" type="submit">
+                <i className="fas fa-save mr-2" />
                 Save
               </button>
             </>
@@ -234,7 +222,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner/>
+                  <Spinner />
                 ) : (
                   <div>
                     {loadingOverlay && <LoadingOverlay />}
@@ -261,10 +249,10 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                       <div className="col-6">
                         <SelectInputComponent
                           options={[
-                            {name: "GET", value: "GET"},
-                            {name: "POST", value: "POST"},
-                            {name: "PUT", value: "PUT"},
-                            {name: "PATCH", value: "PATCH"},
+                            { name: "GET", value: "GET" },
+                            { name: "POST", value: "POST" },
+                            { name: "PUT", value: "PUT" },
+                            { name: "PATCH", value: "PATCH" },
                           ]}
                           name={"method"}
                           id={"methodInput"}
@@ -297,7 +285,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                           options={
                             sources !== null && sources.length > 0
                               ? sources
-                              : [{name: "Please create a source  first.", value: null}]
+                              : [{ name: "Please create a source  first.", value: null }]
                           }
                           data={subscriber?.source?.name}
                           name={"source"}
@@ -310,7 +298,10 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                     <div className="row form-row">
                       <div className="col-6">
                         <SelectInputComponent
-                          options={[{ name: 'Extern Source', value: 'externSource' }, { name: 'Intern Gateway', value: 'internGateway' }]}
+                          options={[
+                            { name: "Extern Source", value: "externSource" },
+                            { name: "Intern Gateway", value: "internGateway" },
+                          ]}
                           data={subscriber?.type}
                           name={"type"}
                           id={"typeInput"}
@@ -320,7 +311,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                       </div>
                       <div className="col-6">
                         <SelectInputComponent
-                          options={endpoints !== null && endpoints.length > 0 ? endpoints : [{ name: 'Please create an endpoint first.', value: null }]}
+                          options={
+                            endpoints !== null && endpoints.length > 0
+                              ? endpoints
+                              : [{ name: "Please create an endpoint first.", value: null }]
+                          }
                           data={subscriber?.endpoint?.name}
                           name={"endpoint"}
                           id={"endpointInput"}
@@ -371,7 +366,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                               />
                             ) : (
                               <>
-                                <Spinner/>
+                                <Spinner />
                               </>
                             );
                           },
@@ -389,7 +384,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                               />
                             ) : (
                               <>
-                                <Spinner/>
+                                <Spinner />
                               </>
                             );
                           },
@@ -405,11 +400,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                                 data={
                                   subscriber && subscriber.mappingIn
                                     ? [
-                                      {
-                                        key: "mappingIn",
-                                        value: subscriber.mappingIn,
-                                      },
-                                    ]
+                                        {
+                                          key: "mappingIn",
+                                          value: subscriber.mappingIn,
+                                        },
+                                      ]
                                     : null
                                 }
                               />
@@ -427,11 +422,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                                 data={
                                   subscriber && subscriber.mappingOut
                                     ? [
-                                      {
-                                        key: "mappingOut",
-                                        value: `${subscriber.mappingOut}`,
-                                      },
-                                    ]
+                                        {
+                                          key: "mappingOut",
+                                          value: `${subscriber.mappingOut}`,
+                                        },
+                                      ]
                                     : null
                                 }
                               />
@@ -449,11 +444,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                                 data={
                                   subscriber && subscriber.headers
                                     ? [
-                                      {
-                                        key: "headers",
-                                        value: `${subscriber.headers}`,
-                                      },
-                                    ]
+                                        {
+                                          key: "headers",
+                                          value: `${subscriber.headers}`,
+                                        },
+                                      ]
                                     : null
                                 }
                               />
@@ -471,11 +466,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, ent
                                 data={
                                   subscriber && subscriber.queryParameters
                                     ? [
-                                      {
-                                        key: "queryParameters",
-                                        value: `${subscriber.queryParameters}`,
-                                      },
-                                    ]
+                                        {
+                                          key: "queryParameters",
+                                          value: `${subscriber.queryParameters}`,
+                                        },
+                                      ]
                                     : null
                                 }
                               />

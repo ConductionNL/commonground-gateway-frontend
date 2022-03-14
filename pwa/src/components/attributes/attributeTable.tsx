@@ -1,14 +1,14 @@
 import * as React from "react";
-import {Table, Spinner, Card, Modal} from "@conductionnl/nl-design-system/lib";
-import {Link} from "gatsby";
+import { Table, Spinner, Card, Modal } from "@conductionnl/nl-design-system/lib";
+import { Link } from "gatsby";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import {AlertContext} from "../../context/alertContext";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTrash, faEdit} from "@fortawesome/free-solid-svg-icons";
+import { AlertContext } from "../../context/alertContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import LabelWithBackground from "../LabelWithBackground/LabelWithBackground";
 
-export default function AttributeTable({entityId}) {
+export default function AttributeTable({ entityId }) {
   const [documentation, setDocumentation] = React.useState<string>(null);
   const [attributes, setAttributes] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState(false);
@@ -27,7 +27,7 @@ export default function AttributeTable({entityId}) {
         setAttributes(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET attributes from entity error: " + err);
       })
       .finally(() => {
@@ -41,7 +41,7 @@ export default function AttributeTable({entityId}) {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -50,11 +50,11 @@ export default function AttributeTable({entityId}) {
     if (confirm(`Do you want to delete this attribute?`)) {
       API.Attribute.delete(id)
         .then(() => {
-          setAlert({message: `Deleted attribute`, type: "success"});
+          setAlert({ message: `Deleted attribute`, type: "success" });
           handleSetAttributes();
         })
         .catch((err) => {
-          setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+          setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
           throw new Error("DELETE attribute error: " + err);
         });
     }
@@ -71,30 +71,24 @@ export default function AttributeTable({entityId}) {
               data-bs-toggle="modal"
               data-bs-target="#attributeHelpModal"
               onClick={() => {
-                !documentation && handleSetDocumentation()
+                !documentation && handleSetDocumentation();
               }}
             >
-              <i className="fas fa-question mr-1"/>
+              <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
             </button>
             <Modal
               title="Attribute Documentation"
               id="attributeHelpModal"
-              body={() =>
-                documentation ? (
-                  <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                ) : (
-                  <Spinner/>
-                )
-              }
+              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
             />
             <a className="utrecht-link" onClick={handleSetAttributes}>
-              <i className="fas fa-sync-alt mr-1"/>
+              <i className="fas fa-sync-alt mr-1" />
               <span className="mr-2">Refresh</span>
             </a>
             <Link to={`/entities/${entityId}/attributes/new`}>
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success">
-                <i className="fas fa-plus mr-2"/>
+                <i className="fas fa-plus mr-2" />
                 Create
               </button>
             </Link>
@@ -106,7 +100,7 @@ export default function AttributeTable({entityId}) {
           <div className="row">
             <div className="col-12">
               {showSpinner === true ? (
-                <Spinner/>
+                <Spinner />
               ) : attributes ? (
                 <Table
                   columns={[
@@ -127,9 +121,9 @@ export default function AttributeTable({entityId}) {
                       field: "required",
                       renderCell: (item: { required: boolean }) =>
                         item.required ? (
-                          <LabelWithBackground label="required" type="primary"/>
+                          <LabelWithBackground label="required" type="primary" />
                         ) : (
-                          <LabelWithBackground label="optional" type="secondary"/>
+                          <LabelWithBackground label="optional" type="secondary" />
                         ),
                     },
                     {
@@ -142,14 +136,14 @@ export default function AttributeTable({entityId}) {
                               onClick={() => handleDeleteAttribute(item.id)}
                               className="utrecht-button btn-sm btn-danger mr-2"
                             >
-                              <FontAwesomeIcon icon={faTrash}/> Delete
+                              <FontAwesomeIcon icon={faTrash} /> Delete
                             </button>
                             <Link
                               className="utrecht-link d-flex justify-content-end"
                               to={`/entities/${entityId}/attributes/${item.id}`}
                             >
                               <button className="utrecht-button btn-sm btn-success">
-                                <FontAwesomeIcon icon={faEdit}/> Edit
+                                <FontAwesomeIcon icon={faEdit} /> Edit
                               </button>
                             </Link>
                           </div>

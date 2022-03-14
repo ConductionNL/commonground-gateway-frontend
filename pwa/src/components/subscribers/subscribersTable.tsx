@@ -1,14 +1,14 @@
 import * as React from "react";
-import {Table, Card, Spinner, Modal} from "@conductionnl/nl-design-system/lib";
-import {Link} from "gatsby";
+import { Table, Card, Spinner, Modal } from "@conductionnl/nl-design-system/lib";
+import { Link } from "gatsby";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import {AlertContext} from "../../context/alertContext";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTrash, faEdit} from "@fortawesome/free-solid-svg-icons";
+import { AlertContext } from "../../context/alertContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import LabelWithBackground from "../LabelWithBackground/LabelWithBackground";
 
-export default function SubscribersTable({entityId}) {
+export default function SubscribersTable({ entityId }) {
   const [subscribers, setSubscribers] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
   const API: APIService = React.useContext(APIContext);
@@ -27,7 +27,7 @@ export default function SubscribersTable({entityId}) {
         setSubscribers(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Subscribers error: " + err);
       })
       .finally(() => {
@@ -39,11 +39,11 @@ export default function SubscribersTable({entityId}) {
     if (confirm(`Do you want to delete this subscriber?`)) {
       API.Subscriber.delete(id)
         .then(() => {
-          setAlert({message: `Deleted subscriber`, type: "success"});
+          setAlert({ message: `Deleted subscriber`, type: "success" });
           handleSetSubscribers();
         })
         .catch((err) => {
-          setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+          setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
           throw new Error("DELETE Subscriber error: " + err);
         });
     }
@@ -55,7 +55,7 @@ export default function SubscribersTable({entityId}) {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -71,30 +71,24 @@ export default function SubscribersTable({entityId}) {
               data-bs-toggle="modal"
               data-bs-target="#sourceHelpModal"
               onClick={() => {
-                !documentation && handleSetDocumentation()
+                !documentation && handleSetDocumentation();
               }}
             >
-              <i className="fas fa-question mr-1"/>
+              <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
             </button>
             <Modal
               title="Source Documentation"
               id="sourceHelpModal"
-              body={() =>
-                documentation ? (
-                  <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                ) : (
-                  <Spinner/>
-                )
-              }
+              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
             />
             <a className="utrecht-link" onClick={handleSetSubscribers}>
-              <i className="fas fa-sync-alt mr-1"/>
+              <i className="fas fa-sync-alt mr-1" />
               <span className="mr-2">Refresh</span>
             </a>
             <Link to={`/entities/${entityId}/subscribers/new`}>
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success">
-                <i className="fas fa-plus mr-2"/>
+                <i className="fas fa-plus mr-2" />
                 Create
               </button>
             </Link>
@@ -106,7 +100,7 @@ export default function SubscribersTable({entityId}) {
           <div className="row">
             <div className="col-12">
               {showSpinner === true ? (
-                <Spinner/>
+                <Spinner />
               ) : subscribers ? (
                 <Table
                   columns={[
@@ -117,8 +111,9 @@ export default function SubscribersTable({entityId}) {
                     {
                       headerName: "Method",
                       field: "method",
-                      renderCell: (item: { method: string }) =>
-                        <LabelWithBackground label={item.method} type="primary"/>
+                      renderCell: (item: { method: string }) => (
+                        <LabelWithBackground label={item.method} type="primary" />
+                      ),
                     },
                     {
                       headerName: "Endpoint",
@@ -137,12 +132,14 @@ export default function SubscribersTable({entityId}) {
                               onClick={() => handleDeleteSubscriber(item.id)}
                               className="utrecht-button btn-sm btn-danger mr-2"
                             >
-                              <FontAwesomeIcon icon={faTrash}/> Delete
+                              <FontAwesomeIcon icon={faTrash} /> Delete
                             </button>
-                            <Link className="utrecht-link d-flex justify-content-end"
-                                  to={`/entities/${entityId}/subscribers/${item.id}`}>
+                            <Link
+                              className="utrecht-link d-flex justify-content-end"
+                              to={`/entities/${entityId}/subscribers/${item.id}`}
+                            >
                               <button className="utrecht-button btn-sm btn-success">
-                                <FontAwesomeIcon icon={faEdit}/> Edit
+                                <FontAwesomeIcon icon={faEdit} /> Edit
                               </button>
                             </Link>
                           </div>
@@ -168,7 +165,7 @@ export default function SubscribersTable({entityId}) {
                       field: "endpoint",
                     },
                   ]}
-                  rows={[{name: "No results found"}]}
+                  rows={[{ name: "No results found" }]}
                 />
               )}
             </div>

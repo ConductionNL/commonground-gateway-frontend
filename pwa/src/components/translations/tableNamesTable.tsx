@@ -1,10 +1,10 @@
 import * as React from "react";
-import {Link} from "gatsby";
-import {Table, Card, Spinner, Modal} from "@conductionnl/nl-design-system/lib";
+import { Link } from "gatsby";
+import { Table, Card, Spinner, Modal } from "@conductionnl/nl-design-system/lib";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import {AlertContext} from "../../context/alertContext";
-import {navigate} from "gatsby";
+import { AlertContext } from "../../context/alertContext";
+import { navigate } from "gatsby";
 
 export default function TableNamesTable() {
   const [tableNames, setTableNames] = React.useState<Array<any>>(null);
@@ -22,7 +22,7 @@ export default function TableNamesTable() {
     API.Translation.getTableNames()
       .then((res) => {
         const names = res.data.results.map((name) => {
-          return {name: name};
+          return { name: name };
         });
         setTableNames(names);
       })
@@ -51,7 +51,7 @@ export default function TableNamesTable() {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", type: "danger", message: err});
+        setAlert({ title: "Oops something went wrong", type: "danger", message: err });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -68,30 +68,24 @@ export default function TableNamesTable() {
                 data-bs-toggle="modal"
                 data-bs-target="#translationHelpModal"
                 onClick={() => {
-                  !documentation && handleSetDocumentation()
+                  !documentation && handleSetDocumentation();
                 }}
               >
-                <i className="fas fa-question mr-1"/>
+                <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Translation Documentation"
                 id="translationHelpModal"
-                body={() =>
-                  documentation ? (
-                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                  ) : (
-                    <Spinner/>
-                  )
-                }
+                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
               <a className="utrecht-link" onClick={getTableNames}>
-                <i className="fas fa-sync-alt mr-1"/>
+                <i className="fas fa-sync-alt mr-1" />
                 <span className="mr-2">Refresh</span>
               </a>
               <Link to="/translation-tables/new">
                 <button className="utrecht-button utrecht-button-sm btn-sm btn-success">
-                  <i className="fas fa-plus mr-2"/>
+                  <i className="fas fa-plus mr-2" />
                   Create
                 </button>
               </Link>
@@ -103,7 +97,7 @@ export default function TableNamesTable() {
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner/>
+                  <Spinner />
                 ) : tableNames ? (
                   <Table
                     columns={[
@@ -121,7 +115,7 @@ export default function TableNamesTable() {
                               onClick={() => linkToTableWithTranslation(tables.name)}
                             >
                               <button className="utrecht-button btn-sm btn-primary">
-                                <i className="fas fa-eye pr-1"/>
+                                <i className="fas fa-eye pr-1" />
                                 View
                               </button>
                             </a>
@@ -139,7 +133,7 @@ export default function TableNamesTable() {
                         field: "name",
                       },
                     ]}
-                    rows={[{name: "No results found"}]}
+                    rows={[{ name: "No results found" }]}
                   />
                 )}
               </div>

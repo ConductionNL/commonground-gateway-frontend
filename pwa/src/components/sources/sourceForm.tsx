@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Link} from "gatsby";
+import { Link } from "gatsby";
 import {
   checkValues,
   removeEmptyObjectValues,
@@ -16,18 +16,18 @@ import {
 } from "@conductionnl/nl-design-system/lib";
 import ElementCreationNew from "../common/elementCreationNew";
 import APIService from "../../apiService/apiService";
-import {navigate} from "gatsby-link";
+import { navigate } from "gatsby-link";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import {AlertContext} from "../../context/alertContext";
-import {HeaderContext} from "../../context/headerContext";
+import { AlertContext } from "../../context/alertContext";
+import { HeaderContext } from "../../context/headerContext";
 import MultiDimensionalArrayInput from "../common/multiDimensionalArrayInput";
 
 interface SourceFormProps {
   sourceId: string;
 }
 
-export const SourceForm: React.FC<SourceFormProps> = ({sourceId}) => {
+export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
   const [source, setSource] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState(false);
   const [loadingOverlay, setLoadingOverlay] = React.useState<boolean>(false);
@@ -57,7 +57,7 @@ export const SourceForm: React.FC<SourceFormProps> = ({sourceId}) => {
         setSource(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET gateway error: " + err);
       })
       .finally(() => {
@@ -71,7 +71,7 @@ export const SourceForm: React.FC<SourceFormProps> = ({sourceId}) => {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -108,7 +108,7 @@ export const SourceForm: React.FC<SourceFormProps> = ({sourceId}) => {
     body = removeEmptyObjectValues(body);
 
     if (!checkValues([body.name, body.location, body.type, body.auth])) {
-      setAlert({title: "Oops something went wrong", type: "danger", message: "Required fields are empty"});
+      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
       setLoadingOverlay(false);
       return;
     }
@@ -139,31 +139,25 @@ export const SourceForm: React.FC<SourceFormProps> = ({sourceId}) => {
                 data-bs-toggle="modal"
                 data-bs-target="#sourceHelpModal"
                 onClick={() => {
-                  !documentation && handleSetDocumentation()
+                  !documentation && handleSetDocumentation();
                 }}
               >
-                <i className="fas fa-question mr-1"/>
+                <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Source Documentation"
                 id="sourceHelpModal"
-                body={() =>
-                  documentation ? (
-                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                  ) : (
-                    <Spinner/>
-                  )
-                }
+                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
               <Link className="utrecht-link" to={"/sources"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2"/>
+                  <i className="fas fa-long-arrow-alt-left mr-2" />
                   Back
                 </button>
               </Link>
               <button className="utrecht-button utrecht`ht-button-sm btn-sm btn-success" type="submit">
-                <i className="fas fa-save mr-2"/>
+                <i className="fas fa-save mr-2" />
                 Save
               </button>
             </>
@@ -174,7 +168,7 @@ export const SourceForm: React.FC<SourceFormProps> = ({sourceId}) => {
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner/>
+                  <Spinner />
                 ) : (
                   <>
                     {loadingOverlay && <LoadingOverlay />}
@@ -334,7 +328,7 @@ export const SourceForm: React.FC<SourceFormProps> = ({sourceId}) => {
                         />
                       </div>
                     </div>
-                    <br/>
+                    <br />
                     <Accordion
                       id="sourceAccordion"
                       items={[

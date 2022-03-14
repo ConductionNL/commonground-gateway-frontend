@@ -7,8 +7,8 @@ import {
   Accordion,
   Modal,
 } from "@conductionnl/nl-design-system/lib";
-import {Link} from "gatsby";
-import {navigate} from "gatsby-link";
+import { Link } from "gatsby";
+import { navigate } from "gatsby-link";
 import {
   checkValues,
   removeEmptyObjectValues,
@@ -19,8 +19,8 @@ import ElementCreationNew from "../common/elementCreationNew";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import {HeaderContext} from "../../context/headerContext";
-import {AlertContext} from "../../context/alertContext";
+import { HeaderContext } from "../../context/headerContext";
+import { AlertContext } from "../../context/alertContext";
 import MultiSelect from "../common/multiSelect";
 
 interface IApplication {
@@ -37,7 +37,7 @@ interface ApplicationFormProps {
   id?: string;
 }
 
-export const ApplicationForm: React.FC<ApplicationFormProps> = ({id}) => {
+export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
   const [application, setApplication] = React.useState<IApplication>(null);
   const [endpoints, setEndpoints] = React.useState<any>(null);
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
@@ -56,7 +56,6 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({id}) => {
     );
   }, [setHeader, application]);
 
-
   React.useEffect(() => {
     handleSetEndpoints();
     id && handleSetApplications();
@@ -73,7 +72,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({id}) => {
         setApplication(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET application error: " + err);
       })
       .finally(() => {
@@ -90,7 +89,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({id}) => {
         setEndpoints(_endpoints);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET endpoints error: " + err);
       });
   };
@@ -101,7 +100,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({id}) => {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -157,31 +156,25 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({id}) => {
                 data-bs-toggle="modal"
                 data-bs-target="#applicationHelpModal"
                 onClick={() => {
-                  !documentation && handleSetDocumentation()
+                  !documentation && handleSetDocumentation();
                 }}
               >
-                <i className="fas fa-question mr-1"/>
+                <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Application Documentation"
                 id="applicationHelpModal"
-                body={() =>
-                  documentation ? (
-                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                  ) : (
-                    <Spinner/>
-                  )
-                }
+                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
               <Link className="utrecht-link" to={"/applications"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2"/>
+                  <i className="fas fa-long-arrow-alt-left mr-2" />
                   Back
                 </button>
               </Link>
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success" type="submit">
-                <i className="fas fa-save mr-2"/>
+                <i className="fas fa-save mr-2" />
                 Save
               </button>
             </>
@@ -192,7 +185,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({id}) => {
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner/>
+                  <Spinner />
                 ) : (
                   <div>
                     {loadingOverlay && <LoadingOverlay />}
@@ -253,7 +246,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({id}) => {
                           title: "Domains *",
                           id: "domainsAccordion",
                           render: function () {
-                            return <ElementCreationNew id="domains" label="Domains" data={application?.domains}/>;
+                            return <ElementCreationNew id="domains" label="Domains" data={application?.domains} />;
                           },
                         },
                         {

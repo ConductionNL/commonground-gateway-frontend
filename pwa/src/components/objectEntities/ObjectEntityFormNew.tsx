@@ -1,19 +1,16 @@
 import * as React from "react";
-import {
-  Card, Modal,
-  Spinner,
-} from "@conductionnl/nl-design-system/lib";
+import { Card, Modal, Spinner } from "@conductionnl/nl-design-system/lib";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import {Link} from 'gatsby';
-import {AlertContext} from "../../context/alertContext";
+import { Link } from "gatsby";
+import { AlertContext } from "../../context/alertContext";
 
 interface ObjectEntityFormNewProps {
-  objectId: string,
-  entityId: string,
+  objectId: string;
+  entityId: string;
 }
 
-export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({objectId, entityId}) => {
+export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ objectId, entityId }) => {
   const API: APIService = React.useContext(APIContext);
   const [entity, setEntity] = React.useState(null);
   const [object, setObject] = React.useState(null);
@@ -39,13 +36,8 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({objectI
     setShowSpinner(true);
 
     import("@formio/react").then((formio) => {
-      const {Form} = formio;
-      setFormIO(
-        <Form
-          src={formIOSchema}
-          onSubmit={saveObject}
-        />,
-      );
+      const { Form } = formio;
+      setFormIO(<Form src={formIOSchema} onSubmit={saveObject} />);
     });
     setShowSpinner(false);
   }, [formIOSchema]);
@@ -56,7 +48,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({objectI
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -108,14 +100,14 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({objectI
     let schemaWithData = schema;
     for (let i = 0; i < schemaWithData.components.length; i++) {
       for (let i = 0; i < object?.objectValues?.length; i++) {
-        if (schemaWithData.components[i].key = object.objectValues[i].attribute.name) {
+        if ((schemaWithData.components[i].key = object.objectValues[i].attribute.name)) {
           let type = object.objectValues[i].attribute.type;
           schemaWithData.components[i].defaultValue = object.objectValues[i][`${type}Value`];
         }
       }
     }
     return schemaWithData;
-  }
+  };
 
   const saveObject = (event) => {
     let body = event.data;
@@ -124,7 +116,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({objectI
     if (!objectId) {
       API.ApiCalls.createObject(entity?.endpoint, body)
         .then((res) => {
-          setObject(res.data)
+          setObject(res.data);
         })
         .catch((err) => {
           throw new Error("Create object error: " + err);
@@ -136,7 +128,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({objectI
     if (objectId) {
       API.ApiCalls.updateObject(entity?.endpoint, objectId, body)
         .then((res) => {
-          setObject(res.data)
+          setObject(res.data);
         })
         .catch((err) => {
           throw new Error("Update object error: " + err);
@@ -146,7 +138,6 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({objectI
         });
     }
   };
-
 
   return (
     <Card
@@ -159,47 +150,34 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({objectI
               data-bs-toggle="modal"
               data-bs-target="#helpModal"
               onClick={() => {
-                !documentation && handleSetDocumentation()
+                !documentation && handleSetDocumentation();
               }}
             >
-              <i className="fas fa-question mr-1"/>
+              <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
             </button>
             <Modal
               title="Entity_object Documentation"
               id="ObjectEntityHelpModal"
-              body={() =>
-                documentation ? (
-                  <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                ) : (
-                  <Spinner/>
-                )
-              }
+              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
             />
-            <Link
-              className="utrecht-link"
-              to={`/entities/${entityId}`}
-              state={{activeTab: "objects"}}
-            >
+            <Link className="utrecht-link" to={`/entities/${entityId}`} state={{ activeTab: "objects" }}>
               <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                <i className="fas fa-long-arrow-alt-left mr-2"/>Back
+                <i className="fas fa-long-arrow-alt-left mr-2" />
+                Back
               </button>
             </Link>
-          </div>)
+          </div>
+        );
       }}
       cardBody={() => {
         return (
           <div className="row">
-            <div className="col-12">
-              {showSpinner === true ? (
-                <Spinner/>
-              ) : (
-                formIO && formIO
-              )}
-            </div>
+            <div className="col-12">{showSpinner === true ? <Spinner /> : formIO && formIO}</div>
           </div>
-        )
-      }}/>
-  )
-}
+        );
+      }}
+    />
+  );
+};
 export default ObjectEntityFormNew;

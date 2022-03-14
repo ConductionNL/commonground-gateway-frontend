@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Link} from "gatsby";
+import { Link } from "gatsby";
 import {
   checkValues,
   removeEmptyObjectValues,
@@ -17,22 +17,22 @@ import {
   Modal,
 } from "@conductionnl/nl-design-system/lib";
 import MultiDimensionalArrayInput from "../common/multiDimensionalArrayInput";
-import {navigate} from "gatsby-link";
+import { navigate } from "gatsby-link";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 import APIContext from "../../apiService/apiContext";
 import APIService from "../../apiService/apiService";
-import {AlertContext} from "../../context/alertContext";
-import {HeaderContext} from "../../context/headerContext";
+import { AlertContext } from "../../context/alertContext";
+import { HeaderContext } from "../../context/headerContext";
 import MultiSelect from "../common/multiSelect";
 import ElementCreationNew from "../common/elementCreationNew";
-import {validateJSON} from "../../services/validateJSON";
+import { validateJSON } from "../../services/validateJSON";
 
 interface HandlerFormProps {
   handlerId: string;
   endpointId: string;
 }
 
-export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId}) => {
+export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId }) => {
   const [handler, setHandler] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
   const [loadingOverlay, setLoadingOverlay] = React.useState<boolean>(false);
@@ -66,7 +66,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
         setHandler(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET handler error: " + err);
       })
       .finally(() => {
@@ -80,7 +80,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
         setEntities(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET entities error: " + err);
       });
   };
@@ -91,7 +91,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -100,7 +100,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
     API.Translation.getTableNames()
       .then((res) => {
         const names = res.data?.results.map((name, idx) => {
-          return {name: name, value: name, idx};
+          return { name: name, value: name, idx };
         });
         setTableNames(names);
       })
@@ -142,13 +142,13 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
     body = removeEmptyObjectValues(body);
 
     if (!checkValues([body.name])) {
-      setAlert({title: "Oops something went wrong", type: "danger", message: "Required fields are empty"});
+      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
       setLoadingOverlay(false);
       return;
     }
 
     if (!validateJSON(body.conditions)) {
-      setAlert({title: "Oops something went wrong", type: "danger", message: "Conditions is not valid JSON"});
+      setAlert({ title: "Oops something went wrong", type: "danger", message: "Conditions is not valid JSON" });
       setLoadingOverlay(false);
       return;
     }
@@ -179,29 +179,25 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
                 data-bs-toggle="modal"
                 data-bs-target="#handlerHelpModal"
                 onClick={() => {
-                  !documentation && handleSetDocumentation()
+                  !documentation && handleSetDocumentation();
                 }}
               >
-                <i className="fas fa-question mr-1"/>
+                <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Handler Documentation"
                 id="handlerHelpModal"
-                body={() => <div dangerouslySetInnerHTML={{__html: ""}}/>}
+                body={() => <div dangerouslySetInnerHTML={{ __html: "" }} />}
               />
-              <Link
-                className="utrecht-link"
-                to={`/endpoints/${endpointId}`}
-                state={{activeTab: "handlers"}}
-              >
+              <Link className="utrecht-link" to={`/endpoints/${endpointId}`} state={{ activeTab: "handlers" }}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2"/>
+                  <i className="fas fa-long-arrow-alt-left mr-2" />
                   Back
                 </button>
               </Link>
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success" type="submit">
-                <i className="fas fa-save mr-2"/>
+                <i className="fas fa-save mr-2" />
                 Save
               </button>
             </>
@@ -212,10 +208,10 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner/>
+                  <Spinner />
                 ) : (
                   <>
-                    {loadingOverlay && <LoadingOverlay/>}
+                    {loadingOverlay && <LoadingOverlay />}
                     <div className="row">
                       <div className="col-6">
                         <GenericInputComponent
@@ -237,7 +233,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
                         />
                       </div>
                     </div>
-                    <br/>
+                    <br />
                     <div className="row">
                       <div className="col-6">
                         <GenericInputComponent
@@ -252,9 +248,9 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
                       <div className="col-6">
                         <SelectInputComponent
                           options={[
-                            {name: "twig", value: "twig"},
-                            {name: "markdown", value: "markdown"},
-                            {name: "restructuredText", value: "restructuredText"},
+                            { name: "twig", value: "twig" },
+                            { name: "markdown", value: "markdown" },
+                            { name: "restructuredText", value: "restructuredText" },
                           ]}
                           name={"templateType"}
                           id={"templateTypeInput"}
@@ -264,7 +260,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
                         />
                       </div>
                     </div>
-                    <br/>
+                    <br />
                     <div className="row">
                       <div className="col-6">
                         <GenericInputComponent
@@ -334,7 +330,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
                                 options={tableNames}
                               />
                             ) : (
-                              <Spinner/>
+                              <Spinner />
                             );
                           },
                         },
@@ -350,7 +346,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
                                 options={tableNames}
                               />
                             ) : (
-                              <Spinner/>
+                              <Spinner />
                             );
                           },
                         },
@@ -395,7 +391,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
                           id: "skeletonInAccordion",
                           render: function () {
                             return (
-                              <ElementCreationNew id="skeletonIn" label="Skeleton In" data={handler?.skeletonIn}/>
+                              <ElementCreationNew id="skeletonIn" label="Skeleton In" data={handler?.skeletonIn} />
                             );
                           },
                         },
@@ -404,7 +400,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({handlerId, endpointId})
                           id: "skeletonOutAccordion",
                           render: function () {
                             return (
-                              <ElementCreationNew id="skeletonOut" label="Skeleton Out" data={handler?.skeletonOut}/>
+                              <ElementCreationNew id="skeletonOut" label="Skeleton Out" data={handler?.skeletonOut} />
                             );
                           },
                         },

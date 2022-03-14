@@ -13,15 +13,15 @@ import { checkValues, removeEmptyObjectValues, retrieveFormArrayAsOArrayWithName
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import {AlertContext} from "../../context/alertContext";
-import {HeaderContext} from "../../context/headerContext";
+import { AlertContext } from "../../context/alertContext";
+import { HeaderContext } from "../../context/headerContext";
 import MultiSelect from "../common/multiSelect";
 
 interface EndpointFormProps {
   endpointId: string;
 }
 
-export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
+export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
   const [endpoint, setEndpoint] = React.useState<any>(null);
   const [applications, setApplications] = React.useState<any>(null);
@@ -56,7 +56,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
         setEndpoint(res.data);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET endpoints error: " + err);
       })
       .finally(() => {
@@ -73,7 +73,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
         setApplications(_applications);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET application error: " + err);
       });
   };
@@ -84,7 +84,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -106,7 +106,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
     body = removeEmptyObjectValues(body);
 
     if (!checkValues([body.name, body.path])) {
-      setAlert({title: "Oops something went wrong", type: "danger", message: "Required fields are empty"});
+      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
       setLoadingOverlay(false);
       return;
     }
@@ -137,26 +137,20 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
                 data-bs-toggle="modal"
                 data-bs-target="#endpointHelpModal"
                 onClick={() => {
-                  !documentation && handleSetDocumentation()
+                  !documentation && handleSetDocumentation();
                 }}
               >
-                <i className="fas fa-question mr-1"/>
+                <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Endpoint Documentation"
                 id="endpointHelpModal"
-                body={() =>
-                  documentation ? (
-                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                  ) : (
-                    <Spinner/>
-                  )
-                }
+                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
               <Link className="utrecht-link" to={"/endpoints"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2"/>
+                  <i className="fas fa-long-arrow-alt-left mr-2" />
                   Back
                 </button>
               </Link>
@@ -171,12 +165,12 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
             </div>
           );
         }}
-        cardBody={ () => {
+        cardBody={() => {
           return (
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner/>
+                  <Spinner />
                 ) : (
                   <div>
                     {loadingOverlay && <LoadingOverlay />}
@@ -226,7 +220,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({endpointId}) => {
                                 options={applications}
                               />
                             ) : (
-                              <Spinner/>
+                              <Spinner />
                             );
                           },
                         },

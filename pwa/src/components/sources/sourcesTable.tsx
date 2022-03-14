@@ -1,12 +1,12 @@
 import * as React from "react";
-import {Link} from "gatsby";
-import {Table, Card, Spinner, Modal} from "@conductionnl/nl-design-system/lib";
+import { Link } from "gatsby";
+import { Table, Card, Spinner, Modal } from "@conductionnl/nl-design-system/lib";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import {AlertContext} from "../../context/alertContext";
-import {HeaderContext} from "../../context/headerContext";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTrash, faEdit} from "@fortawesome/free-solid-svg-icons";
+import { AlertContext } from "../../context/alertContext";
+import { HeaderContext } from "../../context/headerContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 export default function SourcesTable() {
   const [documentation, setDocumentation] = React.useState<string>(null);
@@ -31,7 +31,7 @@ export default function SourcesTable() {
         setSources(res.data);
       })
       .catch((err) => {
-        setAlert({message: err, type: "danger"});
+        setAlert({ message: err, type: "danger" });
         throw new Error("GET Sources error: " + err);
       })
       .finally(() => {
@@ -45,7 +45,7 @@ export default function SourcesTable() {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -54,11 +54,11 @@ export default function SourcesTable() {
     if (confirm(`Do you want to delete this source?`)) {
       API.Source.delete(id)
         .then(() => {
-          setAlert({message: `Deleted source`, type: "success"});
+          setAlert({ message: `Deleted source`, type: "success" });
           handleSetSources();
         })
         .catch((err) => {
-          setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+          setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
           throw new Error("DELETE Sources error: " + err);
         });
     }
@@ -75,30 +75,24 @@ export default function SourcesTable() {
               data-bs-toggle="modal"
               data-bs-target="#sourceHelpModal"
               onClick={() => {
-                !documentation && handleSetDocumentation()
+                !documentation && handleSetDocumentation();
               }}
             >
-              <i className="fas fa-question mr-1"/>
+              <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
             </button>
             <Modal
               title="Source Documentation"
               id="sourceHelpModal"
-              body={() =>
-                documentation ? (
-                  <div dangerouslySetInnerHTML={{__html: documentation}}/>
-                ) : (
-                  <Spinner/>
-                )
-              }
+              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
             />
             <a className="utrecht-link" onClick={handleSetSources}>
-              <i className="fas fa-sync-alt mr-1"/>
+              <i className="fas fa-sync-alt mr-1" />
               <span className="mr-2">Refresh</span>
             </a>
             <Link to="/sources/new">
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success">
-                <i className="fas fa-plus mr-2"/>
+                <i className="fas fa-plus mr-2" />
                 Create
               </button>
             </Link>
@@ -110,7 +104,7 @@ export default function SourcesTable() {
           <div className="row">
             <div className="col-12">
               {showSpinner === true ? (
-                <Spinner/>
+                <Spinner />
               ) : sources ? (
                 <Table
                   columns={[
@@ -132,11 +126,11 @@ export default function SourcesTable() {
                               onClick={() => handleDeleteSource(item.id)}
                               className="utrecht-button btn-sm btn-danger mr-2"
                             >
-                              <FontAwesomeIcon icon={faTrash}/> Delete
+                              <FontAwesomeIcon icon={faTrash} /> Delete
                             </button>
                             <Link className="utrecht-link d-flex justify-content-end" to={`/sources/${item.id}`}>
                               <button className="utrecht-button btn-sm btn-success">
-                                <FontAwesomeIcon icon={faEdit}/> Edit
+                                <FontAwesomeIcon icon={faEdit} /> Edit
                               </button>
                             </Link>
                           </div>
