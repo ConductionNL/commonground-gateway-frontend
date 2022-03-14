@@ -118,11 +118,11 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({objectId, ent
 
     API.ObjectEntity.createOrUpdate(body, objectId)
       .then(() => {
-        setAlert({ message: `${objectId ? "Updated" : "Created"} object entities`, type: "success" });
+        setAlert({message: `${objectId ? "Updated" : "Created"} object entities`, type: "success"});
         navigate(`/entities/${entityId}`);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+        setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
         throw new Error(`Create or update object entity error: ${err}`);
       })
       .finally(() => {

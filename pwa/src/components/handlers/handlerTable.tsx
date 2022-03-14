@@ -17,7 +17,6 @@ export default function HandlersTable({endpointId}) {
 
   React.useEffect(() => {
     handleSetHandlers();
-    handleSetDocumentation();
   }, [API]);
 
   const handleSetHandlers = () => {
