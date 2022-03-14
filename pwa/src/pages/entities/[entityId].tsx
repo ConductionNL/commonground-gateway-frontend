@@ -2,13 +2,13 @@ import * as React from "react";
 import AttributeTable from "../../components/attributes/attributeTable";
 import ObjectEntitiesTable from "../../components/objectEntities/ObjectEntitiesTable";
 import EntityForm from "../../components/entities/entityForm";
-import { Tabs } from "@conductionnl/nl-design-system/lib/Tabs/src/tabs";
+import {Tabs} from "@conductionnl/nl-design-system/lib/Tabs/src/tabs";
 import LogTable from "../../components/logs/logTable/logTable";
 import SubscribersTable from "../../components/subscribers/subscribersTable";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import { AlertContext } from "../../context/alertContext";
-import { Card, Modal } from "@conductionnl/nl-design-system";
+import {AlertContext} from "../../context/alertContext";
+import {Card, Modal} from "@conductionnl/nl-design-system";
 import Spinner from "../../components/common/spinner";
 
 const IndexPage = (props) => {
@@ -45,7 +45,7 @@ const IndexPage = (props) => {
         setLogsDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ message: err, type: "danger" });
+        setAlert({message: err, type: "danger"});
         throw new Error(`GET Logs documentation error: ${err}`);
       });
   };
@@ -93,8 +93,8 @@ const IndexPage = (props) => {
               role="tabpanel"
               aria-labelledby="overview-tab"
             >
-              <br />
-              <EntityForm {...{ entityId }} />
+              <br/>
+              <EntityForm {...{entityId}} />
             </div>
             <div
               className={`tab-pane ${activeTab === "attributes" && "active"}`}
@@ -102,8 +102,8 @@ const IndexPage = (props) => {
               role="tabpanel"
               aria-labelledby="attributes-tab"
             >
-              <br />
-              <AttributeTable {...{ entityId }} />
+              <br/>
+              <AttributeTable {...{entityId}} />
             </div>
             <div
               className={`tab-pane ${activeTab === "objects" && "active"}`}
@@ -111,8 +111,8 @@ const IndexPage = (props) => {
               role="tabpanel"
               aria-labelledby="data-tab"
             >
-              <br />
-              <ObjectEntitiesTable {...{ entityId }} />
+              <br/>
+              <ObjectEntitiesTable {...{entityId}} />
             </div>
             <div
               className={`tab-pane ${activeTab === "subscribers" && "active"}`}
@@ -120,11 +120,11 @@ const IndexPage = (props) => {
               role="tabpanel"
               aria-labelledby="subscribers-tab"
             >
-              <br />
-              <SubscribersTable {...{ entityId }} />
+              <br/>
+              <SubscribersTable {...{entityId}} />
             </div>
             <div className="tab-pane" id="logs" role="tabpanel" aria-labelledby="logs-tab">
-              <br />
+              <br/>
               <Card
                 title="Object type Logs"
                 cardHeader={() => (
@@ -133,9 +133,11 @@ const IndexPage = (props) => {
                       className="utrecht-link button-no-style"
                       data-bs-toggle="modal"
                       data-bs-target="#logsHelpModal"
-                      onClick={handleSetLogsDocumentation}
+                      onClick={() => {
+                        !logsDocumentation && handleSetLogsDocumentation()
+                      }}
                     >
-                      <i className="fas fa-question mr-1" />
+                      <i className="fas fa-question mr-1"/>
                       <span className="mr-2">Help</span>
                     </button>
                     <Modal
@@ -143,19 +145,19 @@ const IndexPage = (props) => {
                       id="logsHelpModal"
                       body={() =>
                         logsDocumentation ? (
-                          <div dangerouslySetInnerHTML={{ __html: logsDocumentation }} />
+                          <div dangerouslySetInnerHTML={{__html: logsDocumentation}}/>
                         ) : (
-                          <Spinner />
+                          <Spinner/>
                         )
                       }
                     />
                     <a className="utrecht-link" onClick={handleSetLogs}>
-                      <i className="fas fa-sync-alt mr-1" />
+                      <i className="fas fa-sync-alt mr-1"/>
                       <span className="mr-2">Refresh</span>
                     </a>
                   </>
                 )}
-                cardBody={() => (showSpinner ? <Spinner /> : <LogTable logs={logs} />)}
+                cardBody={() => (showSpinner ? <Spinner/> : <LogTable logs={logs}/>)}
               />
             </div>
           </div>

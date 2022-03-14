@@ -81,7 +81,7 @@ const IndexPage = (props) => {
                         className="utrecht-link button-no-style"
                         data-bs-toggle="modal"
                         data-bs-target="#logsHelpModal"
-                        onClick={handleSetLogsDocumentation}
+                        onClick={()=>{!logsDocumentation && handleSetLogsDocumentation()}}
                       >
                         <i className="fas fa-question mr-1" />
                         <span className="mr-2">Help</span>

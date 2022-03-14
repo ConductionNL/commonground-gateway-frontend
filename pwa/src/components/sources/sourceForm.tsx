@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "gatsby";
+import {Link} from "gatsby";
 import {
   checkValues,
   removeEmptyObjectValues,
@@ -16,18 +16,18 @@ import {
 } from "@conductionnl/nl-design-system/lib";
 import ElementCreationNew from "../common/elementCreationNew";
 import APIService from "../../apiService/apiService";
-import { navigate } from "gatsby-link";
+import {navigate} from "gatsby-link";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import { AlertContext } from "../../context/alertContext";
-import { HeaderContext } from "../../context/headerContext";
+import {AlertContext} from "../../context/alertContext";
+import {HeaderContext} from "../../context/headerContext";
 import MultiDimensionalArrayInput from "../common/multiDimensionalArrayInput";
 
 interface SourceFormProps {
   sourceId: string;
 }
 
-export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
+export const SourceForm: React.FC<SourceFormProps> = ({sourceId}) => {
   const [source, setSource] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState(false);
   const [loadingOverlay, setLoadingOverlay] = React.useState<boolean>(false);
@@ -46,7 +46,6 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
   }, [setHeader, source]);
 
   React.useEffect(() => {
-    handleSetDocumentation();
     sourceId && handleSetSource();
   }, [sourceId, API]);
 
@@ -58,20 +57,21 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
         setSource(res.data);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET gateway error: " + err);
       })
       .finally(() => {
         setShowSpinner(false);
       });
   };
+
   const handleSetDocumentation = (): void => {
     API.Documentation.get("sources")
       .then((res) => {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -108,7 +108,7 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
     body = removeEmptyObjectValues(body);
 
     if (!checkValues([body.name, body.location, body.type, body.auth])) {
-      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
+      setAlert({title: "Oops something went wrong", type: "danger", message: "Required fields are empty"});
       setLoadingOverlay(false);
       return;
     }
@@ -117,11 +117,11 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
       // unset id means we're creating a new entry
       API.Source.create(body)
         .then(() => {
-          setAlert({ type: "success", message: "Saved source" });
+          setAlert({type: "success", message: "Saved source"});
           navigate("/sources");
         })
         .catch((err) => {
-          setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
           throw new Error("Create source error: " + err);
         })
         .finally(() => {
@@ -133,11 +133,11 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
       // set id means we're updating a existing entry
       API.Source.update(body, sourceId)
         .then((res) => {
-          setAlert({ type: "success", message: "Updated source" });
+          setAlert({type: "success", message: "Updated source"});
           setSource(res.data);
         })
         .catch((err) => {
-          setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
           throw new Error("Update source error: " + err);
         })
         .finally(() => {
@@ -150,45 +150,53 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
     <form id="dataForm" onSubmit={saveSource}>
       <Card
         title={title}
-        cardHeader={function () {
+        cardHeader={() => {
           return (
             <>
               <button
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#sourceHelpModal"
-                onClick={(e) => e.preventDefault()}
+                onClick={() => {
+                  !documentation && handleSetDocumentation()
+                }}
               >
-                <i className="fas fa-question mr-1" />
+                <i className="fas fa-question mr-1"/>
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Source Documentation"
                 id="sourceHelpModal"
-                body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+                body={() =>
+                  documentation ? (
+                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
+                  ) : (
+                    <Spinner/>
+                  )
+                }
               />
               <Link className="utrecht-link" to={"/sources"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2" />
+                  <i className="fas fa-long-arrow-alt-left mr-2"/>
                   Back
                 </button>
               </Link>
               <button className="utrecht-button utrecht`ht-button-sm btn-sm btn-success" type="submit">
-                <i className="fas fa-save mr-2" />
+                <i className="fas fa-save mr-2"/>
                 Save
               </button>
             </>
           );
         }}
-        cardBody={function () {
+        cardBody={() => {
           return (
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner />
+                  <Spinner/>
                 ) : (
                   <>
-                    {loadingOverlay && <LoadingOverlay />}
+                    {loadingOverlay && <LoadingOverlay/>}
                     <div className="row">
                       <div className="col-6">
                         <GenericInputComponent
@@ -218,11 +226,11 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
                       <div className="col-6">
                         <SelectInputComponent
                           options={[
-                            { name: "json", value: "json" },
-                            { name: "xml", value: "xml" },
-                            { name: "soap", value: "soap" },
-                            { name: "ftp", value: "ftp" },
-                            { name: "sftp", value: "sftp" }
+                            {name: "json", value: "json"},
+                            {name: "xml", value: "xml"},
+                            {name: "soap", value: "soap"},
+                            {name: "ftp", value: "ftp"},
+                            {name: "sftp", value: "sftp"}
                           ]}
                           name={"type"}
                           id={"typeInput"}
@@ -234,9 +242,9 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
                       <div className="col-6">
                         <SelectInputComponent
                           options={[
-                            { name: "apikey", value: "apikey" },
-                            { name: "jwt", value: "jwt" },
-                            { name: "username-password", value: "username-password" }
+                            {name: "apikey", value: "apikey"},
+                            {name: "jwt", value: "jwt"},
+                            {name: "username-password", value: "username-password"}
                           ]}
                           name={"auth"}
                           id={"authInput"}
@@ -357,7 +365,7 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
                         {
                           title: "Headers",
                           id: "headersAccordion",
-                          render: function() {
+                          render: function () {
                             return (
                               <MultiDimensionalArrayInput
                                 id="headers"
@@ -379,15 +387,15 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
                         {
                           title: "OAS",
                           id: "oasAccordion",
-                          render: function() {
-                            return <ElementCreationNew id="oas" label="OAS" data={source?.oas} />;
+                          render: function () {
+                            return <ElementCreationNew id="oas" label="OAS" data={source?.oas}/>;
                           }
                         },
                         {
                           title: "Paths",
                           id: "pathsAccordion",
-                          render: function() {
-                            return <ElementCreationNew id="paths" label="Paths" data={source?.paths} />;
+                          render: function () {
+                            return <ElementCreationNew id="paths" label="Paths" data={source?.paths}/>;
                           }
                         }
                       ]}

@@ -1,17 +1,17 @@
 import * as React from "react";
-import { Table, Card, Spinner, Modal } from "@conductionnl/nl-design-system/lib";
-import { Link } from "gatsby";
+import {Table, Card, Spinner, Modal} from "@conductionnl/nl-design-system/lib";
+import {Link} from "gatsby";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import { AlertContext } from "../../context/alertContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faSync } from "@fortawesome/free-solid-svg-icons";
+import {AlertContext} from "../../context/alertContext";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit, faSync} from "@fortawesome/free-solid-svg-icons";
 
 interface ObjectEntitiesTableProps {
   entityId: string;
 }
 
-const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) => {
+const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({entityId}) => {
   const [documentation, setDocumentation] = React.useState<string>(null);
   const [objectEntities, setObjectEntities] = React.useState(null);
   const [entity, setEntity] = React.useState(null);
@@ -27,9 +27,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
       handleSetObjectEntities();
       getEntity();
     }
-    handleSetDocumentation();
     setShowSpinner(false);
-    handleSetDocumentation();
   }, [API, entityId]);
 
   React.useEffect(() => {
@@ -43,8 +41,8 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
     setShowSpinner(true);
 
     import("@formio/react").then((formio) => {
-      const { Form } = formio;
-      setFormIO(<Form src={formIOSchema} onSubmit={saveObject} />);
+      const {Form} = formio;
+      setFormIO(<Form src={formIOSchema} onSubmit={saveObject}/>);
     });
     setShowSpinner(false);
   }, [formIOSchema]);
@@ -94,7 +92,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
         res?.data?.length > 0 && setObjectEntities(res.data);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET object entities error: " + err);
       })
       .finally(() => {
@@ -106,11 +104,11 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
     setShowSpinner(true);
     API.ObjectEntity.sync(objectEntityId)
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET object entities error: " + err);
       })
       .finally(() => {
-        setAlert({ message: `Object ${objectEntityId} synced`, type: "success" });
+        setAlert({message: `Object ${objectEntityId} synced`, type: "success"});
         setShowSpinner(false);
       });
   };
@@ -121,7 +119,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -130,11 +128,11 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
     if (confirm(`Do you want to delete this object entity?`)) {
       API.ObjectEntity.delete(id)
         .then(() => {
-          setAlert({ message: "Deleted object entity", type: "success" });
+          setAlert({message: "Deleted object entity", type: "success"});
           handleSetObjectEntities();
         })
         .catch((err) => {
-          setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+          setAlert({title: "Oops something went wrong", message: err, type: "danger"});
           throw new Error("DELETE object entity error: " + err);
         });
     }
@@ -143,24 +141,33 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
   return (
     <Card
       title={"Objects"}
-      cardHeader={function () {
+      cardHeader={() => {
         return (
           <>
             <button
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#ObjectEntityHelpModal"
+              onClick={() => {
+                !documentation && handleSetDocumentation()
+              }}
             >
-              <i className="fas fa-question mr-1" />
+              <i className="fas fa-question mr-1"/>
               <span className="mr-2">Help</span>
             </button>
             <Modal
               title="Object Entities Documentation"
               id="ObjectEntityHelpModal"
-              body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+              body={() =>
+                documentation ? (
+                  <div dangerouslySetInnerHTML={{__html: documentation}}/>
+                ) : (
+                  <Spinner/>
+                )
+              }
             />
             <a className="utrecht-link" onClick={handleSetObjectEntities}>
-              <i className="fas fa-sync-alt mr-1" />
+              <i className="fas fa-sync-alt mr-1"/>
               <span className="mr-2">Refresh</span>
             </a>
             <button
@@ -168,7 +175,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
               data-bs-toggle="modal"
               data-bs-target="#objectModal"
             >
-              <i className="fas fa-plus mr-2" />
+              <i className="fas fa-plus mr-2"/>
               Create
             </button>
             <Modal
@@ -184,7 +191,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
           <div className="row">
             <div className="col-12">
               {showSpinner === true ? (
-                <Spinner />
+                <Spinner/>
               ) : objectEntities ? (
                 <Table
                   columns={[
@@ -204,21 +211,23 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
                     {
                       field: "id",
                       headerName: " ",
-                      renderCell: (item: { id: string, externalId: string, gateway: {location: string} }) => {
+                      renderCell: (item: { id: string, externalId: string, gateway: { location: string } }) => {
                         return (
                           <div className="utrecht-link d-flex justify-content-end">
                             {
-                              item.externalId && item.gateway?.location && entity?.endpoint &&  
-                              <button onClick={() => {syncObject(item.id)}} className="utrecht-button btn-sm btn-primary mr-2">
-                                <FontAwesomeIcon icon={faSync} /> Sync
+                              item.externalId && item.gateway?.location && entity?.endpoint &&
+                              <button onClick={() => {
+                                syncObject(item.id)
+                              }} className="utrecht-button btn-sm btn-primary mr-2">
+                                <FontAwesomeIcon icon={faSync}/> Sync
                               </button>
-                            } 
+                            }
                             <Link
                               className="utrecht-link d-flex justify-content-end"
                               to={`/entities/${entityId}/objects/${item.id}`}
                             >
                               <button className="utrecht-button btn-sm btn-success">
-                                <FontAwesomeIcon icon={faEdit} /> Edit
+                                <FontAwesomeIcon icon={faEdit}/> Edit
                               </button>
                             </Link>
                           </div>

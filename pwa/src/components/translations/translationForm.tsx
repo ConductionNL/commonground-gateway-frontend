@@ -1,20 +1,20 @@
 import * as React from "react";
-import { GenericInputComponent, Card, Modal, SelectInputComponent, Spinner } from "@conductionnl/nl-design-system/lib";
-import { Link, navigate } from "gatsby";
+import {GenericInputComponent, Card, Modal, SelectInputComponent, Spinner} from "@conductionnl/nl-design-system/lib";
+import {Link, navigate} from "gatsby";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import { AlertContext } from "../../context/alertContext";
-import { HeaderContext } from "../../context/headerContext";
-import { checkValues, removeEmptyObjectValues } from "../utility/inputHandler";
-import { getDefaultLibFileName } from "typescript";
+import {AlertContext} from "../../context/alertContext";
+import {HeaderContext} from "../../context/headerContext";
+import {checkValues, removeEmptyObjectValues} from "../utility/inputHandler";
+import {getDefaultLibFileName} from "typescript";
 
 interface TranslationFormProps {
   id?: string;
   tableName?: string;
 }
 
-export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName }) => {
+export const TranslationForm: React.FC<TranslationFormProps> = ({id, tableName}) => {
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
   const [loadingOverlay, setLoadingOverlay] = React.useState<boolean>(false);
   const [translation, setTranslation] = React.useState<any>(null);
@@ -97,9 +97,6 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
         });
     }
   };
-  React.useEffect(() => {
-    handleSetDocumentation();
-  });
 
   const handleSetDocumentation = (): void => {
     API.Documentation.get("translations")
@@ -107,7 +104,7 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", type: "danger", message: err });
+        setAlert({title: "Oops something went wrong", type: "danger", message: err});
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -124,39 +121,47 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
                   className="utrecht-link button-no-style"
                   data-bs-toggle="modal"
                   data-bs-target="#translationHelpModal"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={() => {
+                    !documentation && handleSetDocumentation()
+                  }}
                 >
-                  <i className="fas fa-question mr-1" />
+                  <i className="fas fa-question mr-1"/>
                   <span className="mr-2">Help</span>
                 </button>
                 <Modal
                   title="Translation Documentation"
                   id="translationHelpModal"
-                  body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+                  body={() =>
+                    documentation ? (
+                      <div dangerouslySetInnerHTML={{__html: documentation}}/>
+                    ) : (
+                      <Spinner/>
+                    )
+                  }
                 />
                 <Link className="utrecht-link" to={`/translation-tables/${tableName}/translations`}>
                   <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                    <i className="fas fa-long-arrow-alt-left mr-2" />
+                    <i className="fas fa-long-arrow-alt-left mr-2"/>
                     Back
                   </button>
                 </Link>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn-success" type="submit">
-                  <i className="fas fa-save mr-2" />
+                  <i className="fas fa-save mr-2"/>
                   Save
                 </button>
               </div>
             );
           }}
-          cardBody={function () {
+          cardBody={() => {
             return (
               <div className="row">
                 <div className="col-12">
                   {showSpinner === true ? (
-                    <Spinner />
+                    <Spinner/>
                   ) : (
                     <>
-                      {loadingOverlay && <LoadingOverlay />}
-                      <TransForm translation={translation} />
+                      {loadingOverlay && <LoadingOverlay/>}
+                      <TransForm translation={translation}/>
                     </>
                   )}
                 </div>
@@ -174,7 +179,7 @@ interface TransFormProps {
   translation: any;
 }
 
-export const TransForm: React.FC<TransFormProps> = ({ translation }) => {
+export const TransForm: React.FC<TransFormProps> = ({translation}) => {
   return (
     <div className="row">
       <div className="col-4">
@@ -205,8 +210,8 @@ export const TransForm: React.FC<TransFormProps> = ({ translation }) => {
         <div className="form-group">
           <SelectInputComponent
             options={[
-              { name: "Nederlands (NL)", value: "nl_NL" },
-              { name: "English (EN)", value: "en_EN" },
+              {name: "Nederlands (NL)", value: "nl_NL"},
+              {name: "English (EN)", value: "en_EN"},
             ]}
             name={"language"}
             id={"languageInput"}

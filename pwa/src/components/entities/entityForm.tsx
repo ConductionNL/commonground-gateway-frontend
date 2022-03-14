@@ -8,20 +8,20 @@ import {
   Spinner,
   TextareaGroup,
 } from "@conductionnl/nl-design-system/lib";
-import { navigate } from "gatsby-link";
-import { Link } from "gatsby";
-import { checkValues, removeEmptyObjectValues } from "../utility/inputHandler";
+import {navigate} from "gatsby-link";
+import {Link} from "gatsby";
+import {checkValues, removeEmptyObjectValues} from "../utility/inputHandler";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import { AlertContext } from "../../context/alertContext";
-import { HeaderContext } from "../../context/headerContext";
+import {AlertContext} from "../../context/alertContext";
+import {HeaderContext} from "../../context/headerContext";
 
 interface EntityFormProps {
   entityId: string;
 }
 
-export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
+export const EntityForm: React.FC<EntityFormProps> = ({entityId}) => {
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
   const [entity, setEntity] = React.useState<any>(null);
   const [sources, setSources] = React.useState<any>(null);
@@ -53,7 +53,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
         setEntity(res.data);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET entity error: " + err);
       })
       .finally(() => {
@@ -67,7 +67,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
         setSources(res.data);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET sources error: " + err);
       });
   };
@@ -78,7 +78,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET documentation error: " + err);
       });
   };
@@ -101,7 +101,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
     body = removeEmptyObjectValues(body);
 
     if (!checkValues([body.name])) {
-      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
+      setAlert({title: "Oops something went wrong", type: "danger", message: "Required fields are empty"});
       setLoadingOverlay(false);
       return;
     }
@@ -110,11 +110,11 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
       // unset id means we're creating a new entry
       API.Entity.create(body)
         .then(() => {
-          setAlert({ message: "Saved object type", type: "success" });
+          setAlert({message: "Saved object type", type: "success"});
           navigate("/entities");
         })
         .catch((err) => {
-          setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
           throw new Error("Create entity error: " + err);
         })
         .finally(() => {
@@ -126,11 +126,11 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
       // set id means we're updating a existing entry
       API.Entity.update(body, entityId)
         .then((res) => {
-          setAlert({ message: "Updated object type", type: "success" });
+          setAlert({message: "Updated object type", type: "success"});
           setEntity(res.data);
         })
         .catch((err) => {
-          setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
           throw new Error("Update entity error: " + err);
         })
         .finally(() => {
@@ -143,31 +143,39 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
     <form id="dataForm" onSubmit={saveEntity}>
       <Card
         title={title}
-        cardHeader={function () {
+        cardHeader={() => {
           return (
             <div>
               <button
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#entityHelpModal"
-                onClick={(e) => e.preventDefault()}
+                onClick={() => {
+                  !documentation && handleSetDocumentation()
+                }}
               >
-                <i className="fas fa-question mr-1" />
+                <i className="fas fa-question mr-1"/>
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Object Type Documentation"
                 id="entityHelpModal"
-                body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+                body={() =>
+                  documentation ? (
+                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
+                  ) : (
+                    <Spinner/>
+                  )
+                }
               />
               <Link className="utrecht-link" to={"/entities"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2" />
+                  <i className="fas fa-long-arrow-alt-left mr-2"/>
                   Back
                 </button>
               </Link>
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success" type="submit" disabled={!sources}>
-                <i className="fas fa-save mr-2" />
+                <i className="fas fa-save mr-2"/>
                 Save
               </button>
             </div>
@@ -178,10 +186,10 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner />
+                  <Spinner/>
                 ) : (
                   <div>
-                    {loadingOverlay && <LoadingOverlay />}
+                    {loadingOverlay && <LoadingOverlay/>}
                     <div className="row">
                       <div className="col-6">
                         <GenericInputComponent
@@ -196,9 +204,9 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
                       <div className="col-6">
                         <SelectInputComponent
                           options={[
-                            { name: "Organization", value: "organization" },
-                            { name: "User", value: "user" },
-                            { name: "User group", value: "userGroup" },
+                            {name: "Organization", value: "organization"},
+                            {name: "User", value: "user"},
+                            {name: "User group", value: "userGroup"},
                           ]}
                           data={entity?.function ?? null}
                           name={"function"}

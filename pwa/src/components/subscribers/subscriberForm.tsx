@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "gatsby";
+import {Link} from "gatsby";
 import {
   checkValues,
   removeEmptyObjectValues,
@@ -14,23 +14,23 @@ import {
   TextareaGroup,
   Accordion,
   Spinner,
-  Card,
+  Card, Modal,
 } from "@conductionnl/nl-design-system/lib";
-import { navigate } from "gatsby-link";
+import {navigate} from "gatsby-link";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import { AlertContext } from "../../context/alertContext";
-import { HeaderContext } from "../../context/headerContext";
+import {AlertContext} from "../../context/alertContext";
+import {HeaderContext} from "../../context/headerContext";
 import MultiSelect from "../common/multiSelect";
-import { validateJSON } from "../../services/validateJSON";
+import {validateJSON} from "../../services/validateJSON";
 
 interface SubscriberFormProps {
   subscriberId: string;
   entityId: string;
 }
 
-export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, entityId }) => {
+export const SubscriberForm: React.FC<SubscriberFormProps> = ({subscriberId, entityId}) => {
   const [subscriber, setSubscriber] = React.useState<any>(null);
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
   const [loadingOverlay, setLoadingOverlay] = React.useState<boolean>(false);
@@ -41,6 +41,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
   const [sources, setSources] = React.useState<any>(null);
   const [endpoints, setEndpoint] = React.useState<any>(null);
   const [tableNames, setTableNames] = React.useState<Array<any>>(null);
+  const [documentation, setDocumentation] = React.useState<string>(null);
 
   React.useEffect(() => {
     setHeader(
@@ -65,11 +66,22 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
         setSubscriber(res.data);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET subscriber error: " + err);
       })
       .finally(() => {
         setShowSpinner(false);
+      });
+  };
+
+  const handleSetDocumentation = (): void => {
+    API.Documentation.get("subscribers")
+      .then((res) => {
+        setDocumentation(res.data.content);
+      })
+      .catch((err) => {
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
+        throw new Error("GET Documentation error: " + err);
       });
   };
 
@@ -81,7 +93,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
         setSources(res.data);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET sources error: " + err);
       })
       .finally(() => {
@@ -97,7 +109,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
         setEndpoint(res.data);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET endpoints error: " + err);
       })
       .finally(() => {
@@ -110,11 +122,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
 
     API.Translation.getTableNames()
       .then((res) => {
-        const mappedTableNames = res.data.results.map((value, idx) => ({ id: idx, name: value, value: value }));
+        const mappedTableNames = res.data.results.map((value, idx) => ({id: idx, name: value, value: value}));
         setTableNames(mappedTableNames);
       })
       .catch((err) => {
-        setAlert({ message: err, type: "danger" });
+        setAlert({message: err, type: "danger"});
         throw new Error("GET table names error: " + err);
       })
       .finally(() => {
@@ -156,13 +168,13 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
     console.log(body.conditions);
 
     if (!checkValues([body.name])) {
-      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
+      setAlert({title: "Oops something went wrong", type: "danger", message: "Required fields are empty"});
       setLoadingOverlay(false);
       return;
     }
 
     if (body.conditions !== undefined && !validateJSON(body.conditions)) {
-      setAlert({ title: "Oops something went wrong", type: "danger", message: "Conditions is not valid JSON" });
+      setAlert({title: "Oops something went wrong", type: "danger", message: "Conditions is not valid JSON"});
       setLoadingOverlay(false);
       return;
     }
@@ -171,13 +183,13 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
       // unset id means we're creating a new entry
       API.Subscriber.create(body)
         .then(() => {
-          setAlert({ message: "Saved subscriber", type: "success" });
+          setAlert({message: "Saved subscriber", type: "success"});
           navigate(`/entities/${entityId}`, {
-            state: { activeTab: "subscribers" },
+            state: {activeTab: "subscribers"},
           });
         })
         .catch((err) => {
-          setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
           throw new Error("Create subscriber error: " + err);
         })
         .finally(() => {
@@ -190,11 +202,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
       API.Subscriber.update(body, subscriberId)
         .then((res) => {
           console.log(res.data);
-          setAlert({ message: "Updated subscriber", type: "success" });
+          setAlert({message: "Updated subscriber", type: "success"});
           setSubscriber(res.data);
         })
         .catch((err) => {
-          setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
           throw new Error("Update subscriber error: " + err);
         })
         .finally(() => {
@@ -207,31 +219,60 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
     <form id="subscriberForm" onSubmit={saveSubscriber}>
       <Card
         title={title}
-        cardHeader={function () {
+        cardHeader={() => {
           return (
             <>
-              <Link className="utrecht-link" to={`/entities/${entityId}`} state={{ activeTab: "subscribers" }}>
+              <button
+                className="utrecht-link button-no-style"
+                data-bs-toggle="modal"
+                data-bs-target="#sourceHelpModal"
+                onClick={() => {
+                  !documentation && handleSetDocumentation()
+                }}
+              >
+                <i className="fas fa-question mr-1"/>
+                <span className="mr-2">Help</span>
+              </button>
+              <Modal
+                title="Source Documentation"
+                id="sourceHelpModal"
+                body={() =>
+                  documentation ? (
+                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
+                  ) : (
+                    <Spinner/>
+                  )
+                }
+              />
+              <Link
+                className="utrecht-link"
+                to={`/entities/${entityId}`}
+                state={{activeTab: "subscribers"}}
+              >
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2" />
+                  <i className="fas fa-long-arrow-alt-left mr-2"/>
                   Back
                 </button>
               </Link>
-              <button className="utrecht-button utrecht-button-sm btn-sm btn-success" type="submit">
-                <i className="fas fa-save mr-2" />
+              <button
+                className="utrecht-button utrecht-button-sm btn-sm btn-success"
+                type="submit"
+              >
+                <i className="fas fa-save mr-2"/>
                 Save
               </button>
             </>
           );
         }}
-        cardBody={function () {
+        cardBody={() => {
           return (
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner />
+                  <Spinner/>
                 ) : (
                   <div>
-                    {loadingOverlay && <LoadingOverlay />}
+                    {loadingOverlay && <LoadingOverlay/>}
                     <div className="row">
                       <div className="col-6">
                         <GenericInputComponent
@@ -254,10 +295,10 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                       <div className="col-6">
                         <SelectInputComponent
                           options={[
-                            { name: "GET", value: "GET" },
-                            { name: "POST", value: "POST" },
-                            { name: "PUT", value: "PUT" },
-                            { name: "PATCH", value: "PATCH" },
+                            {name: "GET", value: "GET"},
+                            {name: "POST", value: "POST"},
+                            {name: "PUT", value: "PUT"},
+                            {name: "PATCH", value: "PATCH"},
                           ]}
                           name={"method"}
                           id={"methodInput"}
@@ -276,7 +317,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                         />
                       </div>
                     </div>
-                    <br />
+                    <br/>
                     <div className="row">
                       <div className="col-6">
                         <TextareaGroup
@@ -291,7 +332,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                           options={
                             sources !== null && sources.length > 0
                               ? sources
-                              : [{ name: "Please create a source  first.", value: null }]
+                              : [{name: "Please create a source  first.", value: null}]
                           }
                           data={subscriber?.source?.name}
                           name={"source"}
@@ -301,14 +342,14 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                         />
                       </div>
                     </div>
-                    <br />
+                    <br/>
                     <div className="row">
                       <div className="col-6">
                         <SelectInputComponent
                           options={
                             endpoints !== null && endpoints.length > 0
                               ? endpoints
-                              : [{ name: "Please create an endpoint first.", value: null }]
+                              : [{name: "Please create an endpoint first.", value: null}]
                           }
                           data={subscriber?.endpoint?.name}
                           name={"endpoint"}
@@ -318,7 +359,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                         />
                       </div>
                     </div>
-                    <br />
+                    <br/>
                     <div className="row mt-3">
                       <div className="col-12 col-sm-6 ">
                         <div className="form-check">
@@ -361,7 +402,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                               />
                             ) : (
                               <>
-                                <Spinner />
+                                <Spinner/>
                               </>
                             );
                           },
@@ -379,7 +420,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                               />
                             ) : (
                               <>
-                                <Spinner />
+                                <Spinner/>
                               </>
                             );
                           },
@@ -395,11 +436,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                                 data={
                                   subscriber && subscriber.mappingIn
                                     ? [
-                                        {
-                                          key: "mappingIn",
-                                          value: subscriber.mappingIn,
-                                        },
-                                      ]
+                                      {
+                                        key: "mappingIn",
+                                        value: subscriber.mappingIn,
+                                      },
+                                    ]
                                     : null
                                 }
                               />
@@ -417,11 +458,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                                 data={
                                   subscriber && subscriber.mappingOut
                                     ? [
-                                        {
-                                          key: "mappingOut",
-                                          value: `${subscriber.mappingOut}`,
-                                        },
-                                      ]
+                                      {
+                                        key: "mappingOut",
+                                        value: `${subscriber.mappingOut}`,
+                                      },
+                                    ]
                                     : null
                                 }
                               />
@@ -439,11 +480,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                                 data={
                                   subscriber && subscriber.headers
                                     ? [
-                                        {
-                                          key: "headers",
-                                          value: `${subscriber.headers}`,
-                                        },
-                                      ]
+                                      {
+                                        key: "headers",
+                                        value: `${subscriber.headers}`,
+                                      },
+                                    ]
                                     : null
                                 }
                               />
@@ -461,11 +502,11 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                                 data={
                                   subscriber && subscriber.queryParameters
                                     ? [
-                                        {
-                                          key: "queryParameters",
-                                          value: `${subscriber.queryParameters}`,
-                                        },
-                                      ]
+                                      {
+                                        key: "queryParameters",
+                                        value: `${subscriber.queryParameters}`,
+                                      },
+                                    ]
                                     : null
                                 }
                               />

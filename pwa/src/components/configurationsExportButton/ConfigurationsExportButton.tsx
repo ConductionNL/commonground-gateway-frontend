@@ -1,8 +1,9 @@
 import * as React from "react";
-import { download } from "../utility/DocumentDownload";
+import {download} from "../utility/DocumentDownload";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import { Modal } from "@conductionnl/nl-design-system";
+import {Modal} from "@conductionnl/nl-design-system";
+import {Spinner} from "@conductionnl/nl-design-system/lib";
 
 export default function ConfigurationsExportButton() {
   const [context, setContext] = React.useState(null);
@@ -38,9 +39,6 @@ export default function ConfigurationsExportButton() {
         setLoading(false);
       });
   };
-  React.useEffect(() => {
-    handleSetDocumentation();
-  });
 
   const handleSetDocumentation = (): void => {
     API.Documentation.get("configurations")
@@ -53,17 +51,35 @@ export default function ConfigurationsExportButton() {
   };
   return (
     <div>
-      <button className="utrecht-button text-center" type="button" onClick={handleExport} disabled={loading}>
+      <button
+        className="utrecht-button text-center"
+        type="button"
+        onClick={handleExport}
+        disabled={loading}
+      >
         {loading ? "Preparing your download..." : "Export Configuration"}
       </button>
-      <button className="utrecht-link button-no-style" data-bs-toggle="modal" data-bs-target="#configurationsHelpModal">
-        <i className="fas fa-question mr-1" />
+      <button
+        className="utrecht-link button-no-style"
+        data-bs-toggle="modal"
+        data-bs-target="#configurationsHelpModal"
+        onClick={() => {
+          !documentation && handleSetDocumentation()
+        }}
+      >
+        <i className="fas fa-question mr-1"/>
         <span className="mr-2">Help</span>
       </button>
       <Modal
         title="Configuration Documentation"
         id="configurationsHelpModal"
-        body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+        body={() =>
+          documentation ? (
+            <div dangerouslySetInnerHTML={{__html: documentation}}/>
+          ) : (
+            <Spinner/>
+          )
+        }
       />
     </div>
   );

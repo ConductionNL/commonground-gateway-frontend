@@ -7,8 +7,8 @@ import {
   Accordion,
   Modal,
 } from "@conductionnl/nl-design-system/lib";
-import { Link } from "gatsby";
-import { navigate } from "gatsby-link";
+import {Link} from "gatsby";
+import {navigate} from "gatsby-link";
 import {
   checkValues,
   removeEmptyObjectValues,
@@ -18,8 +18,8 @@ import ElementCreationNew from "../common/elementCreationNew";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
-import { HeaderContext } from "../../context/headerContext";
-import { AlertContext } from "../../context/alertContext";
+import {HeaderContext} from "../../context/headerContext";
+import {AlertContext} from "../../context/alertContext";
 import MultiSelect from "../common/multiSelect";
 
 interface IApplication {
@@ -36,7 +36,7 @@ interface ApplicationFormProps {
   id?: string;
 }
 
-export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
+export const ApplicationForm: React.FC<ApplicationFormProps> = ({id}) => {
   const [application, setApplication] = React.useState<IApplication>(null);
   const [endpoints, setEndpoints] = React.useState<any>(null);
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
@@ -55,9 +55,6 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
     );
   }, [setHeader, application]);
 
-  React.useEffect(() => {
-    handleSetDocumentation();
-  });
 
   React.useEffect(() => {
     handleSetEndpoints();
@@ -70,12 +67,12 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
     API.Application.getOne(id)
       .then((res) => {
         res.data.endpoints = res.data.endpoints.map((endpoint) => {
-          return { name: endpoint.name, id: endpoint.name, value: `/admin/endpoints/${endpoint.id}` }
+          return {name: endpoint.name, id: endpoint.name, value: `/admin/endpoints/${endpoint.id}`}
         })
         setApplication(res.data);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET application error: " + err);
       })
       .finally(() => {
@@ -87,12 +84,12 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
     API.Endpoint.getAll()
       .then((res) => {
         const _endpoints = res.data?.map((endpoint) => {
-          return { name: endpoint.name, id: endpoint.name, value: `/admin/endpoints/${endpoint.id}` }
+          return {name: endpoint.name, id: endpoint.name, value: `/admin/endpoints/${endpoint.id}`}
         })
         setEndpoints(_endpoints);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET endpoints error: " + err);
       });
   };
@@ -103,7 +100,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({title: "Oops something went wrong", message: err, type: "danger"});
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -128,7 +125,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
     body = removeEmptyObjectValues(body);
 
     if (!checkValues([body.name, body.domains])) {
-      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
+      setAlert({title: "Oops something went wrong", type: "danger", message: "Required fields are empty"});
       setLoadingOverlay(false);
       return;
     }
@@ -137,11 +134,11 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
       // unset id means we're creating a new entry
       API.Application.create(body)
         .then(() => {
-          setAlert({ message: "Saved application", type: "success" });
+          setAlert({message: "Saved application", type: "success"});
           navigate("/applications");
         })
         .catch((err) => {
-          setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
           throw new Error("Create application error: " + err);
         })
         .finally(() => {
@@ -153,11 +150,11 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
       // set id means we're updating a existing entry
       API.Application.update(body, id)
         .then((res) => {
-          setAlert({ message: "Updated application", type: "success" });
+          setAlert({message: "Updated application", type: "success"});
           setApplication(res.data);
         })
         .catch((err) => {
-          setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+          setAlert({title: "Oops something went wrong", type: "danger", message: err.message});
           throw new Error("Update application error: " + err);
         })
         .finally(() => {
@@ -177,24 +174,32 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#applicationHelpModal"
-                onClick={(e) => e.preventDefault()}
+                onClick={() => {
+                  !documentation && handleSetDocumentation()
+                }}
               >
-                <i className="fas fa-question mr-1" />
+                <i className="fas fa-question mr-1"/>
                 <span className="mr-2">Help</span>
               </button>
               <Modal
                 title="Application Documentation"
                 id="applicationHelpModal"
-                body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+                body={() =>
+                  documentation ? (
+                    <div dangerouslySetInnerHTML={{__html: documentation}}/>
+                  ) : (
+                    <Spinner/>
+                  )
+                }
               />
               <Link className="utrecht-link" to={"/applications"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
-                  <i className="fas fa-long-arrow-alt-left mr-2" />
+                  <i className="fas fa-long-arrow-alt-left mr-2"/>
                   Back
                 </button>
               </Link>
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success" type="submit">
-                <i className="fas fa-save mr-2" />
+                <i className="fas fa-save mr-2"/>
                 Save
               </button>
             </>
@@ -205,10 +210,10 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
             <div className="row">
               <div className="col-12">
                 {showSpinner === true ? (
-                  <Spinner />
+                  <Spinner/>
                 ) : (
                   <div>
-                    {loadingOverlay && <LoadingOverlay />}
+                    {loadingOverlay && <LoadingOverlay/>}
                     <div className="row">
                       <div className="col-6">
                         <GenericInputComponent
@@ -266,7 +271,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
                           title: "Domains *",
                           id: "domainsAccordion",
                           render: function () {
-                            return <ElementCreationNew id="domains" label="Domains" data={application?.domains} />;
+                            return <ElementCreationNew id="domains" label="Domains" data={application?.domains}/>;
                           },
                         },
                         {
@@ -281,7 +286,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
                                 options={endpoints}
                               />
                             ) : (
-                                <Spinner />
+                              <Spinner/>
                             );
                           }
                         }
