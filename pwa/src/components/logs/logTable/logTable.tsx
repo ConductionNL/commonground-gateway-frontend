@@ -24,7 +24,6 @@ const LogsTable: React.FC<LogsTableProps> = ({ logs, modal = true }) => {
             <th>Date created</th>
           </tr>
         </thead>
-
         <tbody>
           {logs.map((log, idx) => {
             const statusClass = log.responseStatusCode
@@ -56,15 +55,13 @@ const LogsTable: React.FC<LogsTableProps> = ({ logs, modal = true }) => {
               </tr>
             );
           })}
-
           {!logs.length && (
             <tr>
-              <td>No results found</td>
+              No results found
             </tr>
           )}
         </tbody>
       </table>
-
       {modal && logs.map((log, idx) => <LogModal key={`logModal${idx}`} {...{ log }} />)}
     </div>
   );
