@@ -114,9 +114,13 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
     }
 
     API.Source.createOrUpdate(body, sourceId)
-      .then(() => {
+      .then((response) => {
         setAlert({ type: "success", message: `${sourceId ? "Updated" : "Created"} source` });
-        navigate("/sources");
+        if (sourceId) {
+          navigate(`/sources`);
+        } else {
+          navigate(`/sources/${response.data.id}`);
+        }
       })
       .catch((err) => {
         setAlert({ type: "danger", message: err.message });

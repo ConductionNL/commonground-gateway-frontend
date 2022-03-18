@@ -1,5 +1,7 @@
 # Design Decisions
 
+After user submits a new "source" form, they are redirected to the edit form for the created source entry.
+
 ## Introduction:
 
 The following document contains all design decisions. Any and all included packages **must be** _highly adopted_ and _well documented_.
