@@ -4,7 +4,6 @@ import {
   checkValues,
   removeEmptyObjectValues,
   retrieveFormArrayAsOArray,
-  retrieveFormArrayAsOArrayWithName,
   retrieveFormArrayAsObject,
 } from "../utility/inputHandler";
 import {
@@ -48,11 +47,8 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId 
     getTableNames();
     handlerId && handleSetHandler();
     handleSetEntities();
-  }, [API, handlerId]);
-
-  React.useEffect(() => {
     handleSetDocumentation();
-  });
+  }, [API, handlerId]);
 
   React.useEffect(() => {
     setHeader(
@@ -89,17 +85,6 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId 
       });
   };
 
-  const handleSetDocumentation = (): void => {
-    API.Documentation.get("handler")
-      .then((res) => {
-        setDocumentation(res.data.content);
-      })
-      .catch((err) => {
-        setAlert({ message: err, type: "danger" });
-        throw new Error("GET Documentation error: " + err);
-      });
-  };
-
   const getTableNames = () => {
     API.Translation.getTableNames()
       .then((res) => {
@@ -114,7 +99,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId 
   };
 
   const handleSetDocumentation = (): void => {
-    API.Documentation.get("object_types")
+    API.Documentation.get("handler")
       .then((res) => {
         setDocumentation(res.data.content);
       })
