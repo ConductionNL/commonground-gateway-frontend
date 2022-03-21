@@ -24,6 +24,10 @@ export default function EntitiesTable() {
   }, [setHeader]);
 
   React.useEffect(() => {
+    handleSetDocumentation();
+  });
+
+  React.useEffect(() => {
     handleSetEntities();
   }, [API]);
 
@@ -72,20 +76,18 @@ export default function EntitiesTable() {
   return (
     <Card
       title={"Object types"}
-      cardHeader={() => {
+      cardHeader={function () {
         return (
           <>
-            <button
+            <a
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#entityHelpModal"
-              onClick={() => {
-                !documentation && handleSetDocumentation();
-              }}
+              onClick={(e) => e.preventDefault()}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
-            </button>
+            </a>
             <Modal
               title="Object Types Documentation"
               id="entityHelpModal"
@@ -104,7 +106,7 @@ export default function EntitiesTable() {
           </>
         );
       }}
-      cardBody={() => {
+      cardBody={function () {
         return (
           <div className="row">
             <div className="col-12">

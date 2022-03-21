@@ -137,7 +137,7 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
         cardHeader={() => {
           return (
             <>
-              <button
+              <a
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#ObjectEntityHelpModal"
@@ -147,7 +147,7 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
-              </button>
+              </a>
               <Modal
                 title="Entity_object Documentation"
                 id="ObjectEntityHelpModal"

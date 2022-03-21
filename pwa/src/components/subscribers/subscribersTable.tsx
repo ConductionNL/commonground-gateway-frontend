@@ -20,6 +20,10 @@ export default function SubscribersTable({ entityId }) {
   const [documentation, setDocumentation] = React.useState<string>(null);
 
   React.useEffect(() => {
+    handleSetDocumentation();
+  });
+
+  React.useEffect(() => {
     handleSetSubscribers();
   }, [API]);
 
@@ -35,6 +39,17 @@ export default function SubscribersTable({ entityId }) {
       })
       .finally(() => {
         setShowSpinner(false);
+      });
+  };
+
+  const handleSetDocumentation = (): void => {
+    API.Documentation.get("subscribers")
+      .then((res) => {
+        setDocumentation(res.data.content);
+      })
+      .catch((err) => {
+        setAlert({ message: err, type: "danger" });
+        throw new Error("GET Documentation error: " + err);
       });
   };
 
@@ -54,38 +69,25 @@ export default function SubscribersTable({ entityId }) {
       });
   };
 
-  const handleSetDocumentation = (): void => {
-    API.Documentation.get("subscribers")
-      .then((res) => {
-        setDocumentation(res.data.content);
-      })
-      .catch((err) => {
-        setAlert({ message: err, type: "danger" });
-        throw new Error("GET Documentation error: " + err);
-      });
-  };
-
   return (
     <Card
       title={title}
-      cardHeader={() => {
+      cardHeader={function () {
         return (
           <>
-            <button
+            <a
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#subscriberHelpModal"
-              onClick={() => {
-                !documentation && handleSetDocumentation();
-              }}
+              onClick={(e) => e.preventDefault()}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
-            </button>
+            </a>
             <Modal
-              title="subscriber Documentation"
+              title="Subscriber Documentation"
               id="subscriberHelpModal"
-              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
+              body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
             />
             <a className="utrecht-link" onClick={handleSetSubscribers}>
               <i className="fas fa-sync-alt mr-1" />

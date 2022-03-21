@@ -51,6 +51,10 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId 
   }, [API, handlerId]);
 
   React.useEffect(() => {
+    handleSetDocumentation();
+  });
+
+  React.useEffect(() => {
     setHeader(
       <>
         Handler <i>{handler && handler.name}</i>
@@ -106,6 +110,17 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId 
       })
       .catch((err) => {
         throw new Error("GET table names error: " + err);
+      });
+  };
+
+  const handleSetDocumentation = (): void => {
+    API.Documentation.get("object_types")
+      .then((res) => {
+        setDocumentation(res.data.content);
+      })
+      .catch((err) => {
+        setAlert({ message: err, type: "danger" });
+        throw new Error("GET documentation error: " + err);
       });
   };
 
@@ -174,7 +189,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId 
         cardHeader={() => {
           return (
             <>
-              <button
+              <a
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#handlerHelpModal"
@@ -184,11 +199,11 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId 
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
-              </button>
+              </a>
               <Modal
                 title="Handler Documentation"
                 id="handlerHelpModal"
-                body={() => <div dangerouslySetInnerHTML={{ __html: "" }} />}
+                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
               <Link className="utrecht-link" to={`/endpoints/${endpointId}`} state={{ activeTab: "handlers" }}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">

@@ -63,7 +63,7 @@ export default function TableNamesTable() {
         cardHeader={() => {
           return (
             <>
-              <button
+              <a
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#translationHelpModal"
@@ -73,7 +73,7 @@ export default function TableNamesTable() {
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
-              </button>
+              </a>
               <Modal
                 title="Translation Documentation"
                 id="translationHelpModal"

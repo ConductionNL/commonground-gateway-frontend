@@ -191,7 +191,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
         cardHeader={() => {
           return (
             <>
-              <button
+              <a
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#attributeHelpModal"
@@ -201,7 +201,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
-              </button>
+              </a>
               <Modal
                 title="Attribute Documentation"
                 id="attributeHelpModal"
@@ -325,6 +325,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                           name={"description"}
                           id={"descriptionInput"}
                           defaultValue={attribute?.description}
+                          label={"Description"}
                         />
                       </div>
                     </div>

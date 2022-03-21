@@ -1,10 +1,9 @@
 import * as React from "react";
-import { Card, Modal, Spinner } from "@conductionnl/nl-design-system/lib";
+import { Card, Spinner } from "@conductionnl/nl-design-system/lib";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 import { Link } from "gatsby";
-import { AlertContext } from "../../context/alertContext";
 
 interface ObjectEntityFormNewProps {
   objectId: string;
@@ -18,8 +17,6 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
   const [showSpinner, setShowSpinner] = React.useState(null);
   const [formIOSchema, setFormIOSchema] = React.useState(null);
   const [formIO, setFormIO] = React.useState(null);
-  const [documentation, setDocumentation] = React.useState<string>(null);
-  const [_, setAlert] = React.useContext(AlertContext);
 
   React.useEffect(() => {
     getEntity();
@@ -42,17 +39,6 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
     });
     setShowSpinner(false);
   }, [formIOSchema]);
-
-  const handleSetDocumentation = (): void => {
-    API.Documentation.get("object_types")
-      .then((res) => {
-        setDocumentation(res.data.content);
-      })
-      .catch((err) => {
-        setAlert({ message: err, type: "danger" });
-        throw new Error("GET Documentation error: " + err);
-      });
-  };
 
   const getObject = () => {
     setShowSpinner(true);
@@ -143,25 +129,18 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
   return (
     <Card
       title="Edit"
-      cardHeader={() => {
+      cardHeader={function () {
         return (
           <div>
-            <button
+            <a
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#helpModal"
-              onClick={() => {
-                !documentation && handleSetDocumentation();
-              }}
+              onClick={(e) => e.preventDefault()}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
-            </button>
-            <Modal
-              title="Entity_object Documentation"
-              id="ObjectEntityHelpModal"
-              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
-            />
+            </a>
             <Link className="utrecht-link" to={`/entities/${entityId}`} state={{ activeTab: "objects" }}>
               <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
                 <i className="fas fa-long-arrow-alt-left mr-2" />
@@ -171,7 +150,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
           </div>
         );
       }}
-      cardBody={() => {
+      cardBody={function () {
         return (
           <div className="row">
             <div className="col-12">{showSpinner === true ? <Spinner /> : formIO && formIO}</div>

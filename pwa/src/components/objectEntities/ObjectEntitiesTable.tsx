@@ -27,7 +27,9 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
       handleSetObjectEntities();
       getEntity();
     }
+    handleSetDocumentation();
     setShowSpinner(false);
+    handleSetDocumentation();
   }, [API, entityId]);
 
   React.useEffect(() => {
@@ -141,24 +143,22 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
   return (
     <Card
       title={"Objects"}
-      cardHeader={() => {
+      cardHeader={function () {
         return (
           <>
-            <button
+            <a
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#ObjectEntityHelpModal"
-              onClick={() => {
-                !documentation && handleSetDocumentation();
-              }}
+              onClick={(e) => e.preventDefault()}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
-            </button>
+            </a>
             <Modal
               title="Object Entities Documentation"
               id="ObjectEntityHelpModal"
-              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
+              body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
             />
             <a className="utrecht-link" onClick={handleSetObjectEntities}>
               <i className="fas fa-sync-alt mr-1" />

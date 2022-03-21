@@ -103,7 +103,7 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
           cardHeader={function () {
             return (
               <div>
-                <button
+                <a
                   className="utrecht-link button-no-style"
                   data-bs-toggle="modal"
                   data-bs-target="#translationHelpModal"
@@ -113,7 +113,7 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
                 >
                   <i className="fas fa-question mr-1" />
                   <span className="mr-2">Help</span>
-                </button>
+                </a>
                 <Modal
                   title="Translation Documentation"
                   id="translationHelpModal"

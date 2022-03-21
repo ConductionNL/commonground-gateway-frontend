@@ -147,7 +147,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
         cardHeader={function () {
           return (
             <>
-              <button
+              <a
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#applicationHelpModal"
@@ -155,11 +155,11 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
-              </button>
+              </a>
               <Modal
                 title="Application Documentation"
                 id="applicationHelpModal"
-                body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
               <Link className="utrecht-link" to={"/applications"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">

@@ -64,18 +64,19 @@ export default function CollectionTable() {
       cardHeader={function () {
         return (
           <>
-            <button
+            <a
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#collectionHelpModal"
+              onClick={(e) => e.preventDefault()}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
-            </button>
+            </a>
             <Modal
               title="Endpoint Documentation"
               id="collectionHelpModal"
-              body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
             />
             <a className="utrecht-link" onClick={handleSetCollections}>
               <i className="fas fa-sync-alt mr-1" />

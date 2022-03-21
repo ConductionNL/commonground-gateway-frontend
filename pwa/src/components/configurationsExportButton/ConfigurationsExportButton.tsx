@@ -2,8 +2,7 @@ import * as React from "react";
 import { download } from "../utility/DocumentDownload";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import { Modal } from "@conductionnl/nl-design-system";
-import { Spinner } from "@conductionnl/nl-design-system/lib";
+import { Modal, Spinner } from "@conductionnl/nl-design-system";
 
 export default function ConfigurationsExportButton() {
   const [context, setContext] = React.useState(null);
@@ -39,6 +38,9 @@ export default function ConfigurationsExportButton() {
         setLoading(false);
       });
   };
+  React.useEffect(() => {
+    handleSetDocumentation();
+  });
 
   const handleSetDocumentation = (): void => {
     API.Documentation.get("configurations")
@@ -54,17 +56,15 @@ export default function ConfigurationsExportButton() {
       <button className="utrecht-button text-center" type="button" onClick={handleExport} disabled={loading}>
         {loading ? "Preparing your download..." : "Export Configuration"}
       </button>
-      <button
+      <a
         className="utrecht-link button-no-style"
         data-bs-toggle="modal"
         data-bs-target="#configurationsHelpModal"
-        onClick={() => {
-          !documentation && handleSetDocumentation();
-        }}
+        onClick={(e) => e.preventDefault()}
       >
         <i className="fas fa-question mr-1" />
         <span className="mr-2">Help</span>
-      </button>
+      </a>
       <Modal
         title="Configuration Documentation"
         id="configurationsHelpModal"

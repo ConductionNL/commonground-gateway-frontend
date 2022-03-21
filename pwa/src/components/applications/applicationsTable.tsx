@@ -28,6 +28,10 @@ export default function ApplicationsTable() {
   }, [setHeader, applications]);
 
   React.useEffect(() => {
+    handleSetDocumentation();
+  });
+
+  React.useEffect(() => {
     handleSetApplications();
   }, [API]);
 
@@ -76,20 +80,18 @@ export default function ApplicationsTable() {
   return (
     <Card
       title={"Applications"}
-      cardHeader={() => {
+      cardHeader={function () {
         return (
           <>
-            <button
+            <a
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#applicationHelpModal"
-              onClick={() => {
-                !documentation && handleSetDocumentation();
-              }}
+              onClick={(e) => e.preventDefault()}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
-            </button>
+            </a>
             <Modal
               title="Application Documentation"
               id="applicationHelpModal"

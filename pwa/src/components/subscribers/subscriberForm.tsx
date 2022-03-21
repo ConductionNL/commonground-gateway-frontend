@@ -63,6 +63,10 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
   }, [setHeader, subscriber]);
 
   React.useEffect(() => {
+    handleSetDocumentation();
+  }, [API]);
+
+  React.useEffect(() => {
     subscriberId && handleSetSubscriber();
     handleSetSources();
     handleSetTableNames();
@@ -80,17 +84,6 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
       .catch((err) => {
         setAlert({ message: err, type: "danger" });
         throw new Error("GET subscriber error: " + err);
-      });
-  };
-
-  const handleSetDocumentation = (): void => {
-    API.Documentation.get("subscribers")
-      .then((res) => {
-        setDocumentation(res.data.content);
-      })
-      .catch((err) => {
-        setAlert({ message: err, type: "danger" });
-        throw new Error("GET Documentation error: " + err);
       });
   };
 
@@ -114,6 +107,17 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
       .catch((err) => {
         setAlert({ message: err, type: "danger" });
         throw new Error("GET table names error: " + err);
+      });
+  };
+
+  const handleSetDocumentation = (): void => {
+    API.Documentation.get("subscriber")
+      .then((res) => {
+        setDocumentation(res.data.content);
+      })
+      .catch((err) => {
+        setAlert({ message: err, type: "danger" });
+        throw new Error("GET Documentation error: " + err);
       });
   };
 
@@ -182,22 +186,20 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
     <form id="subscriberForm" onSubmit={saveSubscriber}>
       <Card
         title={title}
-        cardHeader={() => {
+        cardHeader={function () {
           return (
             <>
-              <button
+              <a
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#subscriberHelpModal"
-                onClick={() => {
-                  !documentation && handleSetDocumentation();
-                }}
+                onClick={(e) => e.preventDefault()}
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
-              </button>
+              </a>
               <Modal
-                title="subscriber Documentation"
+                title="Subscriber Documentation"
                 id="subscriberHelpModal"
                 body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
@@ -214,7 +216,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
             </>
           );
         }}
-        cardBody={() => {
+        cardBody={function () {
           return (
             <div className="row">
               <div className="col-12">

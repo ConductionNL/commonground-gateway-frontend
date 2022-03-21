@@ -180,7 +180,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({ collectionId }) 
         cardHeader={function () {
           return (
             <div>
-              <button
+              <a
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#collectionHelpModal"
@@ -188,11 +188,11 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({ collectionId }) 
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
-              </button>
+              </a>
               <Modal
                 title="Collection Documentation"
                 id="collectionHelpModal"
-                body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
               <Link className="utrecht-link" to={"/collections"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">

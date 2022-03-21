@@ -123,7 +123,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
         cardHeader={() => {
           return (
             <div>
-              <button
+              <a
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#entityHelpModal"
@@ -133,7 +133,7 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
-              </button>
+              </a>
               <Modal
                 title="Object Type Documentation"
                 id="entityHelpModal"
