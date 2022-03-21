@@ -91,7 +91,7 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId 
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({ message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };

@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Card, Spinner } from "@conductionnl/nl-design-system/lib";
+import { Card, Modal, Spinner } from "@conductionnl/nl-design-system/lib";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 import { Link } from "gatsby";
+import { AlertContext } from "../../context/alertContext";
 
 interface ObjectEntityFormNewProps {
   objectId: string;
@@ -48,7 +49,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({ message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };

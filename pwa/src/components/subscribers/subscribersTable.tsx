@@ -60,7 +60,7 @@ export default function SubscribersTable({ entityId }) {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({ message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -74,7 +74,7 @@ export default function SubscribersTable({ entityId }) {
             <button
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
-              data-bs-target="#sourceHelpModal"
+              data-bs-target="#subscriberHelpModal"
               onClick={() => {
                 !documentation && handleSetDocumentation();
               }}
@@ -83,8 +83,8 @@ export default function SubscribersTable({ entityId }) {
               <span className="mr-2">Help</span>
             </button>
             <Modal
-              title="Source Documentation"
-              id="sourceHelpModal"
+              title="subscriber Documentation"
+              id="subscriberHelpModal"
               body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
             />
             <a className="utrecht-link" onClick={handleSetSubscribers}>

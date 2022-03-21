@@ -328,7 +328,6 @@ export const SourceForm: React.FC<SourceFormProps> = ({ sourceId }) => {
                         />
                       </div>
                     </div>
-                    <br />
                     <Accordion
                       id="sourceAccordion"
                       items={[

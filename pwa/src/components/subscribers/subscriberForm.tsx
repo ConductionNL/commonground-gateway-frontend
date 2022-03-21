@@ -89,7 +89,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({ message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -149,7 +149,6 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
     };
 
     body = removeEmptyObjectValues(body);
-    console.log(body.conditions);
 
     if (!checkValues([body.name, body.type])) {
       setAlert({ type: "danger", message: "Required fields are empty" });
@@ -189,7 +188,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
               <button
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
-                data-bs-target="#sourceHelpModal"
+                data-bs-target="#subscriberHelpModal"
                 onClick={() => {
                   !documentation && handleSetDocumentation();
                 }}
@@ -198,8 +197,8 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                 <span className="mr-2">Help</span>
               </button>
               <Modal
-                title="Source Documentation"
-                id="sourceHelpModal"
+                title="subscriber Documentation"
+                id="subscriberHelpModal"
                 body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
               />
               <Link className="utrecht-link" to={`/entities/${entityId}`} state={{ activeTab: "subscribers" }}>
