@@ -72,7 +72,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
         setApplication(res.data);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({ message: err, type: "danger" });
         throw new Error("GET application error: " + err);
       })
       .finally(() => {
@@ -89,7 +89,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
         setEndpoints(_endpoints);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({ message: err, type: "danger" });
         throw new Error("GET endpoints error: " + err);
       });
   };
@@ -100,7 +100,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
         setDocumentation(res.data.content);
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", message: err, type: "danger" });
+        setAlert({ message: err, type: "danger" });
         throw new Error("GET Documentation error: " + err);
       });
   };
@@ -125,7 +125,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
     body = removeEmptyObjectValues(body);
 
     if (!checkValues([body.name, body.domains])) {
-      setAlert({ title: "Oops something went wrong", type: "danger", message: "Required fields are empty" });
+      setAlert({ type: "danger", message: "Required fields are empty" });
       setLoadingOverlay(false);
       return;
     }
@@ -136,7 +136,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
         navigate("/applications");
       })
       .catch((err) => {
-        setAlert({ title: "Oops something went wrong", type: "danger", message: err.message });
+        setAlert({ type: "danger", message: err.message });
         throw new Error(`Create or update application error ${err}`);
       })
       .finally(() => {
