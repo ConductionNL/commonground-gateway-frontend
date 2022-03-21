@@ -23,6 +23,10 @@ export default function AttributeTable({ entityId }) {
     handleSetAttributes();
   }, [API]);
 
+  React.useEffect(() => {
+    handleSetDocumentation();
+  }, [API]);
+
   const handleSetAttributes = () => {
     setShowSpinner(true);
     API.Attribute.getAllFromEntity(entityId)
@@ -75,9 +79,7 @@ export default function AttributeTable({ entityId }) {
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#attributeHelpModal"
-              onClick={() => {
-                !documentation && handleSetDocumentation();
-              }}
+              onClick={(e) => e.preventDefault()}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>

@@ -40,7 +40,7 @@ export default function ConfigurationsExportButton() {
   };
   React.useEffect(() => {
     handleSetDocumentation();
-  });
+  }, [API]);
 
   const handleSetDocumentation = (): void => {
     API.Documentation.get("configurations")

@@ -52,6 +52,10 @@ export default function EndpointsTable() {
     setHeader("Endpoints");
   }, [setHeader]);
 
+  React.useEffect(() => {
+    handleSetDocumentation();
+  }, [API]);
+
   const handleSetDocumentation = (): void => {
     API.Documentation.get("endpoints")
       .then((res) => {

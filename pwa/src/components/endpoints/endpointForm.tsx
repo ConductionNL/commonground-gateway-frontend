@@ -108,6 +108,7 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
 
   React.useEffect(() => {
     handleSetApplications();
+    handleSetDocumentation();
   }, [API, endpointId]);
 
   const handleSetApplications = () => {

@@ -11,13 +11,13 @@ import DeleteModal from "../deleteModal/DeleteModal";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 
 export default function ApplicationsTable() {
-  const [documentation, setDocumentation] = React.useState<string>(null);
   const [applications, setApplications] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState(false);
   const [loadingOverlay, setLoadingOverlay] = React.useState<boolean>(false);
   const API: APIService = React.useContext(APIContext);
   const [_, setAlert] = React.useContext(AlertContext);
   const [__, setHeader] = React.useContext(HeaderContext);
+  const [documentation, setDocumentation] = React.useState<string>(null);
 
   React.useEffect(() => {
     setHeader(
@@ -29,7 +29,7 @@ export default function ApplicationsTable() {
 
   React.useEffect(() => {
     handleSetDocumentation();
-  });
+  }, [API]);
 
   React.useEffect(() => {
     handleSetApplications();

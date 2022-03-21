@@ -11,24 +11,21 @@ import DeleteModal from "../deleteModal/DeleteModal";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 
 export default function SourcesTable() {
-  const [documentation, setDocumentation] = React.useState<string>(null);
   const [sources, setSources] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState(false);
   const [loadingOverlay, setLoadingOverlay] = React.useState<boolean>(false);
   const API: APIService = React.useContext(APIContext);
   const [_, setAlert] = React.useContext(AlertContext);
   const [__, setHeader] = React.useContext(HeaderContext);
+  const [documentation, setDocumentation] = React.useState<string>(null);
 
   React.useEffect(() => {
     setHeader("Sources");
-  }, [setHeader]);
+    handleSetSources();
+  }, [API, setHeader]);
 
   React.useEffect(() => {
     handleSetDocumentation();
-  });
-
-  React.useEffect(() => {
-    handleSetSources();
   }, [API]);
 
   const handleSetSources = () => {
