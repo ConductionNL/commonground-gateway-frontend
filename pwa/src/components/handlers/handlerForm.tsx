@@ -142,9 +142,13 @@ export const HandlerForm: React.FC<HandlerFormProps> = ({ handlerId, endpointId 
     }
 
     API.Handler.createOrUpdate(body, handlerId)
-      .then(() => {
+      .then((response) => {
         setAlert({ message: `${handlerId ? "Updated" : "Created"} Handler`, type: "success" });
-        navigate(`/endpoints/${endpointId}/handlers`);
+        if (handlerId) {
+          navigate(`/endpoints/${endpointId}`);
+        } else {
+          navigate(`/endpoints/${endpointId}/${response.data.id}`);
+        }
       })
       .catch((err) => {
         setAlert({ type: "danger", message: err.message });

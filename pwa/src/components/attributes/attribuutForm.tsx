@@ -172,12 +172,13 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
     }
 
     API.Attribute.createOrUpdate(body, attributeId)
-      .then((res) => {
+      .then((response) => {
         setAlert({ message: `${attributeId ? "Updated" : "Created"} attribute`, type: "success" });
-        setAttribute(res.data);
-        navigate(`/entities/${entityId}`, {
-          state: { activeTab: "attributes" },
-        });
+        if (attributeId) {
+          navigate(`/entities/${entityId}`);
+        } else {
+          navigate(`/entities/${entityId}/${response.data.id}`);
+        }
       })
       .catch((err) => {
         setAlert({ type: "danger", message: err.message });
@@ -327,6 +328,7 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
                           name={"description"}
                           id={"descriptionInput"}
                           defaultValue={attribute?.description}
+                          label={"Description"}
                         />
                       </div>
                     </div>

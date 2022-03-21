@@ -95,15 +95,20 @@ export const EndpointForm: React.FC<EndpointFormProps> = ({ endpointId }) => {
     data.applications = data.applications.map((application) => application.value);
 
     API.Endpoint.createOrUpdate(data, endpointId)
-      .then(() => {
+      .then((response) => {
         setAlert({ message: `${endpointId ? "Updated" : "Created"} endpoint`, type: "success" });
+        if (endpointId) {
+          navigate(`/endpoints`);
+        } else {
+          navigate(`/endpoints/${response.data.id}`);
+        }
       })
       .catch((err) => {
         setAlert({ type: "danger", message: err.message });
         throw new Error(`Create or update endpoint error: ${err}`);
       })
       .finally(() => {
-        navigate("/endpoints");
+        setLoadingOverlay(false);
       });
   };
 
