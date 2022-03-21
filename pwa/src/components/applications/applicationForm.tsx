@@ -22,6 +22,7 @@ import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 import { HeaderContext } from "../../context/headerContext";
 import { AlertContext } from "../../context/alertContext";
 import MultiSelect from "../common/multiSelect";
+import { useQuery } from "react-query";
 
 interface IApplication {
   name: string;
@@ -48,6 +49,12 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
   const [_, setAlert] = React.useContext(AlertContext);
   const [__, setHeader] = React.useContext(HeaderContext);
 
+  const getEndpointsSelectQuery = useQuery<any[], Error>("endpoints-select", API.Endpoint.getSelect, {
+    onError: (error) => {
+      setAlert({ message: error.message, type: "danger" });
+    },
+  });
+
   React.useEffect(() => {
     setHeader(
       <>
@@ -57,7 +64,10 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
   }, [setHeader, application]);
 
   React.useEffect(() => {
-    handleSetEndpoints();
+    handleSetDocumentation();
+  });
+
+  React.useEffect(() => {
     id && handleSetApplications();
   }, [API, id]);
 
@@ -77,20 +87,6 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
       })
       .finally(() => {
         setShowSpinner(false);
-      });
-  };
-
-  const handleSetEndpoints = () => {
-    API.Endpoint.getAll()
-      .then((res) => {
-        const _endpoints = res.data?.map((endpoint) => {
-          return { name: endpoint.name, id: endpoint.name, value: `/admin/endpoints/${endpoint.id}` };
-        });
-        setEndpoints(_endpoints);
-      })
-      .catch((err) => {
-        setAlert({ message: err, type: "danger" });
-        throw new Error("GET endpoints error: " + err);
       });
   };
 
@@ -155,9 +151,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#applicationHelpModal"
-                onClick={() => {
-                  !documentation && handleSetDocumentation();
-                }}
+                onClick={(e) => e.preventDefault()}
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
@@ -165,7 +159,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
               <Modal
                 title="Application Documentation"
                 id="applicationHelpModal"
-                body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
+                body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
               />
               <Link className="utrecht-link" to={"/applications"}>
                 <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
@@ -233,6 +227,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
                     <div className="row form-row">
                       <div className="col-6">
                         <TextareaGroup
+                          label="Description"
                           name={"description"}
                           id={"descriptionInput"}
                           defaultValue={application?.description}
@@ -253,8 +248,13 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
                           title: "Endpoints",
                           id: "endpointsAccordion",
                           render: function () {
-                            return endpoints ? (
-                              <MultiSelect id="" label="endpoints" data={application?.endpoints} options={endpoints} />
+                            return getEndpointsSelectQuery.isSuccess ? (
+                              <MultiSelect
+                                id=""
+                                label="endpoints"
+                                data={application?.endpoints}
+                                options={getEndpointsSelectQuery.data}
+                              />
                             ) : (
                               <Spinner />
                             );
