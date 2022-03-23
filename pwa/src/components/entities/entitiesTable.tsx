@@ -24,11 +24,8 @@ export default function EntitiesTable() {
   }, [setHeader]);
 
   React.useEffect(() => {
-    handleSetDocumentation();
-  });
-
-  React.useEffect(() => {
     handleSetEntities();
+    handleSetDocumentation();
   }, [API]);
 
   const handleSetEntities = () => {
@@ -83,7 +80,7 @@ export default function EntitiesTable() {
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#entityHelpModal"
-              onClick={(e) => e.preventDefault()}
+              onClick={!documentation && handleSetDocumentation}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>

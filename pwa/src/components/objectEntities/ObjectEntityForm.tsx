@@ -39,6 +39,10 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
   }, [setHeader]);
 
   React.useEffect(() => {
+    handleSetDocumentation();
+  }, [API]);
+
+  React.useEffect(() => {
     objectId && handleSetEntity_object();
     handleSetApplications();
   }, [API, objectId]);
@@ -141,9 +145,7 @@ export const ObjectEntityForm: React.FC<ObjectEntityFormProps> = ({ objectId, en
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#ObjectEntityHelpModal"
-                onClick={() => {
-                  !documentation && handleSetDocumentation();
-                }}
+                onClick={!documentation && handleSetDocumentation}
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>

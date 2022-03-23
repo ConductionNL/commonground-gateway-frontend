@@ -64,12 +64,7 @@ export default function CollectionTable() {
       cardHeader={function () {
         return (
           <>
-            <a
-              className="utrecht-link button-no-style"
-              data-bs-toggle="modal"
-              data-bs-target="#collectionHelpModal"
-              onClick={(e) => e.preventDefault()}
-            >
+            <a className="utrecht-link button-no-style" data-bs-toggle="modal" data-bs-target="#collectionHelpModal">
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
             </a>

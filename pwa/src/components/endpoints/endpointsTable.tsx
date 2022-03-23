@@ -77,7 +77,7 @@ export default function EndpointsTable() {
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#endpointHelpModal"
-              onClick={(e) => e.preventDefault()}
+              onClick={!documentation && handleSetDocumentation}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>

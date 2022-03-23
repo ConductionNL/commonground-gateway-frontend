@@ -113,15 +113,15 @@ const Dashboard: React.FC = () => {
             cardBody={() => (logs ? <LogsTable {...{ logs }} /> : <Spinner />)}
             cardHeader={() => (
               <>
-                <button
+                <a
                   className="utrecht-link button-no-style"
                   data-bs-toggle="modal"
                   data-bs-target="#logsHelpModal"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={!logsDocumentation && handleSetLogsDocumentation}
                 >
                   <i className="fas fa-question mr-1" />
                   <span className="mr-2">Help</span>
-                </button>
+                </a>
                 <Modal
                   title="Logs Documentation"
                   id="logsHelpModal"

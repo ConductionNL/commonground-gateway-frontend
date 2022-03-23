@@ -70,15 +70,15 @@ export default function HandlersTable({ endpointId }) {
       cardHeader={() => {
         return (
           <>
-            <a
+            <button
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#handlerHelpModal"
-              onClick={(e) => e.preventDefault()}
+              onClick={!documentation && handleSetDocumentation}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
-            </a>
+            </button>
             <Modal
               title="Handler Documentation"
               id="handlerHelpModal"

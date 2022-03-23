@@ -27,9 +27,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
       handleSetObjectEntities();
       getEntity();
     }
-    handleSetDocumentation();
     setShowSpinner(false);
-    handleSetDocumentation();
   }, [API, entityId]);
 
   React.useEffect(() => {
@@ -115,6 +113,10 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
       });
   };
 
+  React.useEffect(() => {
+    handleSetDocumentation();
+  }, [API]);
+
   const handleSetDocumentation = (): void => {
     API.Documentation.get("object_types")
       .then((res) => {
@@ -150,7 +152,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#ObjectEntityHelpModal"
-              onClick={(e) => e.preventDefault()}
+              onClick={!documentation && handleSetDocumentation}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>

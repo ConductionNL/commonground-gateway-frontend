@@ -20,11 +20,8 @@ export default function SubscribersTable({ entityId }) {
   const [documentation, setDocumentation] = React.useState<string>(null);
 
   React.useEffect(() => {
-    handleSetDocumentation();
-  });
-
-  React.useEffect(() => {
     handleSetSubscribers();
+    handleSetDocumentation();
   }, [API]);
 
   const handleSetSubscribers = () => {
@@ -79,7 +76,7 @@ export default function SubscribersTable({ entityId }) {
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
               data-bs-target="#subscriberHelpModal"
-              onClick={(e) => e.preventDefault()}
+              onClick={!documentation && handleSetDocumentation}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
@@ -87,7 +84,7 @@ export default function SubscribersTable({ entityId }) {
             <Modal
               title="Subscriber Documentation"
               id="subscriberHelpModal"
-              body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
             />
             <a className="utrecht-link" onClick={handleSetSubscribers}>
               <i className="fas fa-sync-alt mr-1" />

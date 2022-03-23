@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Card, Spinner } from "@conductionnl/nl-design-system/lib";
+import { Card, Modal, Spinner } from "@conductionnl/nl-design-system/lib";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 import { Link } from "gatsby";
+import { AlertContext } from "../../context/alertContext";
 
 interface ObjectEntityFormNewProps {
   objectId: string;
@@ -17,8 +18,11 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
   const [showSpinner, setShowSpinner] = React.useState(null);
   const [formIOSchema, setFormIOSchema] = React.useState(null);
   const [formIO, setFormIO] = React.useState(null);
+  const [documentation, setDocumentation] = React.useState<string>(null);
+  const [_, setAlert] = React.useContext(AlertContext);
 
   React.useEffect(() => {
+    handleSetDocumentation();
     getEntity();
     getObject();
   }, [API]);
@@ -83,6 +87,17 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
       });
   };
 
+  const handleSetDocumentation = (): void => {
+    API.Documentation.get("object_types")
+      .then((res) => {
+        setDocumentation(res.data.content);
+      })
+      .catch((err) => {
+        setAlert({ message: err, type: "danger" });
+        throw new Error("GET Documentation error: " + err);
+      });
+  };
+
   const fillFormIOSchema = (schema: any) => {
     let schemaWithData = schema;
     for (let i = 0; i < schemaWithData.components.length; i++) {
@@ -135,12 +150,17 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
             <a
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
-              data-bs-target="#helpModal"
-              onClick={(e) => e.preventDefault()}
+              data-bs-target="#ObjectEntityHelpModal"
+              onClick={!documentation && handleSetDocumentation}
             >
               <i className="fas fa-question mr-1" />
               <span className="mr-2">Help</span>
             </a>
+            <Modal
+              title="Entity_object Documentation"
+              id="ObjectEntityHelpModal"
+              body={() => (documentation ? <div dangerouslySetInnerHTML={{ __html: documentation }} /> : <Spinner />)}
+            />
             <Link className="utrecht-link" to={`/entities/${entityId}`} state={{ activeTab: "objects" }}>
               <button className="utrecht-button utrecht-button-sm btn-sm btn btn-light mr-2">
                 <i className="fas fa-long-arrow-alt-left mr-2" />

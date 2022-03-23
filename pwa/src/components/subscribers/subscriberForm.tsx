@@ -63,13 +63,10 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
   }, [setHeader, subscriber]);
 
   React.useEffect(() => {
-    handleSetDocumentation();
-  }, [API]);
-
-  React.useEffect(() => {
     subscriberId && handleSetSubscriber();
     handleSetSources();
     handleSetTableNames();
+    handleSetDocumentation();
   }, [API, subscriberId]);
 
   React.useEffect(() => {
@@ -193,7 +190,7 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
                 className="utrecht-link button-no-style"
                 data-bs-toggle="modal"
                 data-bs-target="#subscriberHelpModal"
-                onClick={(e) => e.preventDefault()}
+                onClick={!documentation && handleSetDocumentation}
               >
                 <i className="fas fa-question mr-1" />
                 <span className="mr-2">Help</span>
