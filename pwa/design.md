@@ -1,6 +1,6 @@
 # Design Decisions
 
-After user submits a new "source" form, they are redirected to the edit form for the created source entry.
+After user submits a new form, they are redirected to the edit form for the created source entry.
 
 ## Introduction:
 

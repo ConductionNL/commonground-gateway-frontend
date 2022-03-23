@@ -72,6 +72,11 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
       .then((res) => {
         setTranslation(res.data);
         setAlert({ message: `${id ? "Updated" : "Created"} translation`, type: "success" });
+        if (id) {
+          navigate(`/translation-tables/${tableName}/translations`);
+        } else {
+          navigate(`/translation-tables/${tableName}/translations/${res.data.id}`);
+        }
       })
       .catch((err) => {
         setAlert({ message: `Error creating translation: ${err}`, type: "danger" });
@@ -80,9 +85,9 @@ export const TranslationForm: React.FC<TranslationFormProps> = ({ id, tableName 
       .finally(() => {
         setShowSpinner(false);
         setLoadingOverlay(false);
-        navigate(`/translation-tables/${tableName}/translations`);
       });
   };
+
   React.useEffect(() => {
     handleSetDocumentation();
   });

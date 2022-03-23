@@ -150,11 +150,15 @@ export const SubscriberForm: React.FC<SubscriberFormProps> = ({ subscriberId, en
     }
 
     API.Subscriber.createOrUpdate(body, subscriberId)
-      .then(() => {
+      .then((res) => {
         setAlert({ message: `${subscriberId ? "Updated" : "Created"} subscriber`, type: "success" });
-        navigate(`/entities/${entityId}`, {
-          state: { activeTab: "subscribers" },
-        });
+        if (subscriberId) {
+          navigate(`/entities/${entityId}`, {
+            state: { activeTab: "subscribers" },
+          });
+        } else {
+          navigate(`/entities/${entityId}/${res.data.id}`);
+        }
       })
       .catch((err) => {
         setAlert({ type: "danger", message: err.message });

@@ -107,12 +107,12 @@ export const EntityForm: React.FC<EntityFormProps> = ({ entityId }) => {
     }
 
     API.Entity.createOrUpdate(body, entityId)
-      .then((response) => {
+      .then((res) => {
         setAlert({ message: `${entityId ? "Updated" : "Saved"} object type`, type: "success" });
         if (entityId) {
           navigate(`/entities`);
         } else {
-          navigate(`/entities/${response.data.id}`);
+          navigate(`/entities/${res.data.id}`);
         }
       })
       .catch((err) => {

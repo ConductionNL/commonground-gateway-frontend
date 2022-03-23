@@ -172,12 +172,12 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ attributeId, entit
     }
 
     API.Attribute.createOrUpdate(body, attributeId)
-      .then((response) => {
+      .then((res) => {
         setAlert({ message: `${attributeId ? "Updated" : "Created"} attribute`, type: "success" });
         if (attributeId) {
           navigate(`/entities/${entityId}`);
         } else {
-          navigate(`/entities/${entityId}/${response.data.id}`);
+          navigate(`/entities/${entityId}/${res.data.id}`);
         }
       })
       .catch((err) => {

@@ -127,12 +127,12 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
     }
 
     API.Application.createOrUpdate(body, id)
-      .then((response) => {
+      .then((res) => {
         setAlert({ message: `${id ? "Updated" : "Created"} application`, type: "success" });
         if (id) {
           navigate(`/applications`);
         } else {
-          navigate(`/applications/${response.data.id}`);
+          navigate(`/applications/${res.data.id}`);
         }
       })
       .catch((err) => {
@@ -235,7 +235,6 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ id }) => {
                           name={"description"}
                           id={"descriptionInput"}
                           defaultValue={application?.description}
-                          label={"Description"}
                         />
                       </div>
                     </div>
