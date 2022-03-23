@@ -15,23 +15,25 @@ const LogsTable: React.FC<LogsTableProps> = ({ logs, modal = true }) => {
   return (
     <div className="logsTable">
       <table>
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>Method</th>
-            <th>Response time</th>
-            <th>Application</th>
-            <th>Date created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {logs.map((log, idx) => {
-            const statusClass = log.responseStatusCode
-              ? log.responseStatusCode > 199 && log.responseStatusCode < 300
-                ? "success"
-                : "danger"
-              : "danger";
-            return (
+        {logs.length && (
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Method</th>
+              <th>Response time</th>
+              <th>Application</th>
+              <th>Date created</th>
+            </tr>
+          </thead>
+        )}
+        {logs.map((log, idx) => {
+          const statusClass = log.responseStatusCode
+            ? log.responseStatusCode > 199 && log.responseStatusCode < 300
+              ? "success"
+              : "danger"
+            : "danger";
+          return (
+            <tbody>
               <tr key={`log${idx}`} className="logsTable-tr">
                 <td>
                   <LabelWithBackground label={log?.responseStatusCode?.toString()} type={statusClass} />
@@ -53,14 +55,14 @@ const LogsTable: React.FC<LogsTableProps> = ({ logs, modal = true }) => {
                   </td>
                 )}
               </tr>
-            );
-          })}
-          {!logs.length && (
-            <tr>
-              No results found
-            </tr>
-          )}
-        </tbody>
+            </tbody>
+          );
+        })}
+        {!logs.length && (
+          <tbody>
+            <tr>No results found</tr>
+          </tbody>
+        )}
       </table>
       {modal && logs.map((log, idx) => <LogModal key={`logModal${idx}`} {...{ log }} />)}
     </div>
