@@ -342,7 +342,7 @@ const LogModal: React.FC<LogModalProps> = ({ log }) => {
                 </div>
                 <div className="tab-pane" id={`outgoing${log.id}`} role="tabpanel" aria-labelledby="outgoing-tab">
                   <div className="mt-3">
-                    {outgoingCallIdLog ? <LogTable logs={outgoingCallIdLog} modal={false} /> : <Spinner />}
+                    {outgoingCallIdLog ? <LogTable hideApplication logs={outgoingCallIdLog} hideModal /> : <Spinner />}
                   </div>
                 </div>
               </div>

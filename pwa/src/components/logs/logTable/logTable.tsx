@@ -8,24 +8,38 @@ import msToSeconds from "../../../services/msToSeconds";
 
 interface LogsTableProps {
   logs: any;
-  modal?: boolean;
 }
 
-const LogsTable: React.FC<LogsTableProps> = ({ logs, modal = true }) => {
+interface ILogTableColumns {
+  hideStatus?: boolean;
+  hideMethod?: boolean;
+  hideResponseTime?: boolean;
+  hideApplication?: boolean;
+  hideDateCreated?: boolean;
+  hideModal?: boolean;
+}
+
+const LogsTable: React.FC<LogsTableProps & ILogTableColumns> = ({
+  logs,
+  hideModal,
+  hideApplication,
+  hideDateCreated,
+  hideMethod,
+  hideResponseTime,
+  hideStatus,
+}) => {
   return (
     <div className="logsTable">
       <table>
-        {logs.length && (
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Method</th>
-              <th>Response time</th>
-              <th>Application</th>
-              <th>Date created</th>
-            </tr>
-          </thead>
-        )}
+        <thead>
+          <tr>
+            {!hideStatus && <th>Status</th>}
+            {!hideMethod && <th>Method</th>}
+            {!hideResponseTime && <th>Response time</th>}
+            {!hideApplication && <th>Application</th>}
+            {!hideDateCreated && <th>Date created</th>}
+          </tr>
+        </thead>
         {logs.map((log, idx) => {
           const statusClass = log.responseStatusCode
             ? log.responseStatusCode > 199 && log.responseStatusCode < 300
@@ -35,14 +49,16 @@ const LogsTable: React.FC<LogsTableProps> = ({ logs, modal = true }) => {
           return (
             <tbody>
               <tr key={`log${idx}`} className="logsTable-tr">
-                <td>
-                  <LabelWithBackground label={log?.responseStatusCode?.toString()} type={statusClass} />
-                </td>
-                <td>{log.requestMethod}</td>
-                <td>{`${log.responseTime}ms (${msToSeconds(log.responseTime)}s)`}</td>
-                <td>{log.application?.name}</td>
-                <td>{new Date(log.createdAt).toLocaleString("nl-NL")}</td>
-                {modal && (
+                {!hideStatus && (
+                  <td>
+                    <LabelWithBackground label={log?.responseStatusCode?.toString()} type={statusClass} />
+                  </td>
+                )}
+                {!hideMethod && <td>{log.requestMethod}</td>}
+                {!hideResponseTime && <td>{`${log.responseTime}ms (${msToSeconds(log.responseTime)}s)`}</td>}
+                {!hideApplication && <td>{log.application?.name}</td>}
+                {!hideDateCreated && <td>{new Date(log.createdAt).toLocaleString("nl-NL")}</td>}
+                {!hideModal && (
                   <td className="logsTable-viewLogTd">
                     <button
                       type="button"
@@ -64,7 +80,7 @@ const LogsTable: React.FC<LogsTableProps> = ({ logs, modal = true }) => {
           </tbody>
         )}
       </table>
-      {modal && logs.map((log, idx) => <LogModal key={`logModal${idx}`} {...{ log }} />)}
+      {!hideModal && logs.map((log, idx) => <LogModal key={`logModal${idx}`} {...{ log }} />)}
     </div>
   );
 };
