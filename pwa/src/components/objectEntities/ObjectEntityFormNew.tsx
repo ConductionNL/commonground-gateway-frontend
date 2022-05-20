@@ -7,7 +7,7 @@ import { useQueryClient } from "react-query";
 import { useEntity } from "../../hooks/entity";
 
 interface ObjectEntityFormNewProps {
-  objectId: string;
+  objectId?: string;
   entityId: string;
 }
 
@@ -24,7 +24,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
   const getEntity = _useEntity.getOne(entityId);
 
   React.useEffect(() => {
-    getObject();
+    objectId && getObject();
   }, [API]);
 
   React.useEffect(() => {
@@ -59,11 +59,12 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
   };
 
   const getFormIOSchema = () => {
-    if (formIOSchema && object) setFormIOSchema(fillFormIOSchema(formIOSchema));
+    // if (formIOSchema && object) setFormIOSchema(fillFormIOSchema(formIOSchema));
     setShowSpinner(true);
-    API.FormIO.getSchema(getEntity.data.endpoint)
+    const endpoint = getEntity.data.handlers[0].endpoints[1].path[0];
+    API.FormIO.getSchema(endpoint)
       .then((res) => {
-        setFormIOSchema(object ? fillFormIOSchema(res.data) : res.data);
+        setFormIOSchema(res.data);
       })
       .catch((err) => {
         throw new Error("GET form.io schema error: " + err);
@@ -73,25 +74,27 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
       });
   };
 
-  const fillFormIOSchema = (schema: any) => {
-    let schemaWithData = schema;
-    for (let i = 0; i < schemaWithData.components.length; i++) {
-      for (let i = 0; i < object?.objectValues?.length; i++) {
-        if ((schemaWithData.components[i].key = object.objectValues[i].attribute.name)) {
-          let type = object.objectValues[i].attribute.type;
-          schemaWithData.components[i].defaultValue = object.objectValues[i][`${type}Value`];
-        }
-      }
-    }
-    return schemaWithData;
-  };
+  // const fillFormIOSchema = (schema: any) => {
+  //   let schemaWithData = schema;
+  //   for (let i = 0; i < schemaWithData.components.length; i++) {
+  //     for (let i = 0; i < object?.objectValues?.length; i++) {
+  //       if ((schemaWithData.components[i].key = object.objectValues[i].attribute.name)) {
+  //         let type = object.objectValues[i].attribute.type;
+  //         schemaWithData.components[i].defaultValue = object.objectValues[i][`${type}Value`];
+  //       }
+  //     }
+  //   }
+  //   return schemaWithData;
+  // };
 
   const saveObject = (event) => {
     let body = event.data;
     body.submit = undefined;
 
+    const endpoint = getEntity.data.handlers[0].endpoints[1].path[0];
+
     if (!objectId) {
-      API.ApiCalls.createObject(getEntity.data?.endpoint, body)
+      API.ApiCalls.createObject(endpoint, body)
         .then((res) => {
           setObject(res.data);
         })
@@ -103,7 +106,7 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
         });
     }
     if (objectId) {
-      API.ApiCalls.updateObject(getEntity.data?.endpoint, objectId, body)
+      API.ApiCalls.updateObject(endpoint, objectId, body)
         .then((res) => {
           setObject(res.data);
         })

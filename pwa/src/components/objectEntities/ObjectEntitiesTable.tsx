@@ -6,6 +6,7 @@ import APIContext from "../../apiService/apiContext";
 import { AlertContext } from "../../context/alertContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSync } from "@fortawesome/free-solid-svg-icons";
+import { navigate } from "gatsby";
 
 interface ObjectEntitiesTableProps {
   entityId: string;
@@ -167,8 +168,9 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
               className="utrecht-button utrecht-button-sm btn-sm btn-success"
               data-bs-toggle="modal"
               data-bs-target="#objectModal"
-              aria-disabled="true"
-              disabled
+              onClick={() => {
+                navigate(`/entities/${entityId}/objects/new`);
+              }}
             >
               <i className="fas fa-plus mr-2" />
               Create

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Table, Card, Spinner, Modal } from "@conductionnl/nl-design-system/lib";
-import { Link } from "gatsby";
+import { Link, navigate } from "gatsby";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import { AlertContext } from "../../context/alertContext";
@@ -68,6 +68,15 @@ export default function EntitiesTable() {
               <i className="fas fa-sync-alt mr-1" />
               <span className="mr-2">{getEntities.isFetching ? "Fetching data..." : "Refresh"}</span>
             </button>
+            <button
+              className="button-no-style mx-1 utrecht-link"
+              onClick={() => {
+                navigate("/search-entities");
+              }}
+            >
+              <i className="fas fa-search mr-1" />
+              Search
+            </button>
             <Link to="/entities/new">
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success">
                 <i className="fas fa-plus mr-2" />
@@ -80,11 +89,6 @@ export default function EntitiesTable() {
       cardBody={function () {
         return (
           <>
-            <div className="row">
-              <div className="col-12">
-                <SearchEntity />
-              </div>
-            </div>
             <div className="row">
               <div className="col-12">
                 {getEntities.isLoading ? (
