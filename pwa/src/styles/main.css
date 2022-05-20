@@ -1,3 +1,5 @@
+@import "./../../node_modules/@utrecht/component-library-css/dist/index.css";
+
 /* These make sure the footer stays at the bottom */
 .utrecht-page {
   display: flex;
