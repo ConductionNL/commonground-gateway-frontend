@@ -10,6 +10,7 @@ import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "../deleteModal/DeleteModal";
 import { useQueryClient } from "react-query";
 import { useEntity } from "../../hooks/entity";
+import { SearchEntity } from "../searchEntity/SearchEntity";
 
 export default function EntitiesTable() {
   const [documentation, setDocumentation] = React.useState<string>(null);
@@ -78,64 +79,71 @@ export default function EntitiesTable() {
       }}
       cardBody={function () {
         return (
-          <div className="row">
-            <div className="col-12">
-              {getEntities.isLoading ? (
-                <Spinner />
-              ) : (
-                <Table
-                  columns={[
-                    {
-                      headerName: "Name",
-                      field: "name",
-                    },
-                    {
-                      headerName: "Endpoint",
-                      field: "endpoint",
-                    },
-                    {
-                      headerName: "Path",
-                      field: "route",
-                    },
-                    {
-                      headerName: "Source",
-                      field: "gateway",
-                      valueFormatter: (item) => {
-                        return item ? item.name : "";
-                      },
-                    },
-                    {
-                      field: "id",
-                      headerName: "",
-                      renderCell: (item) => {
-                        return (
-                          <div className="utrecht-link d-flex justify-content-end">
-                            <button
-                              className="utrecht-button btn-sm btn-danger mr-2"
-                              data-bs-toggle="modal"
-                              data-bs-target={`#deleteModal${item.id.replace(new RegExp("-", "g"), "")}`}
-                            >
-                              <FontAwesomeIcon icon={faTrash} /> Delete
-                            </button>
-                            <DeleteModal
-                              resourceDelete={() => deleteEntity.mutateAsync({ id: item.id })}
-                              resourceId={item.id}
-                            />
-                            <Link className="utrecht-link d-flex justify-content-end" to={`/entities/${item.id}`}>
-                              <button className="utrecht-button btn-sm btn-success">
-                                <FontAwesomeIcon icon={faEdit} /> Edit
-                              </button>
-                            </Link>
-                          </div>
-                        );
-                      },
-                    },
-                  ]}
-                  rows={getEntities.data ?? []}
-                />
-              )}
+          <>
+            <div className="row">
+              <div className="col-12">
+                <SearchEntity />
+              </div>
             </div>
-          </div>
+            <div className="row">
+              <div className="col-12">
+                {getEntities.isLoading ? (
+                  <Spinner />
+                ) : (
+                  <Table
+                    columns={[
+                      {
+                        headerName: "Name",
+                        field: "name",
+                      },
+                      {
+                        headerName: "Endpoint",
+                        field: "endpoint",
+                      },
+                      {
+                        headerName: "Path",
+                        field: "route",
+                      },
+                      {
+                        headerName: "Source",
+                        field: "gateway",
+                        valueFormatter: (item) => {
+                          return item ? item.name : "";
+                        },
+                      },
+                      {
+                        field: "id",
+                        headerName: "",
+                        renderCell: (item) => {
+                          return (
+                            <div className="utrecht-link d-flex justify-content-end">
+                              <button
+                                className="utrecht-button btn-sm btn-danger mr-2"
+                                data-bs-toggle="modal"
+                                data-bs-target={`#deleteModal${item.id.replace(new RegExp("-", "g"), "")}`}
+                              >
+                                <FontAwesomeIcon icon={faTrash} /> Delete
+                              </button>
+                              <DeleteModal
+                                resourceDelete={() => deleteEntity.mutateAsync({ id: item.id })}
+                                resourceId={item.id}
+                              />
+                              <Link className="utrecht-link d-flex justify-content-end" to={`/entities/${item.id}`}>
+                                <button className="utrecht-button btn-sm btn-success">
+                                  <FontAwesomeIcon icon={faEdit} /> Edit
+                                </button>
+                              </Link>
+                            </div>
+                          );
+                        },
+                      },
+                    ]}
+                    rows={getEntities.data ?? []}
+                  />
+                )}
+              </div>
+            </div>
+          </>
         );
       }}
     />

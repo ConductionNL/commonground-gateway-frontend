@@ -21,6 +21,14 @@ export const useEntity = (queryClient: QueryClient) => {
       enabled: !!entityId,
     });
 
+  const search = (entityName: string) =>
+    useQuery<any[], Error>(["entities", entityName], () => API.Entity.search(entityName), {
+      onError: (error) => {
+        setAlert({ message: error.message, type: "danger" });
+      },
+      enabled: !!entityName,
+    });
+
   const getAll = () =>
     useQuery<any[], Error>("entities", API.Entity.getAll, {
       onError: (error) => {
@@ -78,5 +86,5 @@ export const useEntity = (queryClient: QueryClient) => {
       },
     });
 
-  return { getOne, getAll, getSelect, remove, createOrEdit };
+  return { search, getOne, getAll, getSelect, remove, createOrEdit };
 };
