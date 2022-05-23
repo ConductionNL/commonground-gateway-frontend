@@ -67,17 +67,6 @@ export default class APIService {
     });
   }
 
-  public get formIOClient(): AxiosInstance {
-    return axios.create({
-      baseURL: window.GATSBY_API_URL,
-      headers: {
-        Accept: "application/form.io",
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + this._jwtToken,
-      },
-    });
-  }
-
   // Resources
   public get Application(): Application {
     return new Application(this.adminClient);
@@ -129,7 +118,7 @@ export default class APIService {
   }
 
   public get FormIO(): FormIO {
-    return new FormIO(this.formIOClient);
+    return new FormIO(this.apiClient, this.adminClient);
   }
 
   // Services
