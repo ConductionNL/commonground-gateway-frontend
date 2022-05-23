@@ -48,6 +48,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@utrecht/component-library-css": "1.0.0-alpha.219",
     "dotenv": "^10.0.0",
     "gatsby-link": "^4.3.0",
     "prettier": "^2.5.1"
