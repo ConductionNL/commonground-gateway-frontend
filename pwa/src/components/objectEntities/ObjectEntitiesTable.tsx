@@ -14,82 +14,31 @@ interface ObjectEntitiesTableProps {
 
 const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) => {
   const [documentation, setDocumentation] = React.useState<string>(null);
-  const [objectEntities, setObjectEntities] = React.useState(null);
-  const [entity, setEntity] = React.useState(null);
+  const [objectEntities, setObjectEntities] = React.useState(false);
+  const [entityViableForFormIO, setEntityViableForFormIO] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
-  const [FormIO, setFormIO] = React.useState(null);
-  const [formIOSchema, setFormIOSchema] = React.useState(null);
   const API: APIService = React.useContext(APIContext);
   const [_, setAlert] = React.useContext(AlertContext);
 
   React.useEffect(() => {
-    setShowSpinner(true);
     if (entityId) {
       handleSetObjectEntities();
-      getEntity();
+      checkIfEntityCanUseFormIO();
     }
-    handleSetDocumentation();
-    setShowSpinner(false);
     handleSetDocumentation();
   }, [API, entityId]);
 
-  // React.useEffect(() => {
-  //   setShowSpinner(true);
-  //   entity && entity.endpoint && getFormIOSchema();
-  //   setShowSpinner(false);
-  // }, [API, entity]);
-
-  // React.useEffect(() => {
-  //   if (!formIOSchema) return;
-  //   setShowSpinner(true);
-
-  //   import("@formio/react").then((formio) => {
-  //     const { Form } = formio;
-  //     setFormIO(<Form src={formIOSchema} onSubmit={saveObject} />);
-  //   });
-  //   setShowSpinner(false);
-  // }, [formIOSchema]);
-
-  // const getFormIOSchema = () => {
-  //   API.FormIO.getSchema(entity.endpoint)
-  //     .then((res) => {
-  //       setFormIOSchema(res.data);
-  //     })
-  //     .catch((err) => {
-  //       throw new Error("GET form.io schema error: " + err);
-  //     });
-  // };
-
-  // const saveObject = (event) => {
-  //   setShowSpinner(true);
-  //   let body = event.data;
-  //   body.submit = undefined;
-
-  //   API.ApiCalls.createObject(entity?.endpoint, body)
-  //     .catch((err) => {
-  //       throw new Error("Create object error: " + err);
-  //     })
-  //     .finally(() => {
-  //       handleSetObjectEntities();
-  //     });
-  // };
-
-  const getEntity = () => {
-    setShowSpinner(true);
-    API.Entity.getOne(entityId)
+  const checkIfEntityCanUseFormIO = () => {
+    API.FormIO.getEntityCrudEndpoint(entityId)
       .then((res) => {
-        setEntity(res.data);
+        setEntityViableForFormIO(res.data.endpoint);
       })
       .catch((err) => {
-        throw new Error("GET entity error: " + err);
-      })
-      .finally(() => {
-        setShowSpinner(false);
+        throw new Error("GET can use form.io error: " + err);
       });
   };
 
   const handleSetObjectEntities = () => {
-    setShowSpinner(true);
     API.ObjectEntity.getAllFromEntity(entityId)
       .then((res) => {
         res?.data?.length > 0 && setObjectEntities(res.data);
@@ -97,9 +46,6 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
       .catch((err) => {
         setAlert({ message: err, type: "danger" });
         throw new Error("GET object entities error: " + err);
-      })
-      .finally(() => {
-        setShowSpinner(false);
       });
   };
 
@@ -147,6 +93,12 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
       cardHeader={function () {
         return (
           <>
+            {entityViableForFormIO === false && (
+              <p className="utrecht-paragraph text-left">
+                To create or edit objects, his entity needs a handler, which needs to have endpoints with GET, POST and
+                PUT methods
+              </p>
+            )}
             <button
               className="utrecht-link button-no-style"
               data-bs-toggle="modal"
@@ -166,13 +118,12 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
             </a>
             <button
               className="utrecht-button utrecht-button-sm btn-sm btn-success"
-              data-bs-toggle="modal"
-              data-bs-target="#objectModal"
+              disabled={!entityViableForFormIO}
               onClick={() => {
                 navigate(`/entities/${entityId}/objects/new`);
               }}
             >
-              <i className="fas fa-plus mr-2" />
+              <i className={"fas " + (entityViableForFormIO == null ? "fa-spinner" : "fa-plus") + " mr-2"} />
               Create
             </button>
           </>
@@ -182,7 +133,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
         return (
           <div className="row">
             <div className="col-12">
-              {showSpinner === true ? (
+              {objectEntities === false ? (
                 <Spinner />
               ) : objectEntities ? (
                 <Table
@@ -206,7 +157,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
                       renderCell: (item: { id: string; externalId: string; gateway: { location: string } }) => {
                         return (
                           <div className="utrecht-link d-flex justify-content-end">
-                            {item.externalId && item.gateway?.location && entity?.endpoint && (
+                            {item.externalId && item.gateway?.location && (
                               <button
                                 onClick={() => {
                                   syncObject(item.id);
@@ -220,7 +171,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
                               className="utrecht-link d-flex justify-content-end"
                               to={`/entities/${entityId}/objects/${item.id}`}
                             >
-                              <button className="utrecht-button btn-sm btn-success">
+                              <button className="utrecht-button btn-sm btn-success" disabled={!entityViableForFormIO}>
                                 <FontAwesomeIcon icon={faEdit} /> Edit
                               </button>
                             </Link>
