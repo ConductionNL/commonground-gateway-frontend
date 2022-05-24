@@ -95,8 +95,8 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
           <>
             {entityViableForFormIO === false && (
               <p className="utrecht-paragraph text-left">
-                To create or edit objects, his entity needs a handler, which needs to have endpoints with GET, POST and
-                PUT methods
+                To create or edit objects, this entity needs a handler, which needs to have a GET, POST and PUT
+                endpoint.
               </p>
             )}
             <button
