@@ -10,7 +10,9 @@ export default class FormIO {
     this._adminInstance = _adminInstance;
   }
 
-  public getSchema = (endpoint: string): Promise<AxiosResponse> => {
+  public getSchema = (endpoint: string, objectId?: string): Promise<AxiosResponse> => {
+    if (objectId) return Send(this._apiInstance, "GET", `/${endpoint}/${objectId}`);
+
     return Send(this._apiInstance, "GET", `/${endpoint}`);
   };
 
