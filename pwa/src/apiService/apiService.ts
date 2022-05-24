@@ -40,6 +40,17 @@ export default class APIService {
     return axios.create({
       baseURL: window.GATSBY_API_URL,
       headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this._jwtToken,
+      },
+    });
+  }
+
+  public get formIOClient(): AxiosInstance {
+    return axios.create({
+      baseURL: window.GATSBY_API_URL,
+      headers: {
         Accept: "application/form.io",
         "Content-Type": "application/json",
         Authorization: "Bearer " + this._jwtToken,
@@ -63,17 +74,6 @@ export default class APIService {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-      },
-    });
-  }
-
-  public get formIOClient(): AxiosInstance {
-    return axios.create({
-      baseURL: window.GATSBY_API_URL,
-      headers: {
-        Accept: "application/form.io",
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + this._jwtToken,
       },
     });
   }
@@ -129,7 +129,7 @@ export default class APIService {
   }
 
   public get FormIO(): FormIO {
-    return new FormIO(this.formIOClient);
+    return new FormIO(this.formIOClient, this.adminClient);
   }
 
   // Services

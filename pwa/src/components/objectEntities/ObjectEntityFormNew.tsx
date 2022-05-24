@@ -2,68 +2,44 @@ import * as React from "react";
 import { Card, Spinner } from "@conductionnl/nl-design-system/lib";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
-import { Link } from "gatsby";
-import { useQueryClient } from "react-query";
-import { useEntity } from "../../hooks/entity";
+import { Link, navigate } from "gatsby";
 
 interface ObjectEntityFormNewProps {
-  objectId: string;
+  objectId?: string;
   entityId: string;
 }
 
 export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ objectId, entityId }) => {
   const API: APIService = React.useContext(APIContext);
-  const [object, setObject] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState(null);
+  const [formIOEndpoint, setFormIOEndpoint] = React.useState(null);
   const [formIOSchema, setFormIOSchema] = React.useState(null);
   const [formIO, setFormIO] = React.useState(null);
 
-  const queryClient = useQueryClient();
-
-  const _useEntity = useEntity(queryClient);
-  const getEntity = _useEntity.getOne(entityId);
-
-  React.useEffect(() => {
-    getObject();
-  }, [API]);
-
   React.useEffect(() => {
     setShowSpinner(true);
-    getEntity.isSuccess && object && getFormIOSchema();
-    setShowSpinner(false);
-  }, [getEntity.isSuccess, object]);
+    getFormIOEndpoint();
+  }, [objectId]);
 
   React.useEffect(() => {
-    if (!formIOSchema) return;
-    setShowSpinner(true);
+    if (!formIOEndpoint) return;
+    getFormIOSchema();
+  }, [formIOEndpoint]);
 
-    import("@formio/react").then((formio) => {
-      const { Form } = formio;
-      setFormIO(<Form src={formIOSchema} onSubmit={saveObject} />);
-    });
-    setShowSpinner(false);
-  }, [formIOSchema]);
-
-  const getObject = () => {
-    setShowSpinner(true);
-    API.ObjectEntity.getOne(objectId)
+  const getFormIOEndpoint = () => {
+    API.FormIO.getEntityCrudEndpoint(entityId)
       .then((res) => {
-        setObject(res.data);
+        setFormIOEndpoint(res.data.endpoint);
       })
       .catch((err) => {
-        throw new Error("GET objectEntity error: " + err);
-      })
-      .finally(() => {
-        setShowSpinner(false);
+        throw new Error("GET form.io endpoint error: " + err);
       });
   };
 
   const getFormIOSchema = () => {
-    if (formIOSchema && object) setFormIOSchema(fillFormIOSchema(formIOSchema));
-    setShowSpinner(true);
-    API.FormIO.getSchema(getEntity.data.endpoint)
+    API.FormIO.getSchema(formIOEndpoint, objectId)
       .then((res) => {
-        setFormIOSchema(object ? fillFormIOSchema(res.data) : res.data);
+        setFormIOSchema(res.data);
       })
       .catch((err) => {
         throw new Error("GET form.io schema error: " + err);
@@ -73,52 +49,52 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
       });
   };
 
-  const fillFormIOSchema = (schema: any) => {
-    let schemaWithData = schema;
-    for (let i = 0; i < schemaWithData.components.length; i++) {
-      for (let i = 0; i < object?.objectValues?.length; i++) {
-        if ((schemaWithData.components[i].key = object.objectValues[i].attribute.name)) {
-          let type = object.objectValues[i].attribute.type;
-          schemaWithData.components[i].defaultValue = object.objectValues[i][`${type}Value`];
-        }
-      }
-    }
-    return schemaWithData;
-  };
+  React.useEffect(() => {
+    if (!formIOSchema) return;
+    setShowSpinner(false);
+
+    import("@formio/react").then((formio) => {
+      const { Form } = formio;
+      setFormIO(<Form src={formIOSchema} onSubmit={saveObject} />);
+    });
+  }, [formIOSchema]);
 
   const saveObject = (event) => {
+    setShowSpinner(true);
     let body = event.data;
+
     body.submit = undefined;
+    body["@application"] = undefined;
+    body["@owner"] = undefined;
+    body["@organization"] = undefined;
 
     if (!objectId) {
-      API.ApiCalls.createObject(getEntity.data?.endpoint, body)
+      API.ApiCalls.createObject(formIOEndpoint, body)
         .then((res) => {
-          setObject(res.data);
+          setShowSpinner(false);
+          setFormIOEndpoint(null);
+          setFormIOSchema(null);
+          setFormIO(null);
+          navigate(`/entities/${entityId}/objects/${res.data.id}`);
         })
         .catch((err) => {
           throw new Error("Create object error: " + err);
-        })
-        .finally(() => {
-          getObject();
         });
     }
     if (objectId) {
-      API.ApiCalls.updateObject(getEntity.data?.endpoint, objectId, body)
+      API.ApiCalls.updateObject(formIOEndpoint, objectId, body)
         .then((res) => {
-          setObject(res.data);
+          getFormIOSchema();
         })
         .catch((err) => {
           throw new Error("Update object error: " + err);
-        })
-        .finally(() => {
-          getObject();
         });
     }
   };
 
   return (
     <Card
-      title="Edit"
+      title={objectId ? "Edit" : "Create"}
       cardHeader={function () {
         return (
           <div>
