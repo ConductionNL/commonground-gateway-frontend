@@ -1,40 +1,43 @@
 apiVersion: v1
 entries:
-    commonground-gateway:
-        - apiVersion: v2
-          appVersion: 1.16.0
-          created: "2021-12-16T13:11:53.3831884+01:00"
-          dependencies:
-              - condition: postgresql.enabled
-                name: postgresql
-                repository: https://charts.bitnami.com/bitnami
-                version: 10.9.5
-              - condition: redis.enabled
-                name: redis
-                repository: https://charts.bitnami.com/bitnami
-                version: 15.3.2
-          description: A Helm chart for Kubernetes
-          digest: fee17a98ae10f61fd1e3ac7819c7c1b77ffc40ef6cc36590cf5bdf6557f1284e
-          name: commonground-gateway
-          type: application
-          urls:
-              - charts/commonground-gateway-0.1.5.tgz
-          version: 0.1.5
-    commonground-gateway-frontend:
-        - apiVersion: v2
-          appVersion: 0.1.0
-          created: "2021-12-16T13:11:53.3731883+01:00"
-          dependencies:
-              - alias: gateway
-                condition: gateway.enabled
-                name: commonground-gateway
-                repository: https://raw.githubusercontent.com/ConductionNL/commonground-gateway/master/api/helm/
-                version: 0.1.5
-          description: A Helm chart for the Verhuizen PWA of 's-Hertogenbosch
-          digest: fcff9d007d485b2f4ac366d3f96fff7098638c58982249e96a5d6e352db670cb
-          name: commonground-gateway-frontend
-          type: application
-          urls:
-              - commonground-gateway-frontend-0.1.0.tgz
-          version: 0.1.0
-generated: "2021-12-16T13:11:53.3621891+01:00"
+  commonground-gateway:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-06-02T13:38:13.9896776+02:00"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.9.5
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.3.2
+    - name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.0.1
+    description: A Helm chart for Kubernetes
+    digest: 61176b210c41b7f1153021924af204988fb50a0dbef2ed51856d5b98543078f7
+    name: commonground-gateway
+    type: application
+    urls:
+    - charts/commonground-gateway-0.1.7.tgz
+    version: 0.1.7
+  commonground-gateway-frontend:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2022-06-02T13:38:13.975667+02:00"
+    dependencies:
+    - alias: gateway
+      condition: gateway.enabled
+      name: commonground-gateway
+      repository: https://raw.githubusercontent.com/ConductionNL/commonground-gateway/feature-merge-cleanup/api/helm/
+      version: 0.1.7
+    description: A Helm chart for the Verhuizen PWA of 's-Hertogenbosch
+    digest: 2df7448f45a4ca64e0375ce342eca342eff6670cad2a8f30f8ebc6f716635c9f
+    name: commonground-gateway-frontend
+    type: application
+    urls:
+    - commonground-gateway-frontend-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-06-02T13:38:13.9596776+02:00"
