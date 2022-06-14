@@ -3,7 +3,7 @@ entries:
   commonground-gateway:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-06-09T16:07:24.0329762+02:00"
+    created: "2022-06-14T10:49:24.8555696+02:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -26,7 +26,7 @@ entries:
   commonground-gateway-frontend:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2022-06-09T16:07:24.0199759+02:00"
+    created: "2022-06-14T10:49:24.8405137+02:00"
     dependencies:
     - alias: gateway
       condition: gateway.enabled
@@ -34,10 +34,10 @@ entries:
       repository: https://raw.githubusercontent.com/ConductionNL/commonground-gateway/feature-cleanup/api/helm/
       version: 0.1.7
     description: A Helm chart for the Verhuizen PWA of 's-Hertogenbosch
-    digest: 218e4c71f33d4fd51166cbe88a546abcf99da9ba1a692cd0b97cc82c07868bf5
+    digest: 383b353dfd49e0a5bcc577fe40aec42cf2055ae2e93414f4d1833b076e1f57e6
     name: commonground-gateway-frontend
     type: application
     urls:
     - commonground-gateway-frontend-0.1.0.tgz
     version: 0.1.0
-generated: "2022-06-09T16:07:24.0039016+02:00"
+generated: "2022-06-14T10:49:24.825494+02:00"
