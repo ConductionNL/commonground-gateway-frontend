@@ -100,7 +100,7 @@ const Login: React.FC = () => {
       />
 
       <div className="login-container">
-        <h1>Welcome to Conductor!</h1>
+        <h1>Welcome to the Common Gateway!</h1>
 
         <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
           <h2>Login</h2>
