@@ -36,7 +36,7 @@ const WelcomeModal: React.FC = () => {
           applications.
         </p>
         <p>
-          If this is your first time in Conductor we suggest that you follow the
+          If this is your first time in Common Gateway we suggest that you follow the
           <a
             className="utrecht--link"
             href="https://docs.conductor-gateway.app/en/latest/getting_started/"

@@ -45,7 +45,7 @@ export default function Layout({ children, pageContext }) {
             <Alert />
             <LoadingOverlay />
             <Helmet>
-              <title>Conductor Admin Dashboard</title>
+              <title>Common Gateway Admin Dashboard</title>
             </Helmet>
             <div className="utrecht-document conduction-theme">
               <div className="utrecht-page">
