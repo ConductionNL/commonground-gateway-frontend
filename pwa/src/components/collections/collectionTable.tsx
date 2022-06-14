@@ -73,7 +73,7 @@ export default function CollectionTable() {
               <span className="mr-2">Help</span>
             </button>
             <Modal
-              title="Endpoint Documentation"
+              title="Collection Documentation"
               id="collectionHelpModal"
               body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
             />
