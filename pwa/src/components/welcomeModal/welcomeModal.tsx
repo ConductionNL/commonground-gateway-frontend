@@ -71,7 +71,7 @@ const WelcomeModal: React.FC = () => {
       >
         More info
       </button>
-      <Modal title="Welcome to Conductor!" id="welcomeModal" body={welcomeModalBody} />
+      <Modal title="Welcome to the Common Gateway!" id="welcomeModal" body={welcomeModalBody} />
     </>
   );
 };
