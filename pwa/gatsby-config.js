@@ -110,6 +110,10 @@ module.exports = {
             pathname: "/calls/[callId]",
             crumbLabel: "Call",
           },
+          {
+            pathname: "/search-entities",
+            crumbLabel: "Search Entities",
+          },
         ],
       },
     },

@@ -9,6 +9,12 @@ export default class Entity {
     this._instance = _instance;
   }
 
+  public search = async (entityName: string): Promise<any> => {
+    const { data } = await Send(this._instance, "GET", `/entities?name=${entityName}`);
+
+    return data;
+  };
+
   public getAll = async (): Promise<any> => {
     const { data } = await Send(this._instance, "GET", "/entities");
 

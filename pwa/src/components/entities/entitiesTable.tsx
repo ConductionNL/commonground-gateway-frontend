@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Table, Card, Spinner, Modal } from "@conductionnl/nl-design-system/lib";
-import { Link } from "gatsby";
+import { Link, navigate } from "gatsby";
 import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import { AlertContext } from "../../context/alertContext";
@@ -10,6 +10,7 @@ import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "../deleteModal/DeleteModal";
 import { useQueryClient } from "react-query";
 import { useEntity } from "../../hooks/entity";
+import { SearchEntity } from "../searchEntity/SearchEntity";
 
 export default function EntitiesTable() {
   const [documentation, setDocumentation] = React.useState<string>(null);
@@ -67,6 +68,15 @@ export default function EntitiesTable() {
               <i className="fas fa-sync-alt mr-1" />
               <span className="mr-2">{getEntities.isFetching ? "Fetching data..." : "Refresh"}</span>
             </button>
+            <button
+              className="button-no-style mx-1 utrecht-link"
+              onClick={() => {
+                navigate("/search-entities");
+              }}
+            >
+              <i className="fas fa-search mr-1" />
+              Search
+            </button>
             <Link to="/entities/new">
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success">
                 <i className="fas fa-plus mr-2" />
@@ -78,64 +88,66 @@ export default function EntitiesTable() {
       }}
       cardBody={function () {
         return (
-          <div className="row">
-            <div className="col-12">
-              {getEntities.isLoading ? (
-                <Spinner />
-              ) : (
-                <Table
-                  columns={[
-                    {
-                      headerName: "Name",
-                      field: "name",
-                    },
-                    {
-                      headerName: "Endpoint",
-                      field: "endpoint",
-                    },
-                    {
-                      headerName: "Path",
-                      field: "route",
-                    },
-                    {
-                      headerName: "Source",
-                      field: "gateway",
-                      valueFormatter: (item) => {
-                        return item ? item.name : "";
+          <>
+            <div className="row">
+              <div className="col-12">
+                {getEntities.isLoading ? (
+                  <Spinner />
+                ) : (
+                  <Table
+                    columns={[
+                      {
+                        headerName: "Name",
+                        field: "name",
                       },
-                    },
-                    {
-                      field: "id",
-                      headerName: "",
-                      renderCell: (item) => {
-                        return (
-                          <div className="utrecht-link d-flex justify-content-end">
-                            <button
-                              className="utrecht-button btn-sm btn-danger mr-2"
-                              data-bs-toggle="modal"
-                              data-bs-target={`#deleteModal${item.id.replace(new RegExp("-", "g"), "")}`}
-                            >
-                              <FontAwesomeIcon icon={faTrash} /> Delete
-                            </button>
-                            <DeleteModal
-                              resourceDelete={() => deleteEntity.mutateAsync({ id: item.id })}
-                              resourceId={item.id}
-                            />
-                            <Link className="utrecht-link d-flex justify-content-end" to={`/entities/${item.id}`}>
-                              <button className="utrecht-button btn-sm btn-success">
-                                <FontAwesomeIcon icon={faEdit} /> Edit
+                      {
+                        headerName: "Endpoint",
+                        field: "endpoint",
+                      },
+                      {
+                        headerName: "Path",
+                        field: "route",
+                      },
+                      {
+                        headerName: "Source",
+                        field: "gateway",
+                        valueFormatter: (item) => {
+                          return item ? item.name : "";
+                        },
+                      },
+                      {
+                        field: "id",
+                        headerName: "",
+                        renderCell: (item) => {
+                          return (
+                            <div className="utrecht-link d-flex justify-content-end">
+                              <button
+                                className="utrecht-button btn-sm btn-danger mr-2"
+                                data-bs-toggle="modal"
+                                data-bs-target={`#deleteModal${item.id.replace(new RegExp("-", "g"), "")}`}
+                              >
+                                <FontAwesomeIcon icon={faTrash} /> Delete
                               </button>
-                            </Link>
-                          </div>
-                        );
+                              <DeleteModal
+                                resourceDelete={() => deleteEntity.mutateAsync({ id: item.id })}
+                                resourceId={item.id}
+                              />
+                              <Link className="utrecht-link d-flex justify-content-end" to={`/entities/${item.id}`}>
+                                <button className="utrecht-button btn-sm btn-success">
+                                  <FontAwesomeIcon icon={faEdit} /> Edit
+                                </button>
+                              </Link>
+                            </div>
+                          );
+                        },
                       },
-                    },
-                  ]}
-                  rows={getEntities.data ?? []}
-                />
-              )}
+                    ]}
+                    rows={getEntities.data ?? []}
+                  />
+                )}
+              </div>
             </div>
-          </div>
+          </>
         );
       }}
     />
