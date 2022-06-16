@@ -97,6 +97,15 @@ export default function ApplicationsTable() {
                       field: "description",
                     },
                     {
+                      headerName: "Redocly",
+                      field: "name",
+                      renderCell: () => (
+                        <Link to={`https://redocly.github.io/redoc/?url=${(window as any).GATSBY_BASE_URL}/openapi.json&nocors`} target="__blank">
+                          View Redoc
+                        </Link>
+                    )
+                    },
+                    {
                       field: "id",
                       headerName: " ",
                       renderCell: (item: { id: string }) => {

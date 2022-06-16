@@ -97,6 +97,20 @@ spec:
               serviceName: {{ $gateway }}
               servicePort: {{ $svcPort }}
           {{- end }}
+          - path: {{ .Values.ingress.path }}/openapi.json
+            {{- if and .Values.ingress.pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $gateway }}
+                port:
+                  number: {{ $svcPort }}
+              {{- else }}
+              serviceName: {{ $gateway }}
+              servicePort: {{ $svcPort }}
+          {{- end }}
           - path: {{ .Values.ingress.path }}/login
             {{- if and .Values.ingress.pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
             pathType: {{ .Values.ingress.pathType }}
