@@ -99,13 +99,11 @@ export default function ApplicationsTable() {
                     {
                       headerName: "Redocly",
                       field: "name",
-                      renderCell: () => {
-                        return (
-                          <Link to={`https://redocly.github.io/redoc/?url=http://localhost/openapi.yaml&nocors`} target="__blank">
-                            See redoc
-                          </Link>
-                        );
-                      },
+                      renderCell: () => (
+                        <Link to={`https://redocly.github.io/redoc/?url=${(window as any).GATSBY_BASE_URL}/openapi.json&nocors`} target="__blank">
+                          View Redoc
+                        </Link>
+                    )
                     },
                     {
                       field: "id",
