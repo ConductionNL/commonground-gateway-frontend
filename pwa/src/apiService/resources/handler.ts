@@ -20,6 +20,12 @@ export default class Handler {
     return data;
   };
 
+  public getAllFromEntity = async (endpointId: string): Promise<any> => {
+    const { data } = await Send(this._instance, "GET", `/handlers?entity.id=${endpointId}`);
+
+    return data;
+  };
+
   public createOrUpdate = async (variables: { payload: any; id: string }): Promise<any> => {
     const { payload, id } = variables;
 
