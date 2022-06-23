@@ -5,8 +5,9 @@ import APIService from "../../apiService/apiService";
 import APIContext from "../../apiService/apiContext";
 import { AlertContext } from "../../context/alertContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faSync } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faSync, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { navigate } from "gatsby";
+import { deleteItem } from "../../services/mutateQueries";
 
 interface ObjectEntitiesTableProps {
   entityId: string;
@@ -15,6 +16,8 @@ interface ObjectEntitiesTableProps {
 const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) => {
   const [documentation, setDocumentation] = React.useState<string>(null);
   const [objectEntities, setObjectEntities] = React.useState(false);
+  const [handlers, setHandlers] = React.useState(false);
+  const [objectsDeletable, setObjectsDeletable] = React.useState(null);
   const [entityViableForFormIO, setEntityViableForFormIO] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState<boolean>(false);
   const API: APIService = React.useContext(APIContext);
@@ -24,9 +27,16 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
     if (entityId) {
       handleSetObjectEntities();
       checkIfEntityCanUseFormIO();
+      handleSetHandlers();
     }
     handleSetDocumentation();
   }, [API, entityId]);
+
+  React.useEffect(() => {
+    if (handlers && !objectsDeletable !== null) {
+      isThisObjectDeletable();
+    }
+  }, [handlers]);
 
   const checkIfEntityCanUseFormIO = () => {
     API.FormIO.getEntityCrudEndpoint(entityId)
@@ -39,13 +49,25 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
   };
 
   const handleSetObjectEntities = () => {
+    setObjectEntities(false);
     API.ObjectEntity.getAllFromEntity(entityId)
       .then((res) => {
-        res?.data?.length > 0 && setObjectEntities(res.data);
+        setObjectEntities(res.data);
       })
       .catch((err) => {
         setAlert({ message: err, type: "danger" });
         throw new Error("GET object entities error: " + err);
+      });
+  };
+
+  const handleSetHandlers = () => {
+    API.Handler.getAllFromEntity(entityId)
+      .then((res) => {
+        setHandlers(res);
+      })
+      .catch((err) => {
+        setAlert({ message: err, type: "danger" });
+        throw new Error("GET entity error: " + err);
       });
   };
 
@@ -73,7 +95,7 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
       });
   };
 
-  const handleDeleteObjectEntity = (id): void => {
+  const handleDeleteObjectEntity = (id: string): void => {
     if (confirm(`Do you want to delete this object entity?`)) {
       API.ObjectEntity.delete(id)
         .then(() => {
@@ -85,6 +107,20 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
           throw new Error("DELETE object entity error: " + err);
         });
     }
+  };
+
+  const isThisObjectDeletable = () => {
+    let objectsAreDeletable = false;
+    Object.entries(handlers).forEach(([key, handler]) => {
+      if (objectsAreDeletable !== true) {
+        Object.entries(handler.endpoints).forEach(([key, endpoint]) => {
+          if (objectsAreDeletable !== true && (endpoint.method === "DELETE" || endpoint.method === "delete")) {
+            objectsAreDeletable = true;
+          }
+        });
+      }
+    });
+    setObjectsDeletable(objectsAreDeletable);
   };
 
   return (
@@ -167,14 +203,30 @@ const ObjectEntitiesTable: React.FC<ObjectEntitiesTableProps> = ({ entityId }) =
                                 <FontAwesomeIcon icon={faSync} /> Sync
                               </button>
                             )}
-                            <Link
-                              className="utrecht-link d-flex justify-content-end"
-                              to={`/entities/${entityId}/objects/${item.id}`}
-                            >
+                            {objectsDeletable && (
+                              <button
+                                onClick={() => {
+                                  handleDeleteObjectEntity(item.id);
+                                }}
+                                className="utrecht-button btn-sm btn-danger mr-2"
+                              >
+                                <FontAwesomeIcon icon={faTrash} /> Delete
+                              </button>
+                            )}
+                            {entityViableForFormIO ? (
+                              <Link
+                                className="utrecht-link d-flex justify-content-end"
+                                to={`/entities/${entityId}/objects/${item.id}`}
+                              >
+                                <button className="utrecht-button btn-sm btn-success">
+                                  <FontAwesomeIcon icon={faEdit} /> Edit
+                                </button>
+                              </Link>
+                            ) : (
                               <button className="utrecht-button btn-sm btn-success" disabled={!entityViableForFormIO}>
                                 <FontAwesomeIcon icon={faEdit} /> Edit
                               </button>
-                            </Link>
+                            )}
                           </div>
                         );
                       },
