@@ -17,11 +17,13 @@ export default function EntitiesTable() {
   const API: APIService = React.useContext(APIContext);
   const [_, setAlert] = React.useContext(AlertContext);
   const [__, setHeader] = React.useContext(HeaderContext);
+  const [searchEntityValue, setSearchEntityValue] = React.useState<string>("");
+  const [searchEntityParam, setSearchEntityParam] = React.useState<string>("");
 
   const queryClient = useQueryClient();
 
   const _useEntity = useEntity(queryClient);
-  const getEntities = _useEntity.getAll();
+  const getEntities = !searchEntityParam ? _useEntity.getAll() : _useEntity.search(searchEntityParam);
   const deleteEntity = _useEntity.remove();
 
   React.useEffect(() => {
@@ -31,6 +33,13 @@ export default function EntitiesTable() {
   React.useEffect(() => {
     handleSetDocumentation();
   });
+
+  const handleSearchObject = (e) => {
+    e.preventDefault();
+    setSearchEntityParam(searchEntityValue);
+
+    // setSearchEntityValue("");
+  };
 
   const handleSetDocumentation = (): void => {
     API.Documentation.get("object_types")
@@ -62,13 +71,15 @@ export default function EntitiesTable() {
               className="button-no-style utrecht-link"
               disabled={getEntities.isFetching}
               onClick={() => {
-                queryClient.invalidateQueries("endpoints");
+                setSearchEntityValue(null);
+                setSearchEntityParam(null);
+                queryClient.invalidateQueries("entities");
               }}
             >
               <i className="fas fa-sync-alt mr-1" />
               <span className="mr-2">{getEntities.isFetching ? "Fetching data..." : "Refresh"}</span>
             </button>
-            <button
+            {/* <button
               className="button-no-style mx-1 utrecht-link"
               onClick={() => {
                 navigate("/search-entities");
@@ -76,7 +87,7 @@ export default function EntitiesTable() {
             >
               <i className="fas fa-search mr-1" />
               Search
-            </button>
+            </button> */}
             <Link to="/entities/new">
               <button className="utrecht-button utrecht-button-sm btn-sm btn-success">
                 <i className="fas fa-plus mr-2" />
@@ -94,56 +105,93 @@ export default function EntitiesTable() {
                 {getEntities.isLoading ? (
                   <Spinner />
                 ) : (
-                  <Table
-                    columns={[
-                      {
-                        headerName: "Name",
-                        field: "name",
-                      },
-                      {
-                        headerName: "Endpoint",
-                        field: "endpoint",
-                      },
-                      {
-                        headerName: "Path",
-                        field: "route",
-                      },
-                      {
-                        headerName: "Source",
-                        field: "gateway",
-                        valueFormatter: (item) => {
-                          return item ? item.name : "";
+                  <>
+                    <form
+                      className="SearchEntity-form"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      <input
+                        value={searchEntityValue ?? ""}
+                        onChange={(e) => setSearchEntityValue(e.target.value)}
+                        type="text"
+                        disabled={getEntities.isLoading}
+                        className="FormField-field"
+                        placeholder="Search.."
+                      />
+                      <button
+                        className="btn btn-primary"
+                        onClick={(e) => {
+                          handleSearchObject(e);
+                        }}
+                        disabled={!searchEntityValue}
+                      >
+                        {getEntities.isLoading ? "Loading" : "Search"}
+                      </button>
+                      <button
+                        className="button-no-style utrecht-link"
+                        disabled={getEntities.isFetching}
+                        onClick={() => {
+                          setSearchEntityValue(null);
+                          setSearchEntityParam(null);
+                          queryClient.invalidateQueries("entities");
+                        }}
+                      >
+                        Reset
+                      </button>
+                    </form>
+                    <Table
+                      columns={[
+                        {
+                          headerName: "Name",
+                          field: "name",
                         },
-                      },
-                      {
-                        field: "id",
-                        headerName: "",
-                        renderCell: (item) => {
-                          return (
-                            <div className="utrecht-link d-flex justify-content-end">
-                              <button
-                                className="utrecht-button btn-sm btn-danger mr-2"
-                                data-bs-toggle="modal"
-                                data-bs-target={`#deleteModal${item.id.replace(new RegExp("-", "g"), "")}`}
-                              >
-                                <FontAwesomeIcon icon={faTrash} /> Delete
-                              </button>
-                              <DeleteModal
-                                resourceDelete={() => deleteEntity.mutateAsync({ id: item.id })}
-                                resourceId={item.id}
-                              />
-                              <Link className="utrecht-link d-flex justify-content-end" to={`/entities/${item.id}`}>
-                                <button className="utrecht-button btn-sm btn-success">
-                                  <FontAwesomeIcon icon={faEdit} /> Edit
+                        {
+                          headerName: "Endpoint",
+                          field: "endpoint",
+                        },
+                        {
+                          headerName: "Path",
+                          field: "route",
+                        },
+                        {
+                          headerName: "Source",
+                          field: "gateway",
+                          valueFormatter: (item) => {
+                            return item ? item.name : "";
+                          },
+                        },
+                        {
+                          field: "id",
+                          headerName: "",
+                          renderCell: (item) => {
+                            return (
+                              <div className="utrecht-link d-flex justify-content-end">
+                                <button
+                                  className="utrecht-button btn-sm btn-danger mr-2"
+                                  data-bs-toggle="modal"
+                                  data-bs-target={`#deleteModal${item.id.replace(new RegExp("-", "g"), "")}`}
+                                >
+                                  <FontAwesomeIcon icon={faTrash} /> Delete
                                 </button>
-                              </Link>
-                            </div>
-                          );
+                                <DeleteModal
+                                  resourceDelete={() => deleteEntity.mutateAsync({ id: item.id })}
+                                  resourceId={item.id}
+                                />
+                                <Link className="utrecht-link d-flex justify-content-end" to={`/entities/${item.id}`}>
+                                  <button className="utrecht-button btn-sm btn-success">
+                                    <FontAwesomeIcon icon={faEdit} /> Edit
+                                  </button>
+                                </Link>
+                              </div>
+                            );
+                          },
                         },
-                      },
-                    ]}
-                    rows={getEntities.data ?? []}
-                  />
+                      ]}
+                      rows={getEntities.data ?? []}
+                    />
+                  </>
                 )}
               </div>
             </div>
