@@ -19,11 +19,12 @@ export default function EntitiesTable() {
   const [__, setHeader] = React.useContext(HeaderContext);
   const [searchEntityValue, setSearchEntityValue] = React.useState<string>("");
   const [searchEntityParam, setSearchEntityParam] = React.useState<string>("");
+  const [pagination, setPagination] = React.useState<number>(1);
 
   const queryClient = useQueryClient();
 
   const _useEntity = useEntity(queryClient);
-  const getEntities = !searchEntityParam ? _useEntity.getAll() : _useEntity.search(searchEntityParam);
+  const getEntities = !searchEntityParam ? _useEntity.getAll(pagination) : _useEntity.search(searchEntityParam);
   const deleteEntity = _useEntity.remove();
 
   React.useEffect(() => {
@@ -107,7 +108,7 @@ export default function EntitiesTable() {
                 ) : (
                   <>
                     <form
-                      className="SearchEntity-form"
+                      className="SearchEntity-form mb-3"
                       onSubmit={(e) => {
                         e.preventDefault();
                       }}
@@ -191,6 +192,38 @@ export default function EntitiesTable() {
                       ]}
                       rows={getEntities.data ?? []}
                     />
+                    <nav aria-label="...">
+                      <ul className="pagination justify-content-center">
+                        <li
+                          className={"page-item " + (pagination - 1 > 1 ? "disabled" : "")}
+                          onClick={() => {
+                            if (pagination - 1 > 1) {
+                              setPagination(pagination - 1);
+                            }
+                          }}
+                        >
+                          <a className="page-link" tabIndex={pagination - 1}>
+                            Previous
+                          </a>
+                        </li>
+                        {pagination - 1 > 1 && (
+                          <li className="page-item" onClick={() => setPagination(pagination - 1)}>
+                            <a className="page-link">{pagination - 1}</a>
+                          </li>
+                        )}
+                        <li className="page-item active">
+                          <a className="page-link">
+                            {pagination} <span className="sr-only">(current)</span>
+                          </a>
+                        </li>
+                        <li className="page-item" onClick={() => setPagination(pagination + 1)}>
+                          <a className="page-link">{pagination + 1}</a>
+                        </li>
+                        <li className="page-item" onClick={() => setPagination(pagination + 1)}>
+                          <a className="page-link">Next</a>
+                        </li>
+                      </ul>
+                    </nav>
                   </>
                 )}
               </div>

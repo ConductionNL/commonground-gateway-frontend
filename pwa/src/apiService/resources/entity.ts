@@ -15,8 +15,8 @@ export default class Entity {
     return data;
   };
 
-  public getAll = async (): Promise<any> => {
-    const { data } = await Send(this._instance, "GET", "/entities");
+  public getAll = async (pagination: number = 1): Promise<any> => {
+    const { data } = await Send(this._instance, "GET", `/entities?page=${pagination}`);
 
     return data;
   };

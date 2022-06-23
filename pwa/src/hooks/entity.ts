@@ -29,8 +29,8 @@ export const useEntity = (queryClient: QueryClient) => {
       enabled: !!entityName,
     });
 
-  const getAll = () =>
-    useQuery<any[], Error>("entities", API.Entity.getAll, {
+  const getAll = (pagination: number) =>
+    useQuery<any[], Error>("entities", () => API.Entity.getAll(pagination), {
       onError: (error) => {
         setAlert({ message: error.message, type: "danger" });
       },
