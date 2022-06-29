@@ -1,117 +1,132 @@
 import * as React from "react";
-import Spinner from "../common/spinner";
-import { Card } from "@conductionnl/nl-design-system/lib/Card/src/card";
-import { isLoggedIn } from "../../services/auth";
 import { Link } from "gatsby";
-import { Table } from "@conductionnl/nl-design-system/lib/Table/src/table";
-
+import { Table, Card, Spinner, Modal } from "@conductionnl/nl-design-system/lib";
+import APIService from "../../apiService/apiService";
+import APIContext from "../../apiService/apiContext";
+import { AlertContext } from "../../context/alertContext";
+import { HeaderContext } from "../../context/headerContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import DeleteModal from "../deleteModal/DeleteModal";
+import { useQueryClient } from "react-query";
+import { useSource } from "../../hooks/source";
 
 export default function SourcesTable() {
-  const [sources, setSources] = React.useState(null);
-  const [context, setContext] = React.useState(null);
-  const [showSpinner, setShowSpinner] = React.useState(false);
+  const [documentation, setDocumentation] = React.useState<string>(null);
+  const API: APIService = React.useContext(APIContext);
+  const [_, setAlert] = React.useContext(AlertContext);
+  const [__, setHeader] = React.useContext(HeaderContext);
+
+  const queryClient = useQueryClient();
+
+  const _useSource = useSource(queryClient);
+  const getSources = _useSource.getAll();
+  const deleteSource = _useSource.remove();
 
   React.useEffect(() => {
-    if (typeof window !== "undefined" && context === null) {
-      setContext({
-        adminUrl: window.GATSBY_ADMIN_URL,
-      });
-    } else if (isLoggedIn()) {
-      getSources();
-    }
-  }, [context]);
+    setHeader("Sources");
+  }, [setHeader]);
 
-  const getSources = () => {
-    setShowSpinner(true);
-    fetch(`${context.adminUrl}/gateways`, {
-      credentials: "include",
-      headers: {"Content-Type": "application/json", 'Authorization': 'Bearer ' + sessionStorage.getItem('jwt')},
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (
-          data["hydra:member"] !== undefined &&
-          data["hydra:member"] !== null
-        ) {
-          setSources(data["hydra:member"]);
-          setShowSpinner(false);
-        }
+  React.useEffect(() => {
+    handleSetDocumentation();
+  });
+
+  const handleSetDocumentation = (): void => {
+    API.Documentation.get("sources")
+      .then((res) => {
+        setDocumentation(res.data.content);
       })
-      .catch((error) => {
-        console.error("Error:", error);
+      .catch((err) => {
+        setAlert({ message: err, type: "danger" });
+        throw new Error("GET Documentation error: " + err);
       });
-  }
+  };
 
   return (
-    <Card title={"Sources"}
-          cardHeader={function () {
-            return (
-              <>
-                <button className="utrecht-link button-no-style" data-toggle="modal" data-target="helpModal">
-                  <i className="fas fa-question mr-1"/>
-                  <span className="mr-2">Help</span>
-                </button>
-                <a className="utrecht-link">
-                  <i className="fas fa-sync-alt mr-1"/>
-                  <span className="mr-2">Refresh</span>
-                </a>
-                <a
-                  // href={`${context.adminUrl}/export/gateways`}
-                  target="_blank"
-                  className=""
-                >
-                  <button className="utrecht-link button-no-style">
-                    <span className="mr-2">Export Sources</span>
-                  </button>
-                </a>
-                <Link to="/sources/new">
-                  <button className="utrecht-button utrecht-button-sm btn-sm btn-success"><i
-                    className="fas fa-plus mr-2"/>Add
-                  </button>
-                </Link>
-              </>
-            )
-          }}
-          cardBody={function () {
-            return (
-              <div className="row">
-                <div className="col-12">
-                  {showSpinner === true ? (
-                    <Spinner/>
-                  ) : (
-                    sources ? (
-                      <Table columns={[{
-                        headerName: "Name",
-                        field: "name"
-                      }, {
-                        headerName: "Location",
-                        field: "location"
+    <Card
+      title={"Sources"}
+      cardHeader={function () {
+        return (
+          <>
+            <button className="utrecht-link button-no-style" data-bs-toggle="modal" data-bs-target="#sourceHelpModal">
+              <i className="fas fa-question mr-1" />
+              <span className="mr-2">Help</span>
+            </button>
+            <Modal
+              title="Source Documentation"
+              id="sourceHelpModal"
+              body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+            />
+            <button
+              className="button-no-style utrecht-link"
+              disabled={getSources.isFetching}
+              onClick={() => {
+                queryClient.invalidateQueries("endpoints");
+              }}
+            >
+              <i className="fas fa-sync-alt mr-1" />
+              <span className="mr-2">{getSources.isFetching ? "Fetching data..." : "Refresh"}</span>
+            </button>
+            <Link to="/sources/new">
+              <button className="utrecht-button utrecht-button-sm btn-sm btn-success">
+                <i className="fas fa-plus mr-2" />
+                Create
+              </button>
+            </Link>
+          </>
+        );
+      }}
+      cardBody={function () {
+        return (
+          <div className="row">
+            <div className="col-12">
+              {getSources.isLoading ? (
+                <Spinner />
+              ) : (
+                <Table
+                  columns={[
+                    {
+                      headerName: "Name",
+                      field: "name",
+                    },
+                    {
+                      headerName: "Location",
+                      field: "location",
+                    },
+                    {
+                      field: "id",
+                      headerName: " ",
+                      renderCell: (item: { id: string }) => {
+                        return (
+                          <div className="utrecht-link d-flex justify-content-end">
+                            <button
+                              className="utrecht-button btn-sm btn-danger mr-2"
+                              data-bs-toggle="modal"
+                              data-bs-target={`#deleteModal${item.id.replace(new RegExp("-", "g"), "")}`}
+                            >
+                              <FontAwesomeIcon icon={faTrash} /> Delete
+                            </button>
+                            <DeleteModal
+                              resourceDelete={() => deleteSource.mutateAsync({ id: item.id })}
+                              resourceId={item.id}
+                            />
+                            <Link className="utrecht-link d-flex justify-content-end" to={`/sources/${item.id}`}>
+                              <button className="utrecht-button btn-sm btn-success">
+                                <FontAwesomeIcon icon={faEdit} /> Edit
+                              </button>
+                            </Link>
+                          </div>
+                        );
                       },
-                        {
-                          field: "id",
-                          headerName: " ",
-                          renderCell: (item: {id: string}) => {
-                            return (
-                              <Link to={`/sources/${item.id}`}>
-                                <button className="utrecht-button btn-sm btn-success"><i className="fas fa-edit pr-1"/>Edit</button>
-                              </Link>
-                            );
-                          },
-                      },]} rows={sources}/>
-                    ) : (
-                      <Table columns={[{
-                        headerName: "Name",
-                        field: "name"
-                      }, {
-                        headerName: "Location",
-                        field: "location"
-                      }]} rows={[]}/>
-                    )
-                  )}
-                </div>
-              </div>
-            )
-          }}
+                    },
+                  ]}
+                  rows={getSources.data ?? []}
+                />
+              )}
+            </div>
+          </div>
+        );
+      }}
     />
   );
 }

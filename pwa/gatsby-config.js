@@ -6,21 +6,118 @@ module.exports = {
   pathPrefix: "/commonground-gateway-frontend",
   plugins: [
     {
-      resolve: `gatsby-plugin-csp`,
+      resolve: `gatsby-plugin-layout`,
       options: {
-        disableOnDev: true,
-        mergeScriptHashes: true,
-        mergeStyleHashes: true,
-        directives: {
-          "script-src":
-            "'self' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/ https://unpkg.com/@conductionnl/ https://unpkg.com/@utrecht/ https://unpkg.com/@nl-design-system-unstable/",
-          "style-src":
-            "'self' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/ https://unpkg.com/@conductionnl/ https://unpkg.com/@utrecht/ https://unpkg.com/@nl-design-system-unstable/",
-          "img-src": "'self' https://demodam.nl/ data:",
-          "font-src":
-            "'self' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/",
-          "connect-src": "'self' https://",
+        component: require.resolve(`./src/components/common/layout.tsx`),
+      },
+    },
+    {
+      resolve: `gatsby-plugin-breadcrumb`,
+      options: {
+        useAutoGen: true,
+        exclude: [
+          `**/dev-404-page/**`,
+          `**/404/**`,
+          `**/404.html`,
+          `**/offline-plugin-app-shell-fallback/**`,
+        ],
+        excludeOptions: {
+          separator: ".",
         },
+        autoGenHomeLabel: "Dashboard",
+        crumbLabelUpdates: [
+          {
+            pathname: "/sources/[sourceId]",
+            crumbLabel: "Source",
+          },
+          {
+            pathname: "/entities",
+            crumbLabel: "Object Types",
+          },
+          {
+            pathname: "/entities/[entityId]",
+            crumbLabel: "Object Type",
+          },
+          {
+            pathname: "/entities/[entityId]/attributes/[attributeId]",
+            crumbLabel: "Attribute",
+          },
+          {
+            pathname: "/entities/[entityId]/object_entities",
+            crumbLabel: "Object Entities",
+          },
+          {
+            pathname: "/entities/[entityId]/object_entities/[objectId]",
+            crumbLabel: "Object Entity",
+          },
+          {
+            pathname: "/entities/[entityId]/objects/[objectId]",
+            crumbLabel: "Object",
+          },
+          {
+            pathname: "/entities/[entityId]/subscribers/[subscriberId]",
+            crumbLabel: "Subscriber",
+          },
+          {
+            pathname: "/endpoints/[endpointId]",
+            crumbLabel: "Endpoint",
+          },
+          {
+            pathname: "/endpoints/[endpointId]/handlers/[handlerId]",
+            crumbLabel: "Handler",
+          },
+          {
+            pathname: "/applications/[applicationId]",
+            crumbLabel: "Application",
+          },
+          {
+            pathname: "/translation-tables",
+            crumbLabel: "Translation Tables",
+          },
+          {
+            pathname: "/translation-tables/[translationId]",
+            crumbLabel: "Translation Table",
+          },
+          {
+            pathname: "/translation-tables/new",
+            crumbLabel: "Translation Table",
+          },
+          {
+            pathname: "/translation-tables/[translationId]/translations/[id]",
+            crumbLabel: "Translation",
+          },
+          {
+            pathname: "/collections",
+            crumbLabel: "Collections",
+          },
+          {
+            pathname: "/collections/[collectionId]",
+            crumbLabel: "Collections",
+          },
+          {
+            pathname: "/sessions/[sessionId]",
+            crumbLabel: "Session",
+          },
+          {
+            pathname: "/calls/[callId]",
+            crumbLabel: "Call",
+          },
+          {
+            pathname: "/search-entities",
+            crumbLabel: "Search Entities",
+          },
+        ],
+      },
+    },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        icon: `src/images/conduction_logo_blauw.svg`,
+        name: `Conductor`,
+        short_name: `Conductor`,
+        start_url: `/`,
+        display: `standalone`,
+        theme_color_in_head: false,
       },
     },
   ],

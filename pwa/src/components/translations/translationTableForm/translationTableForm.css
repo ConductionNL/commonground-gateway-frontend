@@ -1,0 +1,11 @@
+.TranslationTableForm-dividerHeading {
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+  margin: 32px 0;
+}
+
+.TranslationTableForm-dividerHeading > .subtitle {
+  color: grey;
+  font-size: 16px;
+}

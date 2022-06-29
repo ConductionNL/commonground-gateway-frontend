@@ -9,7 +9,7 @@ import * as _ from "lodash";
 export const checkValues = (array: any[]) => {
   let valid = true;
   for (let i = 0; i < array.length; i++) {
-    if (array[i].length === 0 || _.isEmpty(array[i])) {
+    if (array[i] === undefined || _.isEmpty(array[i]) || array[i].length === 0) {
       valid = false;
     }
   }
@@ -23,10 +23,7 @@ export const checkValues = (array: any[]) => {
  */
 export const removeEmptyObjectValues = (obj: {}) => {
   for (var propName in obj) {
-    if (
-      obj[propName] === undefined ||
-      (obj[propName] === null && obj[propName] !== false)
-    ) {
+    if (obj[propName] === undefined || (obj[propName] === null && obj[propName] !== false) || obj[propName] === "") {
       delete obj[propName];
     }
   }
@@ -46,12 +43,7 @@ export const retrieveFormArrayAsObject = (array: any[], type: string) => {
     let target = array[i];
 
     if (target.name.includes(type)) {
-      result[
-        target.name.substring(
-          target.name.indexOf("[") + 1,
-          target.name.lastIndexOf("]")
-        )
-      ] = target.value;
+      result[target.name.substring(target.name.indexOf("[") + 1, target.name.lastIndexOf("]"))] = target.value;
     }
   }
 
@@ -70,8 +62,31 @@ export const retrieveFormArrayAsOArray = (array: any[], type: string) => {
   for (let i = 0; i < array.length; i++) {
     let target = array[i];
 
-    if (target.name.includes(type)) {
+    if (target.name.includes(type) && target.value !== "") {
       result.push(target.value);
+    }
+  }
+
+  return result;
+};
+
+/**
+ * retrieves html defined array from form as array
+ * @param  array the array that will be searched for the array items
+ * @param type what needs to be searched in the array
+ * @returns array of found array values.
+ */
+export const retrieveFormArrayAsOArrayWithName = (array: any[], type: string) => {
+  let result = [];
+
+  for (let i = 0; i < array.length; i++) {
+    let target = array[i];
+
+    if (target.name.includes(type)) {
+      let _result = target.name;
+      _result = _result.split("[").pop();
+      _result = _result.replace("]", "");
+      result.push(_result);
     }
   }
 

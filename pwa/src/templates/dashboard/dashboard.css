@@ -1,0 +1,42 @@
+.dashboard > * {
+  margin-top: 75px;
+}
+
+.dashboard .dashboard-title {
+  font-size: 82px;
+  font-weight: bold;
+}
+
+.dashboard .dashboard-dividerTitle {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #6c757d;
+}
+
+.dashboard .dashboard-quickOverview {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+}
+
+.dashboard .dashboard-quickOverview > * {
+  flex: 1;
+}
+
+.dashboard .dashboard-row-logsAndDocumentation {
+  display: flex;
+  gap: 40px;
+}
+
+.dashboard .dashboard-row-logsAndDocumentation .dashboard-logsTable {
+  flex: 2;
+}
+
+.dashboard .dashboard-row-logsAndDocumentation .dashboard-externalLinks {
+  flex: 1;
+}
+
+.dashboard .dashboard-externalLinks > *:not(:first-child) {
+  margin-bottom: 20px;
+}

@@ -6,6 +6,7 @@
     "jsx": "preserve",
     "moduleResolution": "node",
     "allowJs": true,
-    "outDir": "./build",
-  }
+    "outDir": "./build"
+  },
+  "include": ["src/custom.d.ts", "src/components", "src/pages", "src/templates"]
 }

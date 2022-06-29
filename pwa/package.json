@@ -15,23 +15,42 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
-    "@conductionnl/nl-design-system": "^1.0.88",
+    "@conductionnl/nl-design-system": "^1.0.133",
+    "@formio/react": "^5.2.0",
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@nl-design-system-unstable/theme-switcher": "1.0.0-alpha.6",
     "@utrecht/design-tokens": "1.0.0-alpha.51",
     "@utrecht/web-component-library-react": "1.0.0-alpha.57",
     "@utrecht/web-component-library-stencil": "1.0.0-alpha.57",
+    "axios": "^0.25.0",
     "bootstrap": "^4.5.3",
     "dotenv": "^10.0.0",
+    "formiojs": "^4.13.12",
     "gatsby": "^4.1.6",
-    "gatsby-plugin-csp": "^1.1.3",
+    "gatsby-plugin-breadcrumb": "^12.3.1",
+    "gatsby-plugin-layout": "^3.6.0",
+    "gatsby-plugin-manifest": "^4.8.2",
     "install": "^0.13.0",
+    "is-valid-uuid-v4": "^1.2.1",
+    "jwt-decode": "^3.1.2",
+    "prismjs": "^1.27.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-flash-message": "^1.0.8",
     "react-helmet": "^6.1.0",
-    "typescript": "^4.4.4"
+    "react-hook-form": "^7.28.0",
+    "react-movable": "^3.0.2",
+    "react-query": "^3.34.16",
+    "react-select": "^5.2.2",
+    "react-tooltip": "^4.2.21",
+    "react-tsparticles": "^1.41.2",
+    "typescript": "^4.4.4",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@utrecht/component-library-css": "1.0.0-alpha.219",
     "dotenv": "^10.0.0",
-    "gatsby-link": "^4.3.0"
+    "gatsby-link": "^4.3.0",
+    "prettier": "^2.5.1"
   }
 }

@@ -1,115 +1,198 @@
 import * as React from "react";
-import {Table} from "@conductionnl/nl-design-system/lib/Table/src/table";
-import Spinner from "../common/spinner";
-import {isLoggedIn} from "../../services/auth";
-import {Card} from "@conductionnl/nl-design-system/lib/Card/src/card";
-import {Link} from "gatsby";
+import { Table, Spinner, Card, Modal } from "@conductionnl/nl-design-system/lib";
+import { Link } from "gatsby";
+import APIService from "../../apiService/apiService";
+import APIContext from "../../apiService/apiContext";
+import { AlertContext } from "../../context/alertContext";
+import { LoadingOverlayContext } from "../../context/loadingOverlayContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import LabelWithBackground from "../LabelWithBackground/LabelWithBackground";
+import DeleteModal from "../deleteModal/DeleteModal";
+import LoadingOverlay from "../loadingOverlay/loadingOverlay";
 
-export default function AttributeTable({id}) {
+export default function AttributeTable({ entityId }) {
+  const [documentation, setDocumentation] = React.useState<string>(null);
   const [attributes, setAttributes] = React.useState(null);
-  const [context, setContext] = React.useState(null);
   const [showSpinner, setShowSpinner] = React.useState(false);
+  const API: APIService = React.useContext(APIContext);
+  const title: string = entityId === "new" ? "Create Attribute" : "Edit Attribute";
+  const [_, setAlert] = React.useContext(AlertContext);
+  const [__, setLoadingOverlay] = React.useContext(LoadingOverlayContext);
 
   React.useEffect(() => {
-    if (typeof window !== "undefined" && context === null) {
-      setContext({
-        apiUrl: window.GATSBY_API_URL,
-      });
-    } else {
-      if (isLoggedIn()) {
-        setShowSpinner(true);
-        getAttributes();
-      }
-    }
-  }, [context]);
+    handleSetDocumentation();
+  });
 
-  const getAttributes = () => {
-    fetch(`${context.adminUrl}/attributes?entity.id=${id}`, {
-      credentials: "include",
-      headers: {"Content-Type": "application/json", 'Authorization': 'Bearer ' + sessionStorage.getItem('jwt')},
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          setShowSpinner(false);
-          setAttributes(null);
-          throw new Error(response.statusText);
-        }
+  React.useEffect(() => {
+    handleSetAttributes();
+  }, [API]);
+
+  const handleSetAttributes = () => {
+    setShowSpinner(true);
+    API.Attribute.getAllFromEntity(entityId)
+      .then((res) => {
+        setAttributes(res.data);
       })
-      .then((data) => {
-        setAttributes(data["hydra:member"]);
-        setShowSpinner(false);
+      .catch((err) => {
+        setAlert({ message: err, type: "danger" });
+        throw new Error("GET attributes from entity error: " + err);
       })
-      .catch((error) => {
-        console.error("Error:", error);
+      .finally(() => {
         setShowSpinner(false);
-        setAttributes(null);
       });
-  }
+  };
+
+  const handleSetDocumentation = (): void => {
+    API.Documentation.get("attributes")
+      .then((res) => {
+        setDocumentation(res.data.content);
+      })
+      .catch((err) => {
+        setAlert({ message: err, type: "danger" });
+        throw new Error("GET Documentation error: " + err);
+      });
+  };
+
+  const handleDeleteAttribute = (id): void => {
+    setLoadingOverlay({ isLoading: true });
+    API.Attribute.delete(id)
+      .then(() => {
+        setAlert({ message: "Deleted attribute", type: "success" });
+        handleSetAttributes();
+      })
+      .catch((err) => {
+        setAlert({ message: err, type: "danger" });
+        throw new Error("DELETE attribute error: " + err);
+      })
+      .finally(() => {
+        setLoadingOverlay({ isLoading: false });
+      });
+  };
 
   return (
-    <Card title={"Attributes"}
-          cardHeader={function () {
-            return (
-              <>
-                <button className="utrecht-link button-no-style" data-toggle="modal" data-target="helpModal">
-                  <i className="fas fa-question mr-1"/>
-                  <span className="mr-2">Help</span>
-                </button>
-                <a className="utrecht-link" onClick={getAttributes}>
-                  <i className="fas fa-sync-alt mr-1"/>
-                  <span className="mr-2">Refresh</span>
-                </a>
-                <Link to={`/attributes/new/${id}`}>
-                  <button className="utrecht-button utrecht-button-sm btn-sm btn-success"><i
-                    className="fas fa-plus mr-2"/>Add
-                  </button>
-                </Link>
-              </>
-            )
-          }}
-          cardBody={function () {
-            return (
-              <div className="row">
-                <div className="col-12">
-                  {showSpinner === true ? (
-                    <Spinner/>
-                  ) : (
-                    attributes ? (
-                      <Table columns={[{
-                        headerName: "Name",
-                        field: "name"
-                      }, {
-                        headerName: "Type",
-                        field: "type"
+    <Card
+      title={title}
+      cardHeader={function () {
+        return (
+          <>
+            <button
+              className="utrecht-link button-no-style"
+              data-bs-toggle="modal"
+              data-bs-target="#attributeHelpModal"
+              onClick={(e) => e.preventDefault()}
+            >
+              <i className="fas fa-question mr-1" />
+              <span className="mr-2">Help</span>
+            </button>
+            <Modal
+              title="Attribute Documentation"
+              id="attributeHelpModal"
+              body={() => <div dangerouslySetInnerHTML={{ __html: documentation }} />}
+            />
+            <a className="utrecht-link" onClick={handleSetAttributes}>
+              <i className="fas fa-sync-alt mr-1" />
+              <span className="mr-2">Refresh</span>
+            </a>
+            <Link to={`/entities/${entityId}/attributes/new`}>
+              <button className="utrecht-button utrecht-button-sm btn-sm btn-success">
+                <i className="fas fa-plus mr-2" />
+                Create
+              </button>
+            </Link>
+          </>
+        );
+      }}
+      cardBody={function () {
+        return (
+          <div className="row">
+            <div className="col-12">
+              {showSpinner === true ? (
+                <Spinner />
+              ) : attributes ? (
+                <Table
+                  columns={[
+                    {
+                      headerName: "Name",
+                      field: "name",
+                    },
+                    {
+                      headerName: "Type",
+                      field: "type",
+                    },
+                    {
+                      headerName: "Format",
+                      field: "format",
+                    },
+                    {
+                      headerName: "Required",
+                      field: "required",
+                      renderCell: (item: { required: boolean }) =>
+                        item.required ? (
+                          <LabelWithBackground label="required" type="primary" />
+                        ) : (
+                          <LabelWithBackground label="optional" type="secondary" />
+                        ),
+                    },
+                    {
+                      field: "id",
+                      headerName: " ",
+                      renderCell: (item: { id: string }) => {
+                        return (
+                          <div className="utrecht-link d-flex justify-content-end">
+                            <button
+                              className="utrecht-button btn-sm btn-danger mr-2"
+                              data-bs-toggle="modal"
+                              data-bs-target={`#deleteModal${item.id.replace(new RegExp("-", "g"), "")}`}
+                            >
+                              <FontAwesomeIcon icon={faTrash} /> Delete
+                            </button>
+                            <DeleteModal
+                              resourceDelete={() => handleDeleteAttribute({ id: item.id })}
+                              resourceId={item.id}
+                            />
+                            <Link
+                              className="utrecht-link d-flex justify-content-end"
+                              to={`/entities/${entityId}/attributes/${item.id}`}
+                            >
+                              <button className="utrecht-button btn-sm btn-success">
+                                <FontAwesomeIcon icon={faEdit} /> Edit
+                              </button>
+                            </Link>
+                          </div>
+                        );
                       },
-                        {
-                          field: "id",
-                          headerName: " ",
-                          renderCell: (item: {id: string}) => {
-                            return (
-                              <Link to={`/attributes/${item.id}`}>
-                                <button className="utrecht-button btn-sm btn-success"><i className="fas fa-edit pr-1"/>Edit</button>
-                              </Link>
-                            );
-                          },
-                        },]} rows={attributes}/>
-                    ) : (
-                      <Table columns={[{
-                        headerName: "Name",
-                        field: "name"
-                      }, {
-                        headerName: "Type",
-                        field: "type"
-                      }]} rows={[]}/>
-                    )
-                  )}
-                </div>
-              </div>
-            )
-          }}
+                    },
+                  ]}
+                  rows={attributes}
+                />
+              ) : (
+                <Table
+                  columns={[
+                    {
+                      headerName: "Name",
+                      field: "name",
+                    },
+                    {
+                      headerName: "Type",
+                      field: "type",
+                    },
+                    {
+                      headerName: "Format",
+                      field: "format",
+                    },
+                    {
+                      headerName: "Required",
+                      field: "required",
+                    },
+                  ]}
+                  rows={[]}
+                />
+              )}
+            </div>
+          </div>
+        );
+      }}
     />
-  )
-    ;
+  );
 }

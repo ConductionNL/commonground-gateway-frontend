@@ -1,5 +1,10 @@
 /certs
 .idea/
+.vscode/
+
+/product-page/node_modules
+/product-page/.cache
+/product-page/public
 
 .vs
 
