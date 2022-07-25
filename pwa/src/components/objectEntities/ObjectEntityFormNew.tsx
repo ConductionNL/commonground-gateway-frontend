@@ -68,15 +68,14 @@ export const ObjectEntityFormNew: React.FC<ObjectEntityFormNewProps> = ({ object
     body["@owner"] = undefined;
     body["@organization"] = undefined;
 
-    Object.keys(body).forEach(key => {
-        Object.entries(formIOSchema['components']).forEach(([componentKey, component]) => {
-            // If readOnly unset
-            if (component['key'] == key && component['label'].includes('(read only)')) {
-                delete(body[key]);
-            }
-        });
-    });
-    
+
+    if (formIOSchema['custom'] && formIOSchema['custom']['readOnly']) {
+      Object.keys(body).forEach(key => {
+        if (formIOSchema['custom']['readOnly'].includes(key)) {
+          delete(body[key]);
+        }
+      });
+    }
 
     if (!objectId) {
       API.ApiCalls.createObject(formIOEndpoint, body)
