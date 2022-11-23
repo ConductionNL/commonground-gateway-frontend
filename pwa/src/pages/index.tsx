@@ -7,7 +7,7 @@ const IndexPage = () => {
   const [_, setHeader] = React.useContext(HeaderContext);
 
   React.useEffect(() => {
-    isLoggedIn() && setHeader("Conductor");
+    isLoggedIn() && setHeader("Common Gateway");
   }, [isLoggedIn()]);
 
   return isLoggedIn() && <Dashboard />;
